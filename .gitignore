@@ -1,0 +1,7 @@
+*.o
+raytracer
+*.a
+.vscode
+.idea
+vgcore*
+cmake-build-debug
