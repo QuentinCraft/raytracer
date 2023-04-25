@@ -20,21 +20,23 @@ int main()
     std::ofstream file("test.ppm");
 
     RayTracer::Sphere sphere;
-    RayTracer::Camera cam;
-    sphere._radius = 50;
-    sphere._center._x = (1920.0 / 2);
-    sphere._center._y = (1080.0 / 2);
-    sphere._center._z = 0;
+    RayTracer::Camera cam(Math::Point3D(0, 0, 0), 800, 800, 120);
+    sphere._radius = 2;
+    sphere._center._x = 0;
+    sphere._center._y = 0;
+    sphere._center._z = 10;
 
-    file << "P3\n1920 1080\n255\n";
+    file << "P3\n800 800\n255\n";
 
-    for (int y = 0; y < 1080; y++) {
-        for (int x = 0; x < 1920; x++) {
-            RayTracer::Ray ray = cam.ray(x, y);
+    for (int y = 0; y < cam._height; y++) {
+        for (int x = 0; x < cam._width; x++) {
+            double u = (x / cam._width) * 2 - 1;
+            double v = (y / cam._height) * 2 - 1;
+            RayTracer::Ray ray = cam.ray(u, v);
             if (sphere.hits(ray)) {
                 file << "255 0 0" << std::endl;
             } else {
-                file << "0 0 0" << std::endl;
+                file << "15 15 15" << std::endl;
             }
         }
     }
