@@ -10,8 +10,8 @@
 namespace RayTracer {
     Camera::Camera() {
         _origin = Math::Point3D(0, 0, 0);
-        _width = 1920;
-        _height = 1080;
+        _width = 800;
+        _height = 800;
         _fov = 90;
     }
 
@@ -24,8 +24,8 @@ namespace RayTracer {
 
     Ray Camera::ray(double u, double v) const {
         Math::Vector3D direction(u * (_fov / 90),
-                                 v * (_fov / 90),
-                                 -1);
+                                 -v * (_fov / 90),
+                                 1);
         Ray ray(_origin, direction);
         return ray;
     }

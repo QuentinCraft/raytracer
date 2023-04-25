@@ -21,32 +21,30 @@ namespace RayTracer {
     std::optional<Math::Point3D> Sphere::hits(Ray const &ray) const {
         Ray rayBis(ray._origin - _center, ray._direction);
         double a = rayBis._direction.dot(rayBis._direction);
-        double b = 2 * rayBis._direction.dot(rayBis._origin);
-        double c = rayBis._origin.dot(rayBis._origin) - _radius * _radius;
+        double b = 2 * rayBis._origin.dot(rayBis._direction);
+        double c = rayBis._origin.dot(rayBis._origin) - (_radius * _radius);
 
-        double discriminant = (b * b) - (4 * (a * c));
+        double discriminant = b * b - 4.0 * a * c;
 
         if (discriminant < 0)
             return std::nullopt;
-        else {
-            double D = ((-b) - sqrt(discriminant)) / (2 * a);
+        double D = (-b - sqrt(discriminant)) / (2 * a);
 
-            double Px = ray._origin._x;
-            double Py = ray._origin._y;
-            double Pz = ray._origin._z;
+        double Px = ray._origin._x;
+        double Py = ray._origin._y;
+        double Pz = ray._origin._z;
 
-            double Vx = ray._direction._x;
-            double Vy = ray._direction._y;
-            double Vz = ray._direction._z;
+        double Vx = ray._direction._x;
+        double Vy = ray._direction._y;
+        double Vz = ray._direction._z;
 
-            double vNorm = sqrt(Vx * Vx + Vy * Vy + Vz * Vz);
+        double vNorm = sqrt(Vx * Vx + Vy * Vy + Vz * Vz);
 
-            double Qx = Px + (D/vNorm) * Vx;
-            double Qy = Py + (D/vNorm) * Vy;
-            double Qz = Pz + (D/vNorm) * Vz;
+        double Qx = Px + (D/vNorm) * Vx;
+        double Qy = Py + (D/vNorm) * Vy;
+        double Qz = Pz + (D/vNorm) * Vz;
 
-            return Math::Point3D(Qx, Qy, Qz);
-        }
+        return ray._origin + ray._direction * D;
     }
 
     Math::Vector3D Sphere::normal(const Math::Point3D &point) const {
