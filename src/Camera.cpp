@@ -25,7 +25,7 @@ namespace RayTracer {
     Ray Camera::ray(double u, double v) const {
         Math::Vector3D direction(u * (_fov / 90),
                                  v * (_fov / 90),
-                                 1);
+                                 -1);
         Ray ray(_origin, direction);
         return ray;
     }

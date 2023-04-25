@@ -135,4 +135,30 @@ namespace Math {
         return (_x * point._x) + (_y * point._y) + (_z * point._z);
     }
 
+    Vector3D::Vector3D(const Point3D &point1, const Point3D &point2) {
+        _x = point2._x - point1._x;
+        _y = point2._y - point1._y;
+        _z = point2._z - point1._z;
+    }
+
+    Vector3D Vector3D::operator+(double value) const {
+        Vector3D result;
+
+        result._x = _x + value;
+        result._y = _y + value;
+        result._z = _z + value;
+        return result;
+    }
+
+    Vector3D &Vector3D::operator+=(double value) {
+        _x += value;
+        _y += value;
+        _z += value;
+        return *this;
+    }
+
+    Point3D Vector3D::toPoint() const {
+        return {_x, _y, _z};
+    }
+
 } // Math

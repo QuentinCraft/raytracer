@@ -51,4 +51,8 @@ namespace Math {
         return result;
     }
 
+    Vector3D Point3D::toVector() const {
+        return {_x, _y, _z};
+    }
+
 } // Math

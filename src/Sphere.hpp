@@ -13,6 +13,10 @@
 #include "Ray.hpp"
 #include "MathUtils.hpp"
 
+#include <iostream>
+#include <optional>
+#include <functional>
+
 namespace RayTracer {
 
     class Sphere {
@@ -27,7 +31,8 @@ namespace RayTracer {
             ~Sphere() = default;
 
             // Methods
-            bool hits(Ray const &ray) const;
+            [[nodiscard]] std::optional<Math::Point3D> hits(Ray const &ray) const;
+            [[nodiscard]] Math::Vector3D normal(Math::Point3D const &point) const;
 
             // Variables
             Math::Point3D _center;

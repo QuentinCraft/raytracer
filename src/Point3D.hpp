@@ -30,8 +30,10 @@ namespace Math {
             Point3D operator+(const Point3D &point) const;
             Point3D operator-(const Point3D &point) const;
 
-            double dot(const Vector3D &vector) const;
-            double dot(const Point3D &point) const;
+            // Methods
+            [[nodiscard]] double dot(const Vector3D &vector) const;
+            [[nodiscard]] double dot(const Point3D &point) const;
+            [[nodiscard]] Vector3D toVector() const;
 
             // Variables
             double _x;
