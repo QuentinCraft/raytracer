@@ -22,4 +22,7 @@ add_executable(raytracer
         src/Sphere.cpp
         src/Sphere.hpp
         src/Vector3D.cpp
-        src/Vector3D.hpp src/Spot.cpp src/Spot.hpp)
+        src/Vector3D.hpp src/Spot.cpp src/Spot.hpp src/utils/config/ConfigManager.hpp src/utils/config/ConfigManager.cpp)
+
+
+target_link_libraries(raytracer config++)
