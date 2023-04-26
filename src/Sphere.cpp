@@ -9,12 +9,12 @@
 
 namespace RayTracer {
     Sphere::Sphere() {
-        _center = Math::Point3D();
+        _center = Math::Vector3D();
         _radius = 0;
         _color = Math::Vector3D(255, 255, 255);
     }
 
-    Sphere::Sphere(const Math::Point3D& center, double radius) {
+    Sphere::Sphere(const Math::Vector3D& center, double radius, const Math::Vector3D& color) {
         _center = center;
         _radius = radius;
         _color = color;
@@ -34,8 +34,8 @@ namespace RayTracer {
         return ray._origin + ray._direction * D;
     }
 
-    Math::Vector3D Sphere::normal(const Math::Point3D &point) const {
-        return Math::Vector3D((_center - point).toVector());
+    Math::Vector3D Sphere::normal(const Math::Vector3D &point) const {
+        return Math::Vector3D((_center - point));
     }
 
     bool Sphere::operator==(const Sphere &sphere) const {

@@ -8,7 +8,6 @@
 #ifndef BSRAYTRACER_SPHERE_HPP
 #define BSRAYTRACER_SPHERE_HPP
 
-#include "Point3D.hpp"
 #include "Vector3D.hpp"
 #include "Ray.hpp"
 #include "MathUtils.hpp"
@@ -23,7 +22,7 @@ namespace RayTracer {
         public:
             // Constructors
             Sphere();
-            Sphere(const Math::Point3D& center, double radius);
+            Sphere(const Math::Vector3D& center, double radius, const Math::Vector3D& color);
             Sphere(Sphere const &sphere) = default;
             Sphere(Sphere &&sphere) = default;
 
@@ -34,8 +33,10 @@ namespace RayTracer {
             bool operator==(Sphere const &sphere) const;
 
             // Methods
-            [[nodiscard]] std::optional<Math::Point3D> hits(Ray const &ray) const;
-            [[nodiscard]] Math::Vector3D normal(Math::Point3D const &point) const;
+            Sphere &operator=(Sphere const &sphere) = default;
+            Sphere &operator=(Sphere &&sphere) = default;
+            [[nodiscard]] std::optional<Math::Vector3D> hits(Ray const &ray) const;
+            [[nodiscard]] Math::Vector3D normal(Math::Vector3D const &point) const;
 
             // Variables
             Math::Vector3D _center;

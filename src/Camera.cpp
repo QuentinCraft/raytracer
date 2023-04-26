@@ -14,7 +14,7 @@ namespace RayTracer {
         _fov = 90;
     }
 
-    Camera::Camera(const Math::Point3D &origin, double width, double height, double fov) {
+    Camera::Camera(const Math::Vector3D &origin, double width, double height, double fov) {
         _origin = origin;
         _width = width;
         _height = height;

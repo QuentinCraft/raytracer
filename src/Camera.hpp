@@ -8,7 +8,7 @@
 #ifndef BSRAYTRACER_CAMERA_HPP
 #define BSRAYTRACER_CAMERA_HPP
 
-#include "Point3D.hpp"
+#include "Vector3D.hpp"
 #include "Rectangle3D.hpp"
 #include "Sphere.hpp"
 #include "Spot.hpp"
@@ -20,7 +20,7 @@ namespace RayTracer {
         public:
             // Constructors
             Camera();
-            Camera(const Math::Point3D& origin, double height, double width, double fov);
+            Camera(const Math::Vector3D& origin, double height, double width, double fov);
             ~Camera() = default;
 
             // Methods

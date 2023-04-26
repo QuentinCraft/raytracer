@@ -13,7 +13,7 @@ namespace RayTracer {
         _direction = Math::Vector3D();
     }
 
-    Ray::Ray(const Math::Point3D &origin, const Math::Vector3D &direction) {
+    Ray::Ray(const Math::Vector3D &origin, const Math::Vector3D &direction) {
         _origin = origin;
         _direction = direction;
     }
