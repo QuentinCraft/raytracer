@@ -8,7 +8,7 @@
 #ifndef RAYTRACER_SPOT_HPP
 #define RAYTRACER_SPOT_HPP
 
-#include "Point3D.hpp"
+#include "Vector3D.hpp"
 
 namespace RayTracer {
 
@@ -16,14 +16,14 @@ namespace RayTracer {
         public:
             // Constructors
             Spot();
-            Spot(const Math::Point3D& origin, double intensity);
+            Spot(const Math::Vector3D& origin, const Math::Vector3D& intensity);
 
             // Destructor
             ~Spot() = default;
 
             // Variables
-            Math::Point3D _origin;
-            double _intensity;
+            Math::Vector3D _origin;
+            Math::Vector3D _intensity;
     };
 
 } // RayTracer

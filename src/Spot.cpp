@@ -9,11 +9,11 @@
 
 namespace RayTracer {
     Spot::Spot() {
-        _origin = Math::Point3D(0, 0, 0);
-        _intensity = 0;
+        _origin = Math::Vector3D(0, 0, 0);
+        _intensity = Math::Vector3D();
     }
 
-    Spot::Spot(const Math::Point3D &origin, double intensity) {
+    Spot::Spot(const Math::Vector3D &origin, const Math::Vector3D& intensity) {
         _origin = origin;
         _intensity = intensity;
     }

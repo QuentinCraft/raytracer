@@ -6,7 +6,7 @@
 */
 
 #include "Vector3D.hpp"
-#include "Point3D.hpp"
+#include "MathUtils.hpp"
 
 namespace Math {
     Vector3D::Vector3D() {
@@ -131,11 +131,7 @@ namespace Math {
         return (_x * vector._x) + (_y * vector._y) + (_z * vector._z);
     }
 
-    double Vector3D::dot(const Math::Point3D &point) const {
-        return (_x * point._x) + (_y * point._y) + (_z * point._z);
-    }
-
-    Vector3D::Vector3D(const Point3D &point1, const Point3D &point2) {
+    Vector3D::Vector3D(const Vector3D &point1, const Vector3D &point2) {
         _x = point2._x - point1._x;
         _y = point2._y - point1._y;
         _z = point2._z - point1._z;
@@ -157,8 +153,15 @@ namespace Math {
         return *this;
     }
 
-    Point3D Vector3D::toPoint() const {
-        return {_x, _y, _z};
+    Vector3D Vector3D::normalized() const {
+        double len = std::sqrt(dot(*this));
+
+        Math::Vector3D normal(_x / len, _y / len, _z / len);
+        return normal;
+    }
+
+    bool Vector3D::operator==(const Vector3D &vector) const {
+        return Math::MathUtils::equal(_x, vector._x) && Math::MathUtils::equal(_y, vector._y) && Math::MathUtils::equal(_z, vector._z);
     }
 
 } // Math

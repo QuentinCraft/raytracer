@@ -9,7 +9,6 @@
 #define BSRAYTRACER_MATHUTILS_HPP
 
 #include "Vector3D.hpp"
-#include "Point3D.hpp"
 
 namespace Math {
 
@@ -18,7 +17,8 @@ namespace Math {
             static bool equal(double a, double b);
             static bool inf(double a, double b);
             static bool sup(double a, double b);
-            static Point3D toRGB(Point3D x);
+            static Vector3D toRGB(Vector3D x);
+            [[nodiscard]] static double distance(const Math::Vector3D &aColor, const Math::Vector3D &bColor);
     };
 
 } // Math

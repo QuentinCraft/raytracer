@@ -11,9 +11,6 @@
 #include <valarray>
 
 namespace Math {
-
-    class Point3D;
-
     class Vector3D {
         public:
             // Constructors
@@ -21,7 +18,7 @@ namespace Math {
             Vector3D(double x, double y, double z);
             Vector3D(const Vector3D &vector);
             Vector3D(Vector3D &&vector) = default;
-            Vector3D(const Point3D &point1, const Point3D &point2);
+            Vector3D(const Vector3D &point1, const Vector3D &point2);
 
             // Destructor
             ~Vector3D() = default;
@@ -46,12 +43,13 @@ namespace Math {
             Vector3D operator/(double value) const;
             Vector3D &operator/=(double value);
 
+            bool operator==(const Vector3D &vector) const;
+
+            [[nodiscard]] Vector3D normalized() const;
+
             // Methods
             [[nodiscard]] double dot(const Vector3D &vector) const;
-            [[nodiscard]] double dot(const Point3D &point) const;
             [[nodiscard]] float length() const;
-
-            [[nodiscard]] Point3D toPoint() const;
 
             // Variables
             double _x;

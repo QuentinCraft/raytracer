@@ -9,7 +9,7 @@
 
 namespace RayTracer {
     Ray::Ray() {
-        _origin = Math::Point3D();
+        _origin = Math::Vector3D();
         _direction = Math::Vector3D();
     }
 

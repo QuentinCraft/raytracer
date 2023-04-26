@@ -4,12 +4,11 @@
 ** File description:
 ** Camera3D.cpp
 */
-
 #include "Camera.hpp"
 
 namespace RayTracer {
     Camera::Camera() {
-        _origin = Math::Point3D(0, 0, 0);
+        _origin = Math::Vector3D (0, 0, 0);
         _width = 800;
         _height = 800;
         _fov = 90;
@@ -28,5 +27,46 @@ namespace RayTracer {
                                  1);
         Ray ray(_origin, direction);
         return ray;
+    }
+
+    Math::Vector3D Camera::pointAt(double u, double v, std::vector<RayTracer::Sphere> &spheres, const RayTracer::Spot &spot) const {
+
+        RayTracer::Ray r = ray(u, v);
+        Math::Vector3D savedHitPoint;
+        RayTracer::Sphere savedSphere;
+        int i = 0;
+
+        for (auto &sphere : spheres) {
+            std::optional<Math::Vector3D> hitPoint = sphere.hits(r);
+            if (hitPoint.has_value()) {
+                if (i == 0) {
+                    savedHitPoint = hitPoint.value();
+                    savedSphere = sphere;
+                    i++;
+                } else {
+                    if (Math::MathUtils::distance(_origin, hitPoint.value()) < Math::MathUtils::distance(_origin, savedHitPoint) && Math::MathUtils::distance(_origin, hitPoint.value()) > 0) {
+                        savedHitPoint = hitPoint.value();
+                        savedSphere = sphere;
+                    }
+                }
+            }
+        }
+        Math::Vector3D normal = savedSphere.normal(savedHitPoint);
+        Math::Vector3D lightDir(spot._origin, savedHitPoint);
+
+        double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
+        Math::Vector3D hitColor(savedSphere._color);
+        hitColor *= dot;
+        for (auto &sphere : spheres) {
+            if (sphere == savedSphere)
+                continue;
+            RayTracer::Ray bouncingRay(savedHitPoint, lightDir);
+            std::optional<Math::Vector3D> hitPoint = sphere.hits(bouncingRay);
+            if (hitPoint.has_value()) {
+                hitColor *= 0.7;
+            }
+        }
+        Math::Vector3D color = Math::MathUtils::toRGB(hitColor * (savedSphere._color));
+        return color;
     }
 } // RayTracer

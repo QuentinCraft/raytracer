@@ -10,6 +10,9 @@
 
 #include "Point3D.hpp"
 #include "Rectangle3D.hpp"
+#include "Sphere.hpp"
+#include "Spot.hpp"
+#include <vector>
 
 namespace RayTracer {
 
@@ -21,13 +24,14 @@ namespace RayTracer {
             ~Camera() = default;
 
             // Methods
-            Ray ray(double u, double v) const;
+            [[nodiscard]] Ray ray(double u, double v) const;
+            [[nodiscard]] Math::Vector3D pointAt(double u, double v, std::vector<RayTracer::Sphere> &sphere, const RayTracer::Spot &spot) const;
 
             // Variables
             double _fov;
             double _height;
             double _width;
-            Math::Point3D _origin;
+            Math::Vector3D _origin;
     };
 
 } // RayTracer

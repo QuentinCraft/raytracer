@@ -13,8 +13,6 @@ add_executable(raytracer
         src/main.cpp
         src/MathUtils.cpp
         src/MathUtils.hpp
-        src/Point3D.cpp
-        src/Point3D.hpp
         src/Ray.cpp
         src/Ray.hpp
         src/Rectangle3D.cpp

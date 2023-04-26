@@ -30,12 +30,16 @@ namespace RayTracer {
             // Destructor
             ~Sphere() = default;
 
+            // Operators
+            bool operator==(Sphere const &sphere) const;
+
             // Methods
             [[nodiscard]] std::optional<Math::Point3D> hits(Ray const &ray) const;
             [[nodiscard]] Math::Vector3D normal(Math::Point3D const &point) const;
 
             // Variables
-            Math::Point3D _center;
+            Math::Vector3D _center;
+            Math::Vector3D _color;
             double _radius;
     };
 
