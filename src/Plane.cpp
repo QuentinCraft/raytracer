@@ -22,8 +22,8 @@ namespace RayTracer {
         double denominator = ray._direction.dot(_normal);
         if (denominator < 1e-6) {
             Math::Vector3D p0l0 = _point - ray._origin;
-            double hitDistance = p0l0.dot(_normal) / denominator;
-            return ray._origin + ray._direction * hitDistance;
+            double D = p0l0.dot(_normal) / denominator;
+            return ray._origin + ray._direction * D;
         }
         return std::nullopt;
 
