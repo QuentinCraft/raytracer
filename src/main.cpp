@@ -15,6 +15,8 @@
 #include <fstream>
 #include <algorithm>
 
+#include "utils/config/ConfigManager.hpp"
+
 int main() {
     std::ofstream file("render.ppm");
 
