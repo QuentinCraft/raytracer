@@ -37,6 +37,7 @@ namespace RayTracer {
             Plane &operator=(Plane &&plane) = default;
             [[nodiscard]] std::optional<Math::Vector3D> hits(Ray const &ray) const;
             [[nodiscard]] Math::Vector3D normal(Math::Vector3D const &point) const;
+            [[nodiscard]] void getCoefficients(double &a, double &b, double &c, double &d) const;
 
             // Variables
             Math::Vector3D _point;

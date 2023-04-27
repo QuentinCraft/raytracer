@@ -18,14 +18,35 @@ namespace RayTracer {
         _normal = normal;
     }
 
-    std::optional<Math::Vector3D> Plane::hits(Ray const &ray) const {
-        double denominator = ray._direction.dot(_normal);
-        if (denominator < 1e-6) {
-            Math::Vector3D p0l0 = _point - ray._origin;
-            double D = p0l0.dot(_normal) / denominator;
-            return ray._origin + ray._direction * D;
-        }
-        return std::nullopt;
+std::optional<Math::Vector3D> Plane::hits(Ray const &ray) const {
+    double denominator = ray._direction.dot(_normal);
+    if (denominator < 1e-6) {
+        Math::Vector3D p0l0 = _point - ray._origin;
+        double D = p0l0.dot(_normal) / denominator;
+        return ray._origin + ray._direction * D;
+    }
+    return std::nullopt;
+}
+
+
+void Plane::getCoefficients(double &a, double &b, double &c, double &d) const {
+    a = _normal._x;
+    b = _normal._y;
+    c = _normal._z;
+    d = -(_point.dot(_normal));
+}
+
+Math::Vector3D Plane::normal(const Math::Vector3D &point) const {
+    double a, b, c, d;
+    getCoefficients(a, b, c, d);
+    Math::Vector3D normal(a, b, c);
+    double length = std::sqrt(normal._x * normal._x + normal._y * normal._y + normal._z * normal._z);
+    normal._x /= length;
+    normal._y /= length;
+    normal._z /= length;
+    return normal;
+}
+
 
 
 //        double t = (_point - ray._origin).dot(_normal) / denominator;
@@ -34,11 +55,10 @@ namespace RayTracer {
 //            return std::nullopt;
 //        }
 //        return ray._origin + ray._direction * t;
-    }
+    // }
 
-    Math::Vector3D Plane::normal(const Math::Vector3D &point) const {
-        return _normal;
-    }
+//function that calculate the normal of a plan 
+
 
     bool Plane::operator==(const Plane &plane) const {
         return _point == plane._point && _normal == plane._normal;
