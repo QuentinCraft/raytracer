@@ -15,18 +15,24 @@ namespace RayTracer {
 
     Plane::Plane(const Math::Vector3D& point, const Math::Vector3D& normal) {
         _point = point;
-        _normal = normal;
+        _normal = normal.normalized();
     }
 
-std::optional<Math::Vector3D> Plane::hits(Ray const &ray) const {
-    double denominator = ray._direction.dot(_normal);
-    if (denominator < 1e-6) {
-        Math::Vector3D p0l0 = _point - ray._origin;
-        double D = p0l0.dot(_normal) / denominator;
-        return ray._origin + ray._direction * D;
+    std::optional<Math::Vector3D> Plane::hits(Ray const &ray) const {
+        double denominator = ray._direction.dot(_normal);
+        if (denominator < 1e-6) {
+            Math::Vector3D p0l0 = _point - ray._origin;
+            double D = std::sqrt(p0l0.dot(p0l0));
+            if (Math::MathUtils::sup(D, 0) || Math::MathUtils::equal(0, D)) {
+                Math::Vector3D p = ray._origin + ray._direction * D;
+//                std::cout << "Ray: " << ray._origin._x << " " << ray._origin._y << " " << ray._origin._z << " | " << ray._direction._x << " " << ray._direction._y << " " << ray._direction._z << std::endl;
+//                std::cout << "D : " << D << std::endl;
+                return p;
+            }
+        }
+        return std::nullopt;
     }
-    return std::nullopt;
-}
+
 
 
 void Plane::getCoefficients(double &a, double &b, double &c, double &d) const {

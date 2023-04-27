@@ -76,7 +76,8 @@ namespace RayTracer {
         RayTracer::Plane plane = Planes.front();
         std::optional<Math::Vector3D> hitPoint = plane.hits(r);
         if (hitPoint.has_value()) {
-            return Math::Vector3D(std::round(std::clamp((100.0 + (u * v ) * -30), 0.0, 255.0)), std::round(std::clamp((100.0 + (u * v) * -30), 0.0, 255.0)), std::round(std::clamp((100.0 + (u * v ) * -30), 0.0, 255.0)));
+            std::cout << "Hit: " << hitPoint.value()._x << " " << hitPoint.value()._y << " " << hitPoint.value()._z << std::endl;
+            return Math::Vector3D(std::round(std::clamp((35 + (std::abs(hitPoint->_y) * 8) * 10), 0.0, 255.0)), std::round(std::clamp((35 + (std::abs(hitPoint->_y) * 8) * 10), 0.0, 255.0)), std::round(std::clamp((35 + (std::abs(hitPoint->_y) * 8) * 10), 0.0, 255.0)));
         }
         return Math::Vector3D(0, 0, 0);
 
