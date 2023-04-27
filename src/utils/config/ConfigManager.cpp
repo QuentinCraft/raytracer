@@ -73,6 +73,61 @@ RayTracer::Utils::Config::ConfigManager::Config::Light RayTracer::Utils::Config:
     return light;
 }
 
+void RayTracer::Utils::Config::ConfigManager::_getSphere(
+        const libconfig::Setting &primitive) {
+    try {
+        const libconfig::Setting& color = primitive["color"];
+        int x = primitive["x"];
+        int y = primitive["y"];
+        int z = primitive["z"];
+        int colorX = color["r"];
+        int colorY = color["g"];
+        int colorZ = color["b"];
+        std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
+        std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("Error: Invalid settings in [Primitives/Sphere] part");
+    }
+}
+
+
+void RayTracer::Utils::Config::ConfigManager::_getPlane(
+        const libconfig::Setting &primitive) {
+    try {
+        const libconfig::Setting& color = primitive["color"];
+        std::string axis = primitive["axis"];
+        int position = primitive["position"];
+        int colorX = color["r"];
+        int colorY = color["g"];
+        int colorZ = color["b"];
+        std::cout << "axis : " << axis << std::endl;
+        std::cout << "pos : " << position << std::endl;
+        std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("Error: Invalid settings in [Primitives/Plane] part");
+    }
+}
+
+void RayTracer::Utils::Config::ConfigManager::_getPrimitives(
+        const libconfig::Setting &root) {
+    try {
+        const libconfig::Setting& primitives = root["primitives"];
+        for (int i = 0; i < primitives.getLength(); i++) {
+            const libconfig::Setting& primitive = primitives[i];
+            for (int x = 0; x < primitive.getLength(); x++) {
+                std::string item = RayTracer::Utils::StringUtils::split(primitive[x].getPath(), ".")[1];
+                if (item == "spheres")
+                    _getSphere(primitive[x]);
+                if (item == "planes")
+                    _getPlane(primitive[x]);
+            }
+        }
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("Error: Invalid settings in [Primitives] part");
+    }
+}
+
+
 RayTracer::Utils::Config::ConfigManager::Config RayTracer::Utils::Config::ConfigManager::getConf(const std::string& path) {
     RayTracer::Utils::Config::ConfigManager::Config cnf;
     libconfig::Config config;
@@ -88,5 +143,6 @@ RayTracer::Utils::Config::ConfigManager::Config RayTracer::Utils::Config::Config
     const libconfig::Setting& root = config.getRoot();
     cnf.camera = _getCamera(root);
     cnf.light = _getLight(root);
+    _getPrimitives(root);
     return cnf;
 }
