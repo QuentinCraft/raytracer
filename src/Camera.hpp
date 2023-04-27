@@ -12,6 +12,7 @@
 #include "Rectangle3D.hpp"
 #include "Sphere.hpp"
 #include "Spot.hpp"
+#include "Plane.hpp"
 #include <vector>
 
 namespace RayTracer {
@@ -26,6 +27,7 @@ namespace RayTracer {
             // Methods
             [[nodiscard]] Ray ray(double u, double v) const;
             [[nodiscard]] Math::Vector3D pointAt(double u, double v, std::vector<RayTracer::Sphere> &sphere, const RayTracer::Spot &spot) const;
+            [[nodiscard]] Math::Vector3D pointAt(double u, double v, std::vector<RayTracer::Plane> &plane, const RayTracer::Spot &spot) const;
 
             // Variables
             double _fov;

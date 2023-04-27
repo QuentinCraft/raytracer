@@ -19,6 +19,8 @@ add_executable(raytracer
         src/Rectangle3D.hpp
         src/Sphere.cpp
         src/Sphere.hpp
+        src/Plane.cpp
+        src/Plane.hpp
         src/Vector3D.cpp
         src/Vector3D.hpp src/Spot.cpp src/Spot.hpp src/utils/config/ConfigManager.hpp src/utils/config/ConfigManager.cpp)
 
