@@ -17,6 +17,7 @@
 #include <libconfig.h++>
 
 #include "../../Vector3D.hpp"
+#include "../string/StringUtils.hpp"
 
 namespace RayTracer::Utils::Config {
 
@@ -39,6 +40,7 @@ namespace RayTracer::Utils::Config {
                     std::vector<Math::Vector3D> points;
                     std::vector<Math::Vector3D> directional_lights;
                 } light;
+
             };
             // Config Throw Error Class
             class Error : public std::exception {
@@ -54,6 +56,9 @@ namespace RayTracer::Utils::Config {
             static Config getConf(const std::string& path);
             static Config::Camera _getCamera(const libconfig::Setting& root);
             static Config::Light _getLight(const libconfig::Setting& root);
+            static void _getPrimitives(const libconfig::Setting& root);
+            static void _getSphere(const libconfig::Setting& primitive);
+            static void _getPlane(const libconfig::Setting& primitive);
     };
 
 } // RayTracer
