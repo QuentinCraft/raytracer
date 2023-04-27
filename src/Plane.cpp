@@ -20,16 +20,20 @@ namespace RayTracer {
 
     std::optional<Math::Vector3D> Plane::hits(Ray const &ray) const {
         double denominator = ray._direction.dot(_normal);
-        if (std::abs(denominator) < 1e-6) {
-            // Ray is parallel to the plane, no intersection
-            return std::nullopt;
-        } // ray is not parallel to plane, compute intersection point
-        double t = (_point - ray._origin).dot(_normal) / denominator;
-        if (t < 0) {
-            // Plane is behind the ray origin, no intersection
-            return std::nullopt;
+        if (denominator < 1e-6) {
+            Math::Vector3D p0l0 = _point - ray._origin;
+            double hitDistance = p0l0.dot(_normal) / denominator;
+            return ray._origin + ray._direction * hitDistance;
         }
-        return ray._origin + ray._direction * t;
+        return std::nullopt;
+
+
+//        double t = (_point - ray._origin).dot(_normal) / denominator;
+//        if (t < 0) {
+//            // Plane is behind the ray origin, no intersection
+//            return std::nullopt;
+//        }
+//        return ray._origin + ray._direction * t;
     }
 
     Math::Vector3D Plane::normal(const Math::Vector3D &point) const {

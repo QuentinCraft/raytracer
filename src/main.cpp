@@ -20,7 +20,7 @@
 
         RayTracer::Sphere sphere;
         RayTracer::Sphere sphere2(Math::Vector3D(0, 0, 0), 0.5, Math::Vector3D(1, 0, 0));
-        RayTracer::Plane plane(Math::Vector3D(0, 0, 0), Math::Vector3D(1, 0, 0));
+        RayTracer::Plane plane(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0));
         // RayTracer::Plane plane2(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0));
         RayTracer::Camera cam(Math::Vector3D(0, 0, -2), 800, 800, 90);
         RayTracer::Spot spot(Math::Vector3D(0, 2, -3), Math::Vector3D(2, 2, 2));
