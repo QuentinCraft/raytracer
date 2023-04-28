@@ -8,21 +8,48 @@ include_directories(src)
 set(CMAKE_CXX_FLAGS "-O3")
 
 add_executable(raytracer
-        src/Camera.cpp
-        src/Camera.hpp
         src/main.cpp
-        src/MathUtils.cpp
-        src/MathUtils.hpp
-        src/Ray.cpp
-        src/Ray.hpp
-        src/Rectangle3D.cpp
-        src/Rectangle3D.hpp
-        src/Sphere.cpp
-        src/Sphere.hpp
-        src/Plane.cpp
-        src/Plane.hpp
-        src/Vector3D.cpp
-        src/Vector3D.hpp src/Spot.cpp src/Spot.hpp src/utils/config/ConfigManager.hpp src/utils/config/ConfigManager.cpp)
+
+        src/maths/Utils.cpp
+        src/maths/Utils.hpp
+        src/maths/Ray.cpp
+        src/maths/Ray.hpp
+        src/maths/Vector3D.cpp
+        src/maths/Vector3D.hpp
+
+        src/objects/Sphere.cpp
+        src/objects/Sphere.hpp
+        src/objects/Plane.cpp
+        src/objects/Plane.hpp
+        src/objects/IObject.hpp
+        src/objects/AObject.hpp
+        src/objects/PipeLine.hpp
+
+        src/lights/ILight.hpp
+        src/lights/ALight.hpp
+        src/lights/Spot.cpp
+        src/lights/Spot.hpp
+
+        src/materials/IMaterial.hpp
+
+        src/utils/config/Config.hpp
+        src/utils/Error.hpp
+
+        src/cameras/ICamera.hpp
+        src/cameras/Camera.hpp
+        src/cameras/Camera.cpp
+
+        src/renderer/IRenderer.hpp
+
+        src/utils/config/ConfigManager.hpp
+        src/utils/config/ConfigManager.cpp
+        src/utils/loader/LibraryLoader.hpp
+        src/utils/loader/Loader.hpp
+        src/utils/loader/ILoader.hpp
+        src/utils/loader/LibraryLoader.cpp
+
+        src/scenes/IScene.hpp
+        src/scenes/Scene.cpp)
 
 
-target_link_libraries(raytracer config++)
+target_link_libraries(raytracer config++ -g)

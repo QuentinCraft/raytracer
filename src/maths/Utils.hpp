@@ -8,11 +8,11 @@
 #ifndef BSRAYTRACER_MATHUTILS_HPP
 #define BSRAYTRACER_MATHUTILS_HPP
 
-#include "Vector3D.hpp"
+#include "maths/Vector3D.hpp"
 
 namespace Math {
 
-    class MathUtils {
+    class Utils {
         public:
             static bool equal(double a, double b);
             static bool inf(double a, double b);

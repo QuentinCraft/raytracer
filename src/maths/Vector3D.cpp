@@ -6,7 +6,7 @@
 */
 
 #include "Vector3D.hpp"
-#include "MathUtils.hpp"
+#include "Utils.hpp"
 
 namespace Math {
     Vector3D::Vector3D() {
@@ -161,7 +161,7 @@ namespace Math {
     }
 
     bool Vector3D::operator==(const Vector3D &vector) const {
-        return Math::MathUtils::equal(_x, vector._x) && Math::MathUtils::equal(_y, vector._y) && Math::MathUtils::equal(_z, vector._z);
+        return Math::Utils::equal(_x, vector._x) && Math::Utils::equal(_y, vector._y) && Math::Utils::equal(_z, vector._z);
     }
 
 } // Math

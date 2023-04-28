@@ -8,7 +8,7 @@
 #ifndef BSRAYTRACER_RAY_HPP
 #define BSRAYTRACER_RAY_HPP
 
-#include "Vector3D.hpp"
+#include "maths/Vector3D.hpp"
 #include <memory>
 
 namespace RayTracer {
