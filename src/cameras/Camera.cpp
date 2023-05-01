@@ -4,6 +4,7 @@
 ** File description:
 ** Camera3D.cpp
 */
+#include <iostream>
 #include "Camera.hpp"
 
 namespace RayTracer {
@@ -40,13 +41,6 @@ namespace RayTracer {
     }
 
     Ray Camera::ray(double u, double v) const {
-//        double theta = ((u * (_fov / 90)) + _rotation._x);
-//        double phi = ((-v * (_fov / 90)) + _rotation._y);
-//        Math::Vector3D direction(
-//                std::cos(phi) * std::sin(theta),
-//                std::sin(phi),
-//                std::cos(phi) * std::cos(theta)
-//            );
         Math::Vector3D direction(u * (_fov / 90),
                                  -v * (_fov / 90),
                                  1);
@@ -90,10 +84,14 @@ namespace RayTracer {
             if (object == savedObject)
                 continue;
             std::optional<PipeLine> pipe = object->hits(bouncingRay);
+
             if (pipe.has_value()) {
                 if (canConnect(savedHitPoint, pipe.value()._position, lights.front()->getOrigin()))
                     continue;
+                if (Math::Utils::inf(Math::Utils::distance(bouncingRay._origin, lights.front()->getOrigin()), Math::Utils::distance(bouncingRay._origin, pipe.value()._position)))
+                    continue;
                 hitColor *= 0.5;
+                break;
             }
         }
         Math::Vector3D color = Math::Utils::toRGB(hitColor);

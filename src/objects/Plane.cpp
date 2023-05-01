@@ -12,12 +12,22 @@ namespace RayTracer {
         _origin = Math::Vector3D();
         _normal = Math::Vector3D().normalized();
         _color = Math::Vector3D(255, 255, 255);
+        _id = -1;
     }
 
     Plane::Plane(const Math::Vector3D& point, const Math::Vector3D& normal) {
         _color = Math::Vector3D(255, 255, 255);
         _origin = point;
         _normal = normal.normalized();
+        _id = -1;
+    }
+
+    Plane::Plane(const Math::Vector3D &point, const Math::Vector3D &normal,
+                 const Math::Vector3D &color) {
+        _origin = point;
+        _normal = normal.normalized();
+        _color = color;
+        _id = -1;
     }
 
     std::optional<PipeLine> Plane::hits(Ray const &ray) const {
@@ -26,11 +36,10 @@ namespace RayTracer {
         double denominator = rayBis._direction.dot(_normal);
         if (denominator < 1e-6) {
             Math::Vector3D p0l0 = _origin - rayBis._origin;
-//            double D = std::sqrt(p0l0.dot(p0l0));
             double D = p0l0.dot(_normal) / denominator;
-            if (Math::Utils::sup(D, 0) || Math::Utils::equal(0, D)) {
+            if (Math::Utils::sup(D, 0)) {
                 PipeLine pipe;
-                pipe._position = rayBis._origin + rayBis._direction * D;
+                pipe._position = ray._origin + ray._direction * D;
                 pipe._color = _color;
                 pipe.id = _id;
                 return pipe;
@@ -45,13 +54,6 @@ namespace RayTracer {
 
     bool Plane::operator==(const Plane &plane) const {
         return _origin == plane._origin && _normal == plane._normal;
-    }
-
-    Plane::Plane(const Math::Vector3D &point, const Math::Vector3D &normal,
-                 const Math::Vector3D &color) {
-        _origin = point;
-        _normal = normal.normalized();
-        _color = color;
     }
 
 
