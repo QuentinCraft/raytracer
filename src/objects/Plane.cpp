@@ -26,8 +26,8 @@ namespace RayTracer {
         double denominator = rayBis._direction.dot(_normal);
         if (denominator < 1e-6) {
             Math::Vector3D p0l0 = _origin - rayBis._origin;
-            double D = std::sqrt(p0l0.dot(p0l0));
-//            double D = p0l0.dot(_normal)  denominator;
+//            double D = std::sqrt(p0l0.dot(p0l0));
+            double D = p0l0.dot(_normal) / denominator;
             if (Math::Utils::sup(D, 0) || Math::Utils::equal(0, D)) {
                 PipeLine pipe;
                 pipe._position = rayBis._origin + rayBis._direction * D;
