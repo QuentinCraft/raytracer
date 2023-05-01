@@ -7,8 +7,8 @@
 
 #include "ConfigManager.hpp"
 
-RayTracer::Utils::Config::ConfigManager::Config::Camera RayTracer::Utils::Config::ConfigManager::_getCamera(const libconfig::Setting& root) {
-    RayTracer::Utils::Config::ConfigManager::Config::Camera cam;
+RayTracer::Utils::Config::Camera RayTracer::Utils::ConfigManager::_getCamera(const libconfig::Setting& root) {
+    RayTracer::Utils::Config::Camera cam;
 
     try {
         const libconfig::Setting& camera = root["camera"];
@@ -29,15 +29,15 @@ RayTracer::Utils::Config::ConfigManager::Config::Camera RayTracer::Utils::Config
         cam.position._x = static_cast<int>(position["x"]);
         cam.position._z = static_cast<int>(position["z"]);
     } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("Error: Invalid settings in [Camera] part");
+        throw RayTracer::Utils::Error("Error: Invalid settings in [Camera] part");
     }
 
     return cam;
 }
 
-RayTracer::Utils::Config::ConfigManager::Config::Light RayTracer::Utils::Config::ConfigManager::_getLight(
+RayTracer::Utils::Config::Light RayTracer::Utils::ConfigManager::_getLight(
         const libconfig::Setting &root) {
-    RayTracer::Utils::Config::ConfigManager::Config::Light light;
+    RayTracer::Utils::Config::Light light;
 
     try {
         const libconfig::Setting& lightSetting = root["lights"];
@@ -68,21 +68,21 @@ RayTracer::Utils::Config::ConfigManager::Config::Light RayTracer::Utils::Config:
         }
 
     } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("Error: Invalid settings in [Light] part");
+        throw RayTracer::Utils::Error("Error: Invalid settings in [Light] part");
     }
     return light;
 }
 
-RayTracer::Utils::Config::ConfigManager::Config RayTracer::Utils::Config::ConfigManager::getConf(const std::string& path) {
-    RayTracer::Utils::Config::ConfigManager::Config cnf;
+RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::string& path) {
+    RayTracer::Utils::Config cnf;
     libconfig::Config config;
 
     try {
         config.readFile(path.c_str());
     } catch (libconfig::FileIOException &e) {
-        throw Error("Error: Cannot read file : [" + path + "]");
+        throw RayTracer::Utils::Error("Error: Cannot read file : [" + path + "]");
     } catch (libconfig::ParseException &e) {
-        throw Error("Error: Cannot be parsed the config file (lines: " + std::to_string(e.getLine()) + ")");
+        throw RayTracer::Utils::Error("Error: Cannot be parsed the config file (lines: " + std::to_string(e.getLine()) + ")");
     }
 
     const libconfig::Setting& root = config.getRoot();

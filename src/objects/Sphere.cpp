@@ -34,7 +34,7 @@ namespace RayTracer {
 
         double discriminant = b * b - 4.0 * a * c;
 
-        if (discriminant < 0)
+        if (Math::Utils::inf(discriminant, 0))
             return std::nullopt;
         double D = (-b - sqrt(discriminant)) / (2 * a);
         PipeLine pipe;

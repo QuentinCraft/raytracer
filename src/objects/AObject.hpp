@@ -51,6 +51,10 @@ namespace RayTracer {
             [[nodiscard]] const Math::Vector3D &getScale() const override { return _scale; }
             void setScale(const Math::Vector3D &scale) override { _scale =  scale; }
 
+            bool operator==(const AObject &other) const {
+                return _id == other._id && _origin == other._origin && _color == other._color && _rotation == other._rotation && _scale == other._scale;
+            }
+
         protected:
             double _id;
             Math::Vector3D _origin;

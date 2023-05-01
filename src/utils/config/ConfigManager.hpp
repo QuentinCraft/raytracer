@@ -16,9 +16,11 @@
 
 #include <libconfig.h++>
 
-#include "../../Vector3D.hpp"
+#include "maths/Vector3D.hpp"
+#include "Config.hpp"
+#include "utils/Error.hpp"
 
-namespace RayTracer::Utils::Config {
+namespace RayTracer::Utils {
 
     class ConfigManager {
         public:

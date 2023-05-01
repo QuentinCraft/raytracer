@@ -84,7 +84,7 @@ namespace RayTracer {
 
         double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
         Math::Vector3D hitColor(savedObject->getColor());
-        hitColor *= dot;
+        hitColor *= (lights.front()->getIntensity() * dot);
         Ray bouncingRay(savedHitPoint, (lights.front()->getOrigin() - savedHitPoint).normalized());
         for (auto &object : objects) {
             if (object == savedObject)
