@@ -16,6 +16,7 @@
 #include "objects/Sphere.hpp"
 #include "objects/Plane.hpp"
 
+/*
 int main() {
     std::ofstream file("render.ppm");
 
@@ -46,5 +47,21 @@ int main() {
     }
     file.close();
 
+    return 0;
+}
+ */
+
+#include "objects/IObject.hpp"
+#include "utils/factory/ObjectFactory.hpp"
+#include "objects/SphereBuilder.hpp"
+
+int main()
+{
+    std::unique_ptr<RayTracer::Utils::ObjectFactory> factory = std::make_unique<RayTracer::Utils::ObjectFactory>();
+    std::string type = "sphere";
+    std::unique_ptr<RayTracer::IObject> object = factory->createObject(type);
+
+    std::unique_ptr<RayTracer::SphereBuilder> builder = std::make_unique<RayTracer::SphereBuilder>();
+    builder->setColor(Math::Vector3D(1, 0, 1)).build();
     return 0;
 }
