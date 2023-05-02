@@ -49,7 +49,7 @@ add_executable(raytracer
         src/utils/loader/LibraryLoader.cpp
 
         src/scenes/IScene.hpp
-        src/scenes/Scene.cpp src/utils/factory/ObjectFactory.hpp src/utils/factory/ObjectFactory.cpp src/utils/builder/IBuilder.hpp src/utils/builder/ABuilder.hpp src/objects/SphereBuilder.hpp src/objects/PlaneBuilder.hpp src/utils/config/data/IData.hpp src/utils/config/data/AData.hpp src/utils/factory/IObjectFactory.hpp)
+        src/scenes/Scene.cpp src/utils/factory/ObjectFactory.hpp src/utils/factory/ObjectFactory.cpp src/utils/builder/IBuilder.hpp src/utils/builder/ABuilder.hpp src/objects/SphereBuilder.hpp src/objects/PlaneBuilder.hpp src/utils/config/data/IData.hpp src/utils/config/data/AData.hpp src/utils/factory/IObjectFactory.hpp src/utils/string/StringUtils.hpp)
 
 
 target_link_libraries(raytracer config++ -g)

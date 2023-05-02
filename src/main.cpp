@@ -51,9 +51,11 @@ int main() {
 }
  */
 
-
+#include "utils/config/ConfigManager.hpp"
 
 int main()
 {
+    RayTracer::Utils::ConfigManager configManager;
+    configManager.getConf("config.cnf");
     return 0;
 }

@@ -27,6 +27,9 @@ namespace RayTracer::Utils {
             static Config getConf(const std::string& path);
             static Config::Camera _getCamera(const libconfig::Setting& root);
             static Config::Light _getLight(const libconfig::Setting& root);
+            static void _getSphere(const libconfig::Setting& primitive);
+            static void _getPlane(const libconfig::Setting& primitive);
+            static void _getPrimitives(const libconfig::Setting &root);
     };
 
 } // RayTracer
