@@ -7,19 +7,17 @@
 
 #ifndef OBJECTFACTORY_HPP_
 #define OBJECTFACTORY_HPP_
-#include <iostream>
-#include <memory>
-#include "utils/builder/IBuilder.hpp"
+#include "IObjectFactory.hpp"
 #include "objects/SphereBuilder.hpp"
 #include "objects/PlaneBuilder.hpp"
 
 namespace RayTracer::Utils {
 
-    class ObjectFactory {
+    class ObjectFactory : public IObjectFactory {
         public:
-            ObjectFactory() {};
-            ~ObjectFactory() {};
-            static std::unique_ptr<RayTracer::IBuilder> createObjectBuilder(std::string &type);
+            ObjectFactory() = default;
+            ~ObjectFactory() override = default;
+            std::unique_ptr<RayTracer::IBuilder> createObjectBuilder(std::string &type) override;
         private:
             static std::unique_ptr<RayTracer::IBuilder> _createSphere();
             static std::unique_ptr<RayTracer::IBuilder> _createPlane();

@@ -51,15 +51,9 @@ int main() {
 }
  */
 
-#include "objects/IObject.hpp"
-#include "utils/factory/ObjectFactory.hpp"
-#include "objects/SphereBuilder.hpp"
+
 
 int main()
 {
-    std::unique_ptr<RayTracer::Utils::ObjectFactory> factory = std::make_unique<RayTracer::Utils::ObjectFactory>();
-    std::string type = "sphere";
-    auto sphereBuilder = factory->createObjectBuilder(type);
-    auto obj = sphereBuilder->build();
     return 0;
 }
