@@ -31,12 +31,10 @@ namespace RayTracer {
         double discriminant = b * b - 4.0 * a * c;
 
         double d1 = (-b - sqrt(discriminant)) / (2 * a);
-        double d2 = (-b + sqrt(discriminant)) / (2 * a);
         double t = d1;
 
 
         Math::Vector3D hitPoint = ray._origin + ray._direction * t;
-        double dist = sqrt(hitPoint._x * hitPoint._x + hitPoint._z * hitPoint._z);
 
         if (
             (Math::Utils::sup(hitPoint._y, _origin._y - _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _length / 2.0)) &&
