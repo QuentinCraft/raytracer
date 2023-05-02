@@ -10,7 +10,7 @@
 #include <iostream>
 #include <memory>
 #include "maths/Vector3D.hpp"
-#include "IObject.hpp"
+#include "objects/IObject.hpp"
 
 namespace RayTracer {
 

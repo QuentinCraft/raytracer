@@ -6,7 +6,7 @@
 */
 #ifndef PLANEBUILDER_HPP_
 #define PLANEBUILDER_HPP_
-#include "ABuilder.hpp"
+#include "utils/builder/ABuilder.hpp"
 #include "Plane.hpp"
 
 namespace RayTracer {
@@ -15,7 +15,7 @@ namespace RayTracer {
         public:
             PlaneBuilder() : ABuilder() {};
             ~PlaneBuilder() {};
-            std::unique_ptr<RayTracer::IObject> build()
+            std::unique_ptr<RayTracer::IObject> build() override
             {
                 _object = std::make_unique<RayTracer::Plane>(_point, _normal, _color);
                 return std::move(_object);

@@ -8,7 +8,7 @@
 #ifndef ABUILDER_HPP_
 #define ABUILDER_HPP_
 #include "IBuilder.hpp"
-#include "IObject.hpp"
+#include "objects/IObject.hpp"
 #include "maths/Vector3D.hpp"
 
 namespace RayTracer {
