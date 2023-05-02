@@ -59,9 +59,7 @@ int main()
 {
     std::unique_ptr<RayTracer::Utils::ObjectFactory> factory = std::make_unique<RayTracer::Utils::ObjectFactory>();
     std::string type = "sphere";
-    std::unique_ptr<RayTracer::IObject> object = factory->createObject(type);
-
-    std::unique_ptr<RayTracer::SphereBuilder> builder = std::make_unique<RayTracer::SphereBuilder>();
-    builder->setColor(Math::Vector3D(1, 0, 1)).build();
+    auto sphereBuilder = factory->createObjectBuilder(type);
+    auto obj = sphereBuilder->build();
     return 0;
 }

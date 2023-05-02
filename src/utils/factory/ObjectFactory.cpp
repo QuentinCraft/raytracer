@@ -7,7 +7,7 @@
 
 #include "ObjectFactory.hpp"
 
-std::unique_ptr<RayTracer::IObject> RayTracer::Utils::ObjectFactory::createObject(std::string &type)
+std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::createObjectBuilder(std::string &type)
 {
     if (type == "sphere")
         return _createSphere();
@@ -16,12 +16,12 @@ std::unique_ptr<RayTracer::IObject> RayTracer::Utils::ObjectFactory::createObjec
     return nullptr;
 }
 
-std::unique_ptr<RayTracer::IObject> RayTracer::Utils::ObjectFactory::_createSphere()
+std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::_createSphere()
 {
-    return std::make_unique<RayTracer::Sphere>();
+    return std::make_unique<RayTracer::SphereBuilder>();
 }
 
-std::unique_ptr<RayTracer::IObject> RayTracer::Utils::ObjectFactory::_createPlane()
+std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::_createPlane()
 {
-    return std::make_unique<RayTracer::Plane>();
+    return std::make_unique<RayTracer::PlaneBuilder>();
 }

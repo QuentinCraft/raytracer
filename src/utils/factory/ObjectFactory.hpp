@@ -9,10 +9,9 @@
 #define OBJECTFACTORY_HPP_
 #include <iostream>
 #include <memory>
-#include "objects/IObject.hpp"
-
-#include "objects/Sphere.hpp"
-#include "objects/Plane.hpp"
+#include "objects/IBuilder.hpp"
+#include "objects/SphereBuilder.hpp"
+#include "objects/PlaneBuilder.hpp"
 
 namespace RayTracer::Utils {
 
@@ -20,10 +19,10 @@ namespace RayTracer::Utils {
     public:
         ObjectFactory() {};
         ~ObjectFactory() {};
-        std::unique_ptr<RayTracer::IObject> createObject(std::string &type);
+        static std::unique_ptr<RayTracer::IBuilder> createObjectBuilder(std::string &type);
     private:
-        static std::unique_ptr<RayTracer::IObject> _createSphere();
-        static std::unique_ptr<RayTracer::IObject> _createPlane();
+        static std::unique_ptr<RayTracer::IBuilder> _createSphere();
+        static std::unique_ptr<RayTracer::IBuilder> _createPlane();
     };
 
 }

@@ -9,6 +9,8 @@
 #define IBUILDER_HPP_
 #include <iostream>
 #include <memory>
+#include "maths/Vector3D.hpp"
+#include "IObject.hpp"
 
 namespace RayTracer {
 
