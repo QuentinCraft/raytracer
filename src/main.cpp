@@ -15,6 +15,7 @@
 
 #include "objects/Sphere.hpp"
 #include "objects/Plane.hpp"
+#include "objects/Cylinder.hpp"
 
 int main() {
     std::ofstream file("render.ppm");
@@ -23,6 +24,8 @@ int main() {
 
     scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 3, 0), 3, Math::Vector3D(1, 0, 1)));
     scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-0.7, 4, -3), 1, Math::Vector3D(1, 0, 0)));
+
+    scene->_objects.push_back(std::make_shared<RayTracer::Cylinder>(Math::Vector3D(-10, 3, 0), 3, 3, Math::Vector3D(1, 0, 1)));
 
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), Math::Vector3D(0.5, 0.5, 1)));
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 8, 0), Math::Vector3D(0, -1, 0), Math::Vector3D(0.5, 0.5, 1)));
