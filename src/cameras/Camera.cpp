@@ -72,7 +72,7 @@ namespace RayTracer {
             }
         }
         if (i == 0)
-            return {0, 100, 150};
+            return {0, 0, 0};
         Math::Vector3D normal = savedObject->normal(savedHitPoint).normalized();
         Math::Vector3D lightDir(lights.front()->getOrigin(), savedHitPoint);
 

@@ -36,11 +36,13 @@ namespace RayTracer {
         double d2 = (-b + sqrt(discriminant)) / (2 * a);
         double t = std::min(d1, d2);
 
+        if (Math::Utils::inf(t, 0))
+            return std::nullopt;
+
         Math::Vector3D hitPoint = ray._origin + ray._direction * t;
         double dist = sqrt(hitPoint._x * hitPoint._x + hitPoint._z * hitPoint._z);
 
-        if ((Math::Utils::inf(dist, _radius) || Math::Utils::equal(dist, _radius)) &&
-            (Math::Utils::sup(hitPoint._y, _origin._y - _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _length / 2.0)) &&
+        if ((Math::Utils::sup(hitPoint._y, _origin._y - _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _length / 2.0)) &&
             (Math::Utils::inf(hitPoint._y, _origin._y + _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y + _length / 2.0))) {
             PipeLine pipe;
             pipe._position = hitPoint;

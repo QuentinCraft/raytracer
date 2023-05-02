@@ -37,6 +37,8 @@ namespace RayTracer {
         if (Math::Utils::inf(discriminant, 0))
             return std::nullopt;
         double D = (-b - sqrt(discriminant)) / (2 * a);
+        if (Math::Utils::inf(D, 0))
+            return std::nullopt;
         PipeLine pipe;
         pipe._position = ray._origin + rayBis._direction * D;
         pipe.id = _id;
