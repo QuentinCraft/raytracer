@@ -46,8 +46,8 @@ namespace RayTracer {
         return pipe;
     }
 
-    Math::Vector3D Sphere::normal(const Math::Vector3D &point) const {
-        return Math::Vector3D(_origin - point).normalized();
+    Math::Vector3D Sphere::normal(const PipeLine &pipe) const {
+        return Math::Vector3D(_origin - pipe._position).normalized();
     }
 
     bool Sphere::operator==(const Sphere &sphere) const {

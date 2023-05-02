@@ -38,7 +38,7 @@ namespace RayTracer {
             Cylinder &operator=(Cylinder const &cylinder) = default;
             Cylinder &operator=(Cylinder &&cylinder) = default;
             [[nodiscard]] std::optional<PipeLine> hits(Ray const &ray) const override;
-            [[nodiscard]] Math::Vector3D normal(Math::Vector3D const &point) const override;
+            [[nodiscard]] Math::Vector3D normal(PipeLine const &pipe) const override;
 
             // Variables
             double _length;

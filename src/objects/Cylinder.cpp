@@ -29,25 +29,27 @@ namespace RayTracer {
         double c = rayOrigin._x * rayOrigin._x + rayOrigin._z * rayOrigin._z - (_radius * _radius);
 
         double discriminant = b * b - 4.0 * a * c;
-        if (Math::Utils::inf(discriminant, 0))
-            return std::nullopt;
 
         double d1 = (-b - sqrt(discriminant)) / (2 * a);
         double d2 = (-b + sqrt(discriminant)) / (2 * a);
-        double t = std::min(d1, d2);
+        double t = d1;
 
-        if (Math::Utils::inf(t, 0))
-            return std::nullopt;
 
         Math::Vector3D hitPoint = ray._origin + ray._direction * t;
         double dist = sqrt(hitPoint._x * hitPoint._x + hitPoint._z * hitPoint._z);
 
-        if ((Math::Utils::sup(hitPoint._y, _origin._y - _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _length / 2.0)) &&
+        if (
+            (Math::Utils::sup(hitPoint._y, _origin._y - _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _length / 2.0)) &&
             (Math::Utils::inf(hitPoint._y, _origin._y + _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y + _length / 2.0))) {
+            if (Math::Utils::inf(discriminant, 0))
+                return std::nullopt;
+            if (Math::Utils::inf(t, 0))
+                return std::nullopt;
             PipeLine pipe;
             pipe._position = hitPoint;
             pipe._color = _color;
             pipe.id = _id;
+            pipe._info = "Cylinder";
             return pipe;
         }
 
@@ -74,6 +76,7 @@ namespace RayTracer {
             pipe._position = hitPoint_top;
             pipe._color = _color;
             pipe.id = _id;
+            pipe._info = "TopCylinder";
             return pipe;
         }
 
@@ -82,14 +85,22 @@ namespace RayTracer {
             pipe._position = hitPoint_bot;
             pipe._color = _color;
             pipe.id = _id;
+            pipe._info = "BotCylinder";
             return pipe;
         }
 
         return std::nullopt;
     }
 
-    Math::Vector3D Cylinder::normal(const Math::Vector3D &point) const {
-        return Math::Vector3D((_origin - point));
+    Math::Vector3D Cylinder::normal(const PipeLine &pipe) const {
+        if (pipe._info == "TopCylinder" ) {
+            return Math::Vector3D(0, -1, 0);
+        } else if (pipe._info == "BotCylinder") {
+            return Math::Vector3D(0, 1, 0);
+        } else if (pipe._info == "Cylinder") {
+            return Math::Vector3D((_origin - pipe._position)._x, 0, (_origin - pipe._position)._z);
+        }
+        return Math::Vector3D();
     }
 
     bool Cylinder::operator==(const Cylinder &cylinder) const {

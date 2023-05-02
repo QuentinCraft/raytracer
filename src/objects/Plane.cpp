@@ -50,7 +50,7 @@ namespace RayTracer {
         return std::nullopt;
     }
 
-    Math::Vector3D Plane::normal(const Math::Vector3D &point) const {
+    Math::Vector3D Plane::normal(const PipeLine &pipe) const {
         return _normal * -1;
     }
 
