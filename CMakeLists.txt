@@ -49,7 +49,7 @@ add_executable(raytracer
         src/utils/loader/LibraryLoader.cpp
 
         src/scenes/IScene.hpp
-        src/scenes/Scene.cpp src/objects/Cylinder.cpp)
+        src/scenes/Scene.cpp src/objects/Cylinder.cpp src/lights/Ambient.cpp src/lights/Ambient.hpp)
 
 
 target_link_libraries(raytracer config++ -g)

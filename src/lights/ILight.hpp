@@ -8,6 +8,8 @@
 #ifndef RAYTRACER_ILIGHT_HPP
 #define RAYTRACER_ILIGHT_HPP
 
+#include "maths/Vector3D.hpp"
+
 namespace RayTracer {
 
     class ILight {
@@ -19,8 +21,6 @@ namespace RayTracer {
 
             [[nodiscard]] virtual const Math::Vector3D &getIntensity() const = 0;
             virtual void setIntensity(const Math::Vector3D &intensity) = 0;
-
-
     };
 
 } // RayTracer

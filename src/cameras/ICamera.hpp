@@ -8,6 +8,8 @@
 #ifndef RAYTRACER_ICAMERA_HPP
 #define RAYTRACER_ICAMERA_HPP
 
+#include "lights/Ambient.hpp"
+
 namespace RayTracer {
 
     class ICamera {
@@ -32,7 +34,8 @@ namespace RayTracer {
             [[nodiscard]] virtual Ray ray(double u, double v) const = 0;
             [[nodiscard]] virtual Math::Vector3D pointAt(double u, double v,
                                                  std::vector<std::shared_ptr<IObject>> &objects,
-                                                 std::vector<std::shared_ptr<ILight>> &lights) const = 0;
+                                                 std::vector<std::shared_ptr<ILight>> &lights,
+                                                 std::shared_ptr<Ambient> &ambient) const = 0;
     };
 
 } // RayTracer

@@ -30,7 +30,8 @@ namespace RayTracer {
             [[nodiscard]] Ray ray(double u, double v) const override;
             [[nodiscard]] Math::Vector3D pointAt(double u, double v,
                                                  std::vector<std::shared_ptr<IObject>> &objects,
-                                                 std::vector<std::shared_ptr<ILight>> &lights) const override;
+                                                 std::vector<std::shared_ptr<ILight>> &lights,
+                                                 std::shared_ptr<Ambient> &ambient) const override;
 
             [[nodiscard]] const Math::Vector3D &getOrigin() const override { return _origin; };
             void setOrigin(const Math::Vector3D &origin) override { _origin = origin; };

@@ -50,7 +50,8 @@ namespace RayTracer {
 
     Math::Vector3D Camera::pointAt(double u, double v,
                                    std::vector<std::shared_ptr<IObject>> &objects,
-                                   std::vector<std::shared_ptr<ILight>> &lights) const {
+                                   std::vector<std::shared_ptr<ILight>> &lights,
+                                   std::shared_ptr<Ambient> &ambient) const {
         Ray r = ray(u, v);
         Math::Vector3D savedHitPoint;
         std::shared_ptr<IObject> savedObject;
@@ -78,7 +79,7 @@ namespace RayTracer {
 
         double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
         Math::Vector3D hitColor(savedObject->getColor());
-        hitColor *= (lights.front()->getIntensity() * dot);
+        hitColor *= (ambient->getIntensity() + dot);
         Ray bouncingRay(savedHitPoint, (lights.front()->getOrigin() - savedHitPoint).normalized());
         for (auto &object : objects) {
             if (object == savedObject)
@@ -90,7 +91,7 @@ namespace RayTracer {
                     continue;
                 if (Math::Utils::inf(Math::Utils::distance(bouncingRay._origin, lights.front()->getOrigin()), Math::Utils::distance(bouncingRay._origin, pipe.value()._position)))
                     continue;
-                hitColor *= 0.5;
+                hitColor *= ambient->getIntensity();
                 break;
             }
         }

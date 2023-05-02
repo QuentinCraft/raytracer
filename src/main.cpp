@@ -35,6 +35,8 @@ int main() {
 
     scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(5, 5, -10), Math::Vector3D(1, 1, 1)));
 
+    scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.25, 0.25, 0.25));
+
     scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 5, -25), 800, 800, 90);
 
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
@@ -43,7 +45,7 @@ int main() {
         for (int x = 0; x < scene->_camera->getHeight(); x++) {
             double u = x / scene->_camera->getWidth() * 2 -1;
             double v = y / scene->_camera->getHeight() * 2 - 1;
-            Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights);
+            Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
             file << ((unsigned int) color._x) << " " << ((unsigned int) color._y) << " " << ((unsigned int) color._z) << std::endl;
         }
     }
