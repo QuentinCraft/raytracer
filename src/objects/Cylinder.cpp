@@ -36,8 +36,7 @@ namespace RayTracer {
 
         Math::Vector3D hitPoint = ray._origin + ray._direction * t;
 
-        if (
-            (Math::Utils::sup(hitPoint._y, _origin._y - _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _length / 2.0)) &&
+        if  ((Math::Utils::sup(hitPoint._y, _origin._y - _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _length / 2.0)) &&
             (Math::Utils::inf(hitPoint._y, _origin._y + _length / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y + _length / 2.0))) {
             if (Math::Utils::inf(discriminant, 0))
                 return std::nullopt;
