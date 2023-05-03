@@ -19,8 +19,9 @@
 
 #include "utils/config/ConfigManager.hpp"
 #include "utils/loader/LibraryLoader.hpp"
+#include "utils/loader/PluginsManager.hpp"
 
-
+/*
 int main() {
     std::ofstream file("render.ppm");
 
@@ -57,11 +58,15 @@ int main() {
 
     return 0;
 }
+*/
 
-//
-//int main()
-//{
-//    RayTracer::Utils::LibraryLoader loader;
-//
-//    std::cout << loader.loadLib<RayTracer::IBuilder *>("../plugins/raytracer_sphere.so")->build() << std::endl;
-//}
+#include "utils/loader/PluginsManager.hpp"
+
+int main()
+{
+    RayTracer::Utils::PluginsManager manager("../plugins");
+
+    for (auto &x : manager.load()) {
+        std::cout << "builder : [" << x << "]" << std::endl;
+    }
+}
