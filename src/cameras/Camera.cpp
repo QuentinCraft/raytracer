@@ -49,8 +49,8 @@ namespace RayTracer {
     }
 
     static PipeLine closestPoint(const Ray &r, std::vector<std::shared_ptr<IObject>> &objects,
-                                       std::vector<std::shared_ptr<ILight>> &lights,
-                                       std::shared_ptr<Ambient> &ambient) {
+                                 std::vector<std::shared_ptr<ILight>> &lights,
+                                 std::shared_ptr<Ambient> &ambient) {
         PipeLine savedHitPoint;
         savedHitPoint.object = nullptr;
         int i = 0;
@@ -69,7 +69,7 @@ namespace RayTracer {
         return savedHitPoint;
     }
     static Math::Vector3D lambert(PipeLine &object, std::vector<std::shared_ptr<ILight>> &lights,
-                                 std::shared_ptr<Ambient> &ambient) {
+                                  std::shared_ptr<Ambient> &ambient) {
         Math::Vector3D normal = object.object->normal(object).normalized();
         Math::Vector3D lightDir(lights.front()->getOrigin(), object._position);
         double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
@@ -79,9 +79,9 @@ namespace RayTracer {
     }
 
     static Math::Vector3D dropShadow(PipeLine &savedHitPoint, Math::Vector3D hitColor,
-                           std::vector<std::shared_ptr<IObject>> &objects,
-                           std::vector<std::shared_ptr<ILight>> &lights,
-                           std::shared_ptr<Ambient> &ambient) {
+                                     std::vector<std::shared_ptr<IObject>> &objects,
+                                     std::vector<std::shared_ptr<ILight>> &lights,
+                                     std::shared_ptr<Ambient> &ambient) {
         Ray bouncingRay(savedHitPoint._position, (lights.front()->getOrigin() - savedHitPoint._position).normalized());
         for (auto &object : objects) {
             if (object == savedHitPoint.object)
@@ -101,7 +101,7 @@ namespace RayTracer {
 
     static Math::Vector3D compute(const Ray &r, std::vector<std::shared_ptr<IObject>> &objects,
                                   std::vector<std::shared_ptr<ILight>> &lights,
-                                    std::shared_ptr<Ambient> &ambient, int recursive) {
+                                  std::shared_ptr<Ambient> &ambient, int recursive) {
         Math::Vector3D hitColor;
 
         PipeLine savedHitPoint = closestPoint(r, objects, lights, ambient);
