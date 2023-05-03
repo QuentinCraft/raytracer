@@ -13,7 +13,7 @@ namespace RayTracer {
 
     class PlaneBuilder : public ABuilder  {
         public:
-            PlaneBuilder() : ABuilder() {};
+            PlaneBuilder() : ABuilder("plane") {};
             ~PlaneBuilder() {};
             std::unique_ptr<RayTracer::IObject> build() override
             {

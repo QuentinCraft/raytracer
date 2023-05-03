@@ -10,17 +10,21 @@
 #include "IObjectFactory.hpp"
 #include "objects/SphereBuilder.hpp"
 #include "objects/PlaneBuilder.hpp"
+#include "utils/loader/PluginsManager.hpp"
 
 namespace RayTracer::Utils {
 
     class ObjectFactory : public IObjectFactory {
         public:
-            ObjectFactory() = default;
+            ObjectFactory(const std::string &path) {
+                _manager = std::make_unique<PluginsManager>(path);
+                _builders = _manager->loadPlugins();
+            };
             ~ObjectFactory() override = default;
-            std::unique_ptr<RayTracer::IBuilder> createObjectBuilder(const std::string &type) override;
+            RayTracer::IBuilder *createObjectBuilder(const std::string &type) override;
         private:
-            static std::unique_ptr<RayTracer::IBuilder> _createSphere();
-            static std::unique_ptr<RayTracer::IBuilder> _createPlane();
+            std::unique_ptr<IPluginsManager> _manager;
+            std::vector<std::unique_ptr<RayTracer::IBuilder>> _builders;
     };
 
 }

@@ -7,13 +7,12 @@
 
 #include "utils/builder/IBuilder.hpp"
 #include "PlaneBuilder.hpp"
+#include <memory>
 
 extern "C"
 {
-    RayTracer::IBuilder *entryPoint(void)
+    std::unique_ptr<RayTracer::IBuilder> entryPoint(void)
     {
-        RayTracer::PlaneBuilder *newObject = new RayTracer::PlaneBuilder();
-
-        return newObject;
+         return std::make_unique<RayTracer::PlaneBuilder>();
     }
 }

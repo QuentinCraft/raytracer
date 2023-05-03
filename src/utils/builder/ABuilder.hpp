@@ -15,7 +15,7 @@ namespace RayTracer {
 
     class ABuilder : public IBuilder {
         public:
-            ABuilder() {};
+            ABuilder(const std::string &name) {_builderName = name;};
             ~ABuilder() {};
 
             IBuilder &setColor(Math::Vector3D const &color) override
@@ -47,12 +47,24 @@ namespace RayTracer {
             {
                 return std::move(_object);
             }
+            std::string &getBuilderName() override
+            {
+                return _builderName;
+            }
+            void reset() override
+            {
+                _color = Math::Vector3D(0, 0, 0);
+                _center = Math::Vector3D(0, 0, 0);
+                _radius = 0;
+                _normal = Math::Vector3D(0, 0, 0);
+            }
         protected:
             Math::Vector3D _color;
             Math::Vector3D _center;
             Math::Vector3D _point;
             Math::Vector3D _normal;
             double _radius;
+            std::string _builderName;
             std::unique_ptr<RayTracer::IObject> _object;
     };
 
