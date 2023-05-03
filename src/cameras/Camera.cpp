@@ -118,8 +118,8 @@ namespace RayTracer {
                 hitColor = Math::Vector3D(0.3, 0.3, 1);
             } else {
                 if (recursive <= 0)
-                    return {0.3, 0.3, 1};
-                return compute(reflectedRay, objects, lights, ambient, recursive - 1);
+                    return {0, 0, 0};
+                return compute(reflectedRay, objects, lights, ambient, recursive - 1) * 0.9;
             }
         }
         hitColor *= lambert(savedHitPoint, lights, ambient);
@@ -132,7 +132,7 @@ namespace RayTracer {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 50);
+        hitColor = compute(r, objects, lights, ambient, 5);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }
