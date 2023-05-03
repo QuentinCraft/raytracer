@@ -17,6 +17,8 @@
 #include "objects/Plane.hpp"
 #include "objects/Cylinder.hpp"
 
+#include "utils/config/ConfigManager.hpp"
+
 int main() {
     std::ofstream file("render.ppm");
 
