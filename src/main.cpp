@@ -19,7 +19,6 @@
 
 #include "utils/config/ConfigManager.hpp"
 
-/*
 int main() {
     std::ofstream file("render.ppm");
 
@@ -54,15 +53,5 @@ int main() {
     }
     file.close();
 
-    return 0;
-}
- */
-
-#include "utils/config/ConfigManager.hpp"
-
-int main()
-{
-    RayTracer::Utils::ConfigManager configManager;
-    configManager.getConf("config.cnf");
     return 0;
 }
