@@ -7,6 +7,30 @@ include_directories(src)
 
 set(CMAKE_CXX_FLAGS "-O3")
 
+###### PLUGINS ######
+
+###### SPHERE ######
+set(OBJ_SPHERE_SRC
+        src/objects/Sphere.cpp
+        src/objects/SphereEntryPoint.cpp
+        src/maths/Vector3D.cpp
+)
+
+add_library(sphere SHARED ${OBJ_SPHERE_SRC})
+set_target_properties(sphere PROPERTIES PREFIX raytracer_)
+set_target_properties(sphere PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
+###### PLANE ######
+set(OBJ_PLANE_SRC
+        src/objects/Plane.cpp
+        src/objects/PlaneEntryPoint.cpp
+        src/maths/Vector3D.cpp
+)
+
+add_library(plane SHARED ${OBJ_PLANE_SRC})
+set_target_properties(plane PROPERTIES PREFIX raytracer_)
+set_target_properties(plane PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
 add_executable(raytracer
         src/main.cpp
 

@@ -19,7 +19,7 @@ namespace RayTracer::Utils {
             /* open (arg: path ./lib.so)
              * Return [false] = error
              */
-            virtual bool open(std::string &path) = 0;
+            virtual bool open(const std::string &path) = 0;
 
             // get function by name (ex: entryPoint)
             virtual void *getFunction(const std::string function) = 0;

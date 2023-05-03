@@ -18,6 +18,8 @@
 #include "objects/Cylinder.hpp"
 
 #include "utils/config/ConfigManager.hpp"
+#include "utils/loader/LibraryLoader.hpp"
+
 
 int main() {
     std::ofstream file("render.ppm");
@@ -55,3 +57,11 @@ int main() {
 
     return 0;
 }
+
+//
+//int main()
+//{
+//    RayTracer::Utils::LibraryLoader loader;
+//
+//    std::cout << loader.loadLib<RayTracer::IBuilder *>("../plugins/raytracer_sphere.so")->build() << std::endl;
+//}

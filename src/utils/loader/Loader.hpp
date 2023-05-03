@@ -28,7 +28,7 @@ namespace RayTracer::Utils {
                 _handle = nullptr;
                 _error = nullptr;
             }
-            bool open(std::string &path) override {
+            bool open(const std::string &path) override {
                 if (_handle) close();
                 _handle = dlopen(path.c_str(), RTLD_LAZY);
 

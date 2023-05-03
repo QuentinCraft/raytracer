@@ -5,3 +5,5 @@ raytracer
 .idea
 vgcore*
 cmake-build-debug
+cmake-build-release
+plugins
