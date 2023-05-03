@@ -21,7 +21,7 @@ namespace RayTracer {
             virtual ~IObject() = default;
 
             [[nodiscard]] virtual std::optional<PipeLine> hits(Ray const &ray) const = 0;
-            [[nodiscard]] virtual Math::Vector3D normal(Math::Vector3D const &point) const = 0;
+            [[nodiscard]] virtual Math::Vector3D normal(PipeLine const &pipe) const = 0;
 
 
             [[nodiscard]] virtual double getId() const = 0;

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.20.5)
 project(raytracer)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -49,6 +49,9 @@ add_executable(raytracer
         src/utils/loader/LibraryLoader.cpp
 
         src/scenes/IScene.hpp
+        src/objects/Cylinder.cpp
+        src/lights/Ambient.cpp
+        src/lights/Ambient.hpp
         src/scenes/Scene.cpp src/utils/factory/ObjectFactory.hpp src/utils/factory/ObjectFactory.cpp src/utils/builder/IBuilder.hpp src/utils/builder/ABuilder.hpp src/objects/SphereBuilder.hpp src/objects/PlaneBuilder.hpp src/utils/config/data/IData.hpp src/utils/config/data/AData.hpp src/utils/factory/IObjectFactory.hpp src/utils/string/StringUtils.hpp src/objects/PlaneData.hpp src/objects/SphereData.hpp)
 
 

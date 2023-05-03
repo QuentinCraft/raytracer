@@ -11,6 +11,7 @@
 #include "IScene.hpp"
 #include "objects/IObject.hpp"
 #include "lights/ILight.hpp"
+#include "lights/Ambient.hpp"
 #include "cameras/ICamera.hpp"
 #include <memory>
 
@@ -24,6 +25,7 @@ namespace RayTracer {
             std::unique_ptr<ICamera> _camera;
             std::vector<std::shared_ptr<IObject>> _objects;
             std::vector<std::shared_ptr<ILight>> _lights;
+            std::shared_ptr<Ambient> _ambientLight;
     };
 
 } // RayTracer

@@ -37,6 +37,8 @@ namespace RayTracer {
         if (Math::Utils::inf(discriminant, 0))
             return std::nullopt;
         double D = (-b - sqrt(discriminant)) / (2 * a);
+        if (Math::Utils::inf(D, 0))
+            return std::nullopt;
         PipeLine pipe;
         pipe._position = ray._origin + rayBis._direction * D;
         pipe.id = _id;
@@ -44,8 +46,8 @@ namespace RayTracer {
         return pipe;
     }
 
-    Math::Vector3D Sphere::normal(const Math::Vector3D &point) const {
-        return Math::Vector3D(_origin - point).normalized();
+    Math::Vector3D Sphere::normal(const PipeLine &pipe) const {
+        return Math::Vector3D(_origin - pipe._position).normalized();
     }
 
     bool Sphere::operator==(const Sphere &sphere) const {

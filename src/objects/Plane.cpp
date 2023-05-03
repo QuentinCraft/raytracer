@@ -36,6 +36,8 @@ namespace RayTracer {
         double denominator = rayBis._direction.dot(_normal);
         if (denominator < 1e-6) {
             Math::Vector3D p0l0 = _origin - rayBis._origin;
+            if (Math::Utils::equal(denominator, 0))
+                denominator = 0.001;
             double D = p0l0.dot(_normal) / denominator;
             if (Math::Utils::sup(D, 0)) {
                 PipeLine pipe;
@@ -48,7 +50,7 @@ namespace RayTracer {
         return std::nullopt;
     }
 
-    Math::Vector3D Plane::normal(const Math::Vector3D &point) const {
+    Math::Vector3D Plane::normal(const PipeLine &pipe) const {
         return _normal * -1;
     }
 

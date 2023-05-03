@@ -15,6 +15,7 @@ namespace RayTracer {
         Math::Vector3D _position;
         Math::Vector3D _color;
         int id;
+        std::string _info;
     };
 };
 

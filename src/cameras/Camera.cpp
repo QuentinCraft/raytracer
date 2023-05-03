@@ -50,9 +50,10 @@ namespace RayTracer {
 
     Math::Vector3D Camera::pointAt(double u, double v,
                                    std::vector<std::shared_ptr<IObject>> &objects,
-                                   std::vector<std::shared_ptr<ILight>> &lights) const {
+                                   std::vector<std::shared_ptr<ILight>> &lights,
+                                   std::shared_ptr<Ambient> &ambient) const {
         Ray r = ray(u, v);
-        Math::Vector3D savedHitPoint;
+        PipeLine savedHitPoint;
         std::shared_ptr<IObject> savedObject;
         int i = 0;
 
@@ -60,37 +61,37 @@ namespace RayTracer {
             std::optional<PipeLine> hitPoint = object->hits(r);
             if (hitPoint.has_value()) {
                 if (i == 0) {
-                    savedHitPoint = hitPoint.value()._position;
+                    savedHitPoint = hitPoint.value();
                     savedObject = object;
                     i++;
                 } else {
-                    if (Math::Utils::distance(_origin, hitPoint.value()._position) < Math::Utils::distance(_origin, savedHitPoint)) {
-                        savedHitPoint = hitPoint.value()._position;
+                    if (Math::Utils::distance(_origin, hitPoint.value()._position) < Math::Utils::distance(_origin, savedHitPoint._position)) {
+                        savedHitPoint = hitPoint.value();
                         savedObject = object;
                     }
                 }
             }
         }
         if (i == 0)
-            return {0, 100, 150};
+            return {0, 0, 0};
         Math::Vector3D normal = savedObject->normal(savedHitPoint).normalized();
-        Math::Vector3D lightDir(lights.front()->getOrigin(), savedHitPoint);
+        Math::Vector3D lightDir(lights.front()->getOrigin(), savedHitPoint._position);
 
         double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
         Math::Vector3D hitColor(savedObject->getColor());
-        hitColor *= (lights.front()->getIntensity() * dot);
-        Ray bouncingRay(savedHitPoint, (lights.front()->getOrigin() - savedHitPoint).normalized());
+        hitColor *= (ambient->getIntensity() + dot);
+        Ray bouncingRay(savedHitPoint._position, (lights.front()->getOrigin() - savedHitPoint._position).normalized());
         for (auto &object : objects) {
             if (object == savedObject)
                 continue;
             std::optional<PipeLine> pipe = object->hits(bouncingRay);
 
             if (pipe.has_value()) {
-                if (canConnect(savedHitPoint, pipe.value()._position, lights.front()->getOrigin()))
+                if (canConnect(savedHitPoint._position, pipe.value()._position, lights.front()->getOrigin()))
                     continue;
                 if (Math::Utils::inf(Math::Utils::distance(bouncingRay._origin, lights.front()->getOrigin()), Math::Utils::distance(bouncingRay._origin, pipe.value()._position)))
                     continue;
-                hitColor *= 0.5;
+                hitColor *= ambient->getIntensity();
                 break;
             }
         }
