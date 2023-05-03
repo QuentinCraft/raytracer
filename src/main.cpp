@@ -21,7 +21,6 @@
 #include "utils/loader/LibraryLoader.hpp"
 #include "utils/loader/PluginsManager.hpp"
 
-/*
 int main() {
     std::ofstream file("render.ppm");
 
@@ -56,17 +55,5 @@ int main() {
     }
     file.close();
 
-    return 0;
-}
-*/
-
-int main()
-{
-    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("../plugins");
-    RayTracer::Utils::Config config = configManager->getConf("config.cnf");
-
-    for (auto &x : config.primitives) {
-        std::cout << "Primitive: " << x.first->getBuilderName() << std::endl;
-    }
     return 0;
 }
