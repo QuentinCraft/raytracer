@@ -101,9 +101,11 @@ namespace RayTracer {
 
         // REFLECTION
         if (savedObject->getColor() == Math::Vector3D(1, 0, 1)) {
-            hitColor = Math::Vector3D(0.3, 0.3, 1) + (dot * 0.3);
             Math::Vector3D reflect = r._direction - ((normal * r._direction.dot(normal)) * 2);
             Ray bouncingRayRe(savedHitPoint._position, reflect);
+            Math::Vector3D savedReflect = Math::Vector3D(0.3, 0.3, 1) + (dot * 0.3);
+            Math::Vector3D savedReflectPos = Math::Vector3D(9999999999, 9999999999, 9999999999);
+
             for (auto &object : objects) {
                 if (object == savedObject)
                     continue;
@@ -114,7 +116,7 @@ namespace RayTracer {
                     double dot2 = std::max(normal2.dot(lightDir2.normalized()), 0.0);
                     Math::Vector3D hitColor2(object->getColor());
                     hitColor2 *= (ambient->getIntensity() + dot2);
-                    hitColor = hitColor2 + (dot * 0.3);
+                    Math::Vector3D savedReflect2 = hitColor2 + (dot * 0.3);
 
                     Ray bouncingRay3(pipe.value()._position, (lights.front()->getOrigin() - pipe.value()._position).normalized());
                     for (auto &object3 : objects) {
@@ -126,13 +128,17 @@ namespace RayTracer {
                                 continue;
                             if (Math::Utils::inf(Math::Utils::distance(bouncingRay3._origin, lights.front()->getOrigin()), Math::Utils::distance(bouncingRay3._origin, pipe3.value()._position)))
                                 continue;
-                            hitColor *= ambient->getIntensity();
+                            savedReflect2 *= ambient->getIntensity();
                             break;
                         }
                     }
-                    break;
+                    if (Math::Utils::distance(savedHitPoint._position, pipe.value()._position) < Math::Utils::distance(savedHitPoint._position, savedReflectPos)) {
+                        savedReflectPos = pipe.value()._position;
+                        savedReflect = savedReflect2;
+                    }
                 }
             }
+        hitColor = savedReflect;
         }
 
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
