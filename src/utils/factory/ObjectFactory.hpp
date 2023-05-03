@@ -17,7 +17,7 @@ namespace RayTracer::Utils {
         public:
             ObjectFactory() = default;
             ~ObjectFactory() override = default;
-            std::unique_ptr<RayTracer::IBuilder> createObjectBuilder(std::string &type) override;
+            std::unique_ptr<RayTracer::IBuilder> createObjectBuilder(const std::string &type) override;
         private:
             static std::unique_ptr<RayTracer::IBuilder> _createSphere();
             static std::unique_ptr<RayTracer::IBuilder> _createPlane();

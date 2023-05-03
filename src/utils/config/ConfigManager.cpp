@@ -7,6 +7,9 @@
 
 #include "ConfigManager.hpp"
 #include "utils/string/StringUtils.hpp"
+#include "objects/PlaneData.hpp"
+#include "objects/SphereData.hpp"
+#include "utils/factory/ObjectFactory.hpp"
 
 RayTracer::Utils::Config::Camera RayTracer::Utils::ConfigManager::_getCamera(const libconfig::Setting& root) {
     RayTracer::Utils::Config::Camera cam;
@@ -81,12 +84,20 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         int x = primitive["x"];
         int y = primitive["y"];
         int z = primitive["z"];
+        int r = primitive["r"];
         int colorX = color["r"];
         int colorY = color["g"];
         int colorZ = color["b"];
         std::cout << "[Sphere]----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+        std::unique_ptr<IData> data = std::make_unique<RayTracer::SphereData>();
+        data->setPoint(Math::Vector3D(x, y, z));
+        data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        data->setRadius(r);
+        std::unique_ptr<IBuilder> builder = _builder->createObjectBuilder("sphere");
+        _primitives.push_back({std::move(builder), std::move(data)});
+
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Primitives/Sphere] part");
     }
@@ -99,6 +110,7 @@ void RayTracer::Utils::ConfigManager::_getPlane(
         const libconfig::Setting& color = primitive["color"];
         std::string axis = primitive["axis"];
         int position = primitive["position"];
+        double pos = static_cast<double>(position);
         int colorX = color["r"];
         int colorY = color["g"];
         int colorZ = color["b"];
@@ -106,6 +118,14 @@ void RayTracer::Utils::ConfigManager::_getPlane(
         std::cout << "axis : " << axis << std::endl;
         std::cout << "pos : " << position << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+        std::unique_ptr<IData> data = std::make_unique<RayTracer::PlaneData>();
+        data->setAxis(axis);
+        data->setColor((Math::Vector3D){(axis == "X") ? pos : 0,
+                         (axis == "Y") ? pos : 0,
+                         (axis == "Z") ? pos : 0});
+        data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        std::unique_ptr<IBuilder> builder = _builder->createObjectBuilder("plane");
+        _primitives.push_back({std::move(builder), std::move(data)});
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Primitives/Plane] part");
     }

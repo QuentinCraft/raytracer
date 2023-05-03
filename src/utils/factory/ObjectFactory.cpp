@@ -7,7 +7,7 @@
 
 #include "ObjectFactory.hpp"
 
-std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::createObjectBuilder(std::string &type)
+std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::createObjectBuilder(const std::string &type)
 {
     if (type == "sphere")
         return _createSphere();

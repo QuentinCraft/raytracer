@@ -20,16 +20,25 @@
 #include "Config.hpp"
 #include "utils/Error.hpp"
 
+#include "utils/config/data/IData.hpp"
+#include "utils/builder/IBuilder.hpp"
+#include "utils/factory/ObjectFactory.hpp"
+
 namespace RayTracer::Utils {
 
     class ConfigManager {
         public:
-            static Config getConf(const std::string& path);
-            static Config::Camera _getCamera(const libconfig::Setting& root);
-            static Config::Light _getLight(const libconfig::Setting& root);
-            static void _getSphere(const libconfig::Setting& primitive);
-            static void _getPlane(const libconfig::Setting& primitive);
-            static void _getPrimitives(const libconfig::Setting &root);
+            ConfigManager() {_builder = std::make_unique<ObjectFactory>();};
+            Config getConf(const std::string& path);
+        private:
+            Config::Camera _getCamera(const libconfig::Setting& root);
+            Config::Light _getLight(const libconfig::Setting& root);
+            void _getSphere(const libconfig::Setting& primitive);
+            void _getPlane(const libconfig::Setting& primitive);
+            void _getPrimitives(const libconfig::Setting &root);
+            //
+            std::vector<std::pair<std::unique_ptr<IBuilder>, std::unique_ptr<IData>>> _primitives;
+            std::unique_ptr<IObjectFactory> _builder;
     };
 
 } // RayTracer

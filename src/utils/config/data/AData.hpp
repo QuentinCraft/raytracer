@@ -21,13 +21,14 @@ namespace RayTracer::Utils {
             void setPoint(Math::Vector3D point) override { _point = point; };
             void setNormal(Math::Vector3D normal) override { _normal = normal; };
             void setRadius(double radius) override { _radius = radius; };
-
+            void setAxis(const std::string &axis) override { _axis = axis;};
             std::string &getType() override { return _type; };
             Math::Vector3D &getColor() override { return _color; };
             Math::Vector3D &getCenter() override { return _center; };
             Math::Vector3D &getPoint() override { return _point; };
             Math::Vector3D &getNormal() override { return _normal; };
             double &getRadius() override { return _radius; };
+            std::string &getAxis() override { return _axis; };
 
         protected:
             std::string _type;
@@ -36,6 +37,7 @@ namespace RayTracer::Utils {
             Math::Vector3D _point;
             Math::Vector3D _normal;
             double _radius;
+            std::string _axis;
     };
 
 }

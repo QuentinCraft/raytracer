@@ -22,6 +22,7 @@ namespace RayTracer::Utils {
             virtual void setPoint(Math::Vector3D point) = 0;
             virtual void setNormal(Math::Vector3D normal) = 0;
             virtual void setRadius(double radius) = 0;
+            virtual void setAxis(const std::string &axis) = 0;
 
             virtual std::string &getType() = 0;
             virtual Math::Vector3D &getColor() = 0;
@@ -29,6 +30,7 @@ namespace RayTracer::Utils {
             virtual Math::Vector3D &getPoint() = 0;
             virtual Math::Vector3D &getNormal() = 0;
             virtual double &getRadius() = 0;
+            virtual std::string &getAxis() = 0;
     };
 
 }
