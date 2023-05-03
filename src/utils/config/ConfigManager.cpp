@@ -95,8 +95,8 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         data->setPoint(Math::Vector3D(x, y, z));
         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
         data->setRadius(r);
-        std::unique_ptr<IBuilder> builder = _builder->createObjectBuilder("sphere");
-        _primitives.push_back({std::move(builder), std::move(data)});
+        IBuilder *builder = _builder->createObjectBuilder("sphere");
+        _primitives.push_back({builder, std::move(data)});
 
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Primitives/Sphere] part");
@@ -124,8 +124,8 @@ void RayTracer::Utils::ConfigManager::_getPlane(
                          (axis == "Y") ? pos : 0,
                          (axis == "Z") ? pos : 0});
         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
-        std::unique_ptr<IBuilder> builder = _builder->createObjectBuilder("plane");
-        _primitives.push_back({std::move(builder), std::move(data)});
+        IBuilder *builder = _builder->createObjectBuilder("plane");
+        _primitives.push_back({builder, std::move(data)});
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Primitives/Plane] part");
     }
@@ -166,5 +166,6 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     cnf.camera = _getCamera(root);
     cnf.light = _getLight(root);
     _getPrimitives(root);
+    cnf.primitives = std::move(_primitives);
     return cnf;
 }

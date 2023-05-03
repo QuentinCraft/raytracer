@@ -14,7 +14,7 @@ namespace RayTracer {
 
     class SphereBuilder : public ABuilder {
         public:
-            SphereBuilder() : ABuilder() {};
+            SphereBuilder() : ABuilder("sphere") {};
             ~SphereBuilder() {};
             std::unique_ptr<RayTracer::IObject> build() override
             {

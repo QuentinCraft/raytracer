@@ -28,7 +28,10 @@ namespace RayTracer::Utils {
 
     class ConfigManager {
         public:
-            ConfigManager() {_builder = std::make_unique<ObjectFactory>();};
+            ConfigManager(const std::string &plugins) {
+                _builder = std::make_unique<ObjectFactory>(plugins);
+            };
+            ~ConfigManager() = default;
             Config getConf(const std::string& path);
         private:
             Config::Camera _getCamera(const libconfig::Setting& root);
@@ -37,8 +40,8 @@ namespace RayTracer::Utils {
             void _getPlane(const libconfig::Setting& primitive);
             void _getPrimitives(const libconfig::Setting &root);
             //
-            std::vector<std::pair<std::unique_ptr<IBuilder>, std::unique_ptr<IData>>> _primitives;
-            std::unique_ptr<IObjectFactory> _builder;
+            std::vector<std::pair<IBuilder *, std::unique_ptr<IData>>> _primitives;
+            std::unique_ptr<ObjectFactory> _builder;
     };
 
 } // RayTracer

@@ -10,10 +10,8 @@
 
 extern "C"
 {
-    RayTracer::IBuilder *entryPoint(void)
+    std::unique_ptr<RayTracer::IBuilder> entryPoint(void)
     {
-        RayTracer::SphereBuilder *newObject = new RayTracer::SphereBuilder();
-
-        return newObject;
+        return std::make_unique<RayTracer::SphereBuilder>();
     }
 }

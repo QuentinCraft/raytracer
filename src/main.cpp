@@ -60,13 +60,13 @@ int main() {
 }
 */
 
-#include "utils/loader/PluginsManager.hpp"
-
 int main()
 {
-    RayTracer::Utils::PluginsManager manager("../plugins");
+    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("../plugins");
+    RayTracer::Utils::Config config = configManager->getConf("config.cnf");
 
-    for (auto &x : manager.load()) {
-        std::cout << "builder : [" << x << "]" << std::endl;
+    for (auto &x : config.primitives) {
+        std::cout << "Primitive: " << x.first->getBuilderName() << std::endl;
     }
+    return 0;
 }

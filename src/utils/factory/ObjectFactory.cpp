@@ -7,21 +7,12 @@
 
 #include "ObjectFactory.hpp"
 
-std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::createObjectBuilder(const std::string &type)
+RayTracer::IBuilder *RayTracer::Utils::ObjectFactory::createObjectBuilder(const std::string &type)
 {
-    if (type == "sphere")
-        return _createSphere();
-    if (type == "plane")
-        return _createPlane();
+    for (auto &plugin : _builders) {
+        if (plugin->getBuilderName() == type) {
+            return plugin.get();
+        }
+    }
     return nullptr;
-}
-
-std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::_createSphere()
-{
-    return std::make_unique<RayTracer::SphereBuilder>();
-}
-
-std::unique_ptr<RayTracer::IBuilder> RayTracer::Utils::ObjectFactory::_createPlane()
-{
-    return std::make_unique<RayTracer::PlaneBuilder>();
 }
