@@ -21,9 +21,9 @@ namespace RayTracer::Utils {
                 _error = nullptr;
             }
             ~Loader() override {
-                if (!_handle)
+                if (_handle)
                     dlclose(_handle);
-                if (!_error)
+                if (_error)
                     free(_error);
                 _handle = nullptr;
                 _error = nullptr;
