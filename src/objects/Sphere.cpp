@@ -6,6 +6,7 @@
 */
 
 #include "Sphere.hpp"
+#include "objects/PipeLine.hpp"
 
 namespace RayTracer {
     Sphere::Sphere() {
@@ -43,6 +44,7 @@ namespace RayTracer {
         pipe._position = ray._origin + rayBis._direction * D;
         pipe.id = _id;
         pipe._color = _color;
+        pipe.object = std::make_shared<Sphere>(*this);
         return pipe;
     }
 

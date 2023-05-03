@@ -6,6 +6,7 @@
 */
 
 #include "Plane.hpp"
+#include "objects/PipeLine.hpp"
 
 namespace RayTracer {
     Plane::Plane() {
@@ -41,6 +42,7 @@ namespace RayTracer {
             double D = p0l0.dot(_normal) / denominator;
             if (Math::Utils::sup(D, 0)) {
                 PipeLine pipe;
+                pipe.object = std::make_shared<Plane>(*this);
                 pipe._position = ray._origin + ray._direction * D;
                 pipe._color = _color;
                 pipe.id = _id;
