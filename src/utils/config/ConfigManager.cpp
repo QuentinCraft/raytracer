@@ -189,18 +189,24 @@ std::vector<std::unique_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager
 }
 
 std::unique_ptr<RayTracer::ICamera> RayTracer::Utils::ConfigManager::createCamera(RayTracer::Utils::Config &conf) {
-    std::cout << "Creating camera : " << std::endl;
-    std::cout << "Position : " << conf.camera.position._x << "," << conf.camera.position._y << std::endl;
-    std::cout << "Resolution : " << conf.camera.resolution._x << "," << conf.camera.resolution._y << std::endl;
-    std::cout << "Rotation : " << conf.camera.rotation._x << "," << conf.camera.rotation._y << std::endl;
-    std::cout << "FOV : " << conf.camera.fieldOfView << std::endl;
-    return std::make_unique<RayTracer::Camera>(conf.camera.position, conf.camera.resolution._y, conf.camera.resolution._x, conf.camera.fieldOfView);
+//    std::cout << "Creating camera : " << std::endl;
+//    std::cout << "Position : " << conf.camera.position._x << "," << conf.camera.position._y << std::endl;
+//    std::cout << "Resolution : " << conf.camera.resolution._x << "," << conf.camera.resolution._y << std::endl;
+//    std::cout << "Rotation : " << conf.camera.rotation._x << "," << conf.camera.rotation._y << std::endl;
+//    std::cout << "FOV : " << conf.camera.fieldOfView << std::endl;
+    std::cout << "building object [camera]";
+    auto x = std::make_unique<RayTracer::Camera>(conf.camera.position, conf.camera.resolution._y, conf.camera.resolution._x, conf.camera.fieldOfView);
+    std::cout << " [OK]" << std::endl;
+    return std::move(x);
 }
 
 std::vector<std::unique_ptr<RayTracer::ILight>> RayTracer::Utils::ConfigManager::createLight(RayTracer::Utils::Config &conf) {
     std::vector<std::unique_ptr<RayTracer::ILight>> points;
 
-    for (auto &point : conf.light.points)
+    for (auto &point : conf.light.points) {
+        std::cout << "building object [light]";
         points.push_back(std::make_unique<RayTracer::Spot>(point.first, point.second));
+        std::cout << " [OK]" << std::endl;
+    }
     return points;
 }
