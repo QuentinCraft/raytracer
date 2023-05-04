@@ -11,6 +11,7 @@
 #include <memory>
 #include "maths/Vector3D.hpp"
 #include "objects/IObject.hpp"
+#include "utils/config/data/IData.hpp"
 
 namespace RayTracer {
 
@@ -25,6 +26,8 @@ namespace RayTracer {
             virtual std::unique_ptr<RayTracer::IObject> build() = 0;
             virtual std::string &getBuilderName() = 0;
             virtual void reset() = 0;
+
+            virtual IBuilder &applyData(std::unique_ptr<Utils::IData> &data) = 0;
     };
 
 }
