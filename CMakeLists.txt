@@ -80,3 +80,4 @@ add_executable(raytracer
 
 
 target_link_libraries(raytracer config++ -g)
+set_target_properties(raytracer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
