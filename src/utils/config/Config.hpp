@@ -28,7 +28,7 @@ namespace RayTracer::Utils {
         struct Light {
             double ambient, diffuse;
 
-            std::vector <Math::Vector3D> points;
+            std::vector <std::pair<Math::Vector3D, Math::Vector3D>> points;
             std::vector <Math::Vector3D> directional_lights;
         } light;
 

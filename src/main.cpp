@@ -65,12 +65,7 @@ int main()
 
     auto objects = configManager->createObjects(config);
 
-    for (auto &obj : objects) {
-        std::cout << "object : " << std::endl;
-        std::cout << "pos : " << obj->getOrigin()._x << "," << obj->getOrigin()._y << "," << obj->getOrigin()._z << std::endl;
-        std::cout << "color : " << obj->getColor()._x << "," << obj->getColor()._y << "," << obj->getColor()._z << std::endl;
-    }
-
     configManager->createCamera(config);
+    configManager->createLight(config);
     return 0;
 }

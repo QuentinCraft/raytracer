@@ -35,7 +35,7 @@ namespace RayTracer::Utils {
             ~ConfigManager() = default;
             Config getConf(const std::string& path);
             std::unique_ptr<ICamera> createCamera(Config &conf);
-            std::unique_ptr<ILight> createLight(Config &conf);
+            std::vector<std::unique_ptr<ILight>> createLight(Config &conf);
             std::vector<std::unique_ptr<IObject>> createObjects(Config &conf);
         private:
             Config::Camera _getCamera(const libconfig::Setting& root);
