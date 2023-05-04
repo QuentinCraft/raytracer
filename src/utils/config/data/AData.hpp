@@ -29,6 +29,8 @@ namespace RayTracer::Utils {
             Math::Vector3D &getNormal() override { return _normal; };
             double &getRadius() override { return _radius; };
             std::string &getAxis() override { return _axis; };
+            Math::Vector3D &getIntensity() override { return _intensity; };
+            void setIntensity(const Math::Vector3D intensity) override { _intensity = intensity; };
 
         protected:
             std::string _type;
@@ -38,6 +40,7 @@ namespace RayTracer::Utils {
             Math::Vector3D _normal;
             double _radius;
             std::string _axis;
+            Math::Vector3D _intensity;
     };
 
 }

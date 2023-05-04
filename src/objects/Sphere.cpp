@@ -54,5 +54,4 @@ namespace RayTracer {
         return _origin == sphere._origin && _radius == sphere._radius && _color == sphere._color;
     }
 
-
 } // RayTracer

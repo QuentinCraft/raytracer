@@ -57,3 +57,19 @@ int main() {
 
     return 0;
 }
+
+//int main(int argc, char **argv)
+//{
+//    if (argc == 1) {
+//        std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
+//        return 84;
+//    }
+//    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
+//    RayTracer::Utils::Config config = configManager->getConf(argv[1]);
+//
+//    auto objects = configManager->createObjects(config);
+//
+//    configManager->createCamera(config);
+//    configManager->createLight(config);
+//    return 0;
+//}

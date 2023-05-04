@@ -10,6 +10,7 @@
 #include "objects/PlaneData.hpp"
 #include "objects/SphereData.hpp"
 #include "utils/factory/ObjectFactory.hpp"
+#include "cameras/Camera.hpp"
 
 RayTracer::Utils::Config::Camera RayTracer::Utils::ConfigManager::_getCamera(const libconfig::Setting& root) {
     RayTracer::Utils::Config::Camera cam;
@@ -20,8 +21,8 @@ RayTracer::Utils::Config::Camera RayTracer::Utils::ConfigManager::_getCamera(con
         const libconfig::Setting& position = camera["position"];
         const libconfig::Setting& rotation = camera["rotation"];
 
-        cam.resolution._x = static_cast<int>(resolution["height"]);
-        cam.resolution._y = static_cast<int>(resolution["width"]);
+        cam.resolution._y = static_cast<int>(resolution["height"]);
+        cam.resolution._x = static_cast<int>(resolution["width"]);
         cam.resolution._z = 0;
         cam.fieldOfView = camera["fieldOfView"];
 
@@ -54,11 +55,16 @@ RayTracer::Utils::Config::Light RayTracer::Utils::ConfigManager::_getLight(
         for (int i = 0; i < points.getLength(); i++) {
             const libconfig::Setting& point = points[i];
             Math::Vector3D vec;
+            Math::Vector3D vec_intensity;
 
             vec._x = static_cast<int>(point["x"]);
             vec._y = static_cast<int>(point["y"]);
             vec._z = static_cast<int>(point["z"]);
-            light.points.push_back(vec);
+            libconfig::Setting& intensity = point["intensity"];
+            vec_intensity._x = intensity["x"];
+            vec_intensity._y = intensity["y"];
+            vec_intensity._z = intensity["z"];
+            light.points.push_back({vec, vec_intensity});
         }
 
         for (int i = 0; i < directional.getLength(); i++) {
@@ -168,4 +174,39 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     _getPrimitives(root);
     cnf.primitives = std::move(_primitives);
     return cnf;
+}
+
+std::vector<std::unique_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager::createObjects(RayTracer::Utils::Config &conf) {
+    std::vector<std::unique_ptr<RayTracer::IObject>> objects;
+
+    for (auto &x : conf.primitives) {
+        std::cout << "building object [" << x.first->getBuilderName() << "]";
+        objects.push_back(x.first->applyData(x.second).build());
+        x.first->reset();
+        std::cout << " [OK]" << std::endl;
+    }
+    return objects;
+}
+
+std::unique_ptr<RayTracer::ICamera> RayTracer::Utils::ConfigManager::createCamera(RayTracer::Utils::Config &conf) {
+//    std::cout << "Creating camera : " << std::endl;
+//    std::cout << "Position : " << conf.camera.position._x << "," << conf.camera.position._y << std::endl;
+//    std::cout << "Resolution : " << conf.camera.resolution._x << "," << conf.camera.resolution._y << std::endl;
+//    std::cout << "Rotation : " << conf.camera.rotation._x << "," << conf.camera.rotation._y << std::endl;
+//    std::cout << "FOV : " << conf.camera.fieldOfView << std::endl;
+    std::cout << "building object [camera]";
+    auto x = std::make_unique<RayTracer::Camera>(conf.camera.position, conf.camera.resolution._y, conf.camera.resolution._x, conf.camera.fieldOfView);
+    std::cout << " [OK]" << std::endl;
+    return std::move(x);
+}
+
+std::vector<std::unique_ptr<RayTracer::ILight>> RayTracer::Utils::ConfigManager::createLight(RayTracer::Utils::Config &conf) {
+    std::vector<std::unique_ptr<RayTracer::ILight>> points;
+
+    for (auto &point : conf.light.points) {
+        std::cout << "building object [light]";
+        points.push_back(std::make_unique<RayTracer::Spot>(point.first, point.second));
+        std::cout << " [OK]" << std::endl;
+    }
+    return points;
 }

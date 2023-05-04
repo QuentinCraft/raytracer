@@ -58,6 +58,15 @@ namespace RayTracer {
                 _radius = 0;
                 _normal = Math::Vector3D(0, 0, 0);
             }
+            IBuilder &applyData(std::unique_ptr<Utils::IData> &data) override
+            {
+                _color = data->getColor();
+                _center = data->getCenter();
+                _point = data->getPoint();
+                _radius = data->getRadius();
+                _normal = data->getNormal();
+                return *this;
+            }
         protected:
             Math::Vector3D _color;
             Math::Vector3D _center;
