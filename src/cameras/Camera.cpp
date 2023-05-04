@@ -108,9 +108,9 @@ namespace RayTracer {
         if (savedHitPoint.object == nullptr)
             return {0.3, 0.3, 1};
         else
-            hitColor = savedHitPoint.object->getColor();
+            hitColor = savedHitPoint._color;
 
-        if (savedHitPoint.object->getColor() == Math::Vector3D(1, 0, 1)) {
+        if (savedHitPoint._color == Math::Vector3D(1, 0, 1)) {
             Math::Vector3D reflect = r._direction - (savedHitPoint.object->normal(savedHitPoint) * r._direction.dot(savedHitPoint.object->normal(savedHitPoint)) * 2);
             Ray reflectedRay(savedHitPoint._position, reflect);
             PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
@@ -122,7 +122,7 @@ namespace RayTracer {
                 return compute(reflectedRay, objects, lights, ambient, recursive - 1) * 0.9;
             }
         }
-        if (savedHitPoint.object->getColor() == Math::Vector3D(0, 1, 0) && recursive > 0) {
+        if (savedHitPoint._color == Math::Vector3D(0, 1, 0) && recursive > 0) {
             double etai_over_etat = 1.7;
 
             Math::Vector3D uv = r._direction.normalized();

@@ -28,8 +28,7 @@ int main() {
 
     scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-4, 4, 10), 4, Math::Vector3D(0.7, 0.5, 0.5)));
     scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 4, 0), 4, Math::Vector3D(0, 1, 0)));
-//    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, Math::Vector3D(1, 0, 1)));
-
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, Math::Vector3D(1, 0, 1)));
 
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), Math::Vector3D(0.67, 0.67, 0.67)));
 //    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 6, 0), Math::Vector3D(0, -1, 0), Math::Vector3D(1, 0, 1)));
@@ -42,7 +41,7 @@ int main() {
 
     scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.7, 0.7, 0.7));
 
-    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 3, -20), 800, 800, 110);
+    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 3, -20), 4000, 4000, 110);
 
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
