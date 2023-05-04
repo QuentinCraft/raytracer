@@ -73,7 +73,7 @@ namespace RayTracer {
         Math::Vector3D normal = object.object->normal(object).normalized();
         Math::Vector3D lightDir(lights.front()->getOrigin(), object._position);
         double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
-        Math::Vector3D hitColor(object.object->getColor());
+        Math::Vector3D hitColor(object._color);
         hitColor *= (ambient->getIntensity() + dot);
         return hitColor;
     }
@@ -115,24 +115,43 @@ namespace RayTracer {
             Ray reflectedRay(savedHitPoint._position, reflect);
             PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
             if (savedHitPoint2.object == nullptr) {
-                hitColor = Math::Vector3D(0.3, 0.3, 1);
+                return {0.3, 0.3, 1};
             } else {
                 if (recursive <= 0)
                     return {0, 0, 0};
                 return compute(reflectedRay, objects, lights, ambient, recursive - 1) * 0.9;
             }
         }
+        if (savedHitPoint.object->getColor() == Math::Vector3D(0, 1, 0) && recursive > 0) {
+            double etai_over_etat = 1.7;
+
+            Math::Vector3D uv = r._direction.normalized();
+            Math::Vector3D n = savedHitPoint.object->normal(
+                    savedHitPoint).normalized();
+
+            if (Math::Utils::sup(r._direction.dot(n), 0)) {
+                n = n * -1;
+                etai_over_etat = 1.0 / etai_over_etat;
+            }
+
+            auto cos_theta = fmin((uv * -1).dot(n), 1.0);
+            Math::Vector3D r_out_perp = (uv + (n * cos_theta)) * etai_over_etat;
+            Math::Vector3D r_out_parallel = n * -sqrt(fabs(1.0 - r_out_perp.length()));
+            Ray reflectedRay(savedHitPoint._position, (r_out_perp + r_out_parallel.normalized()).normalized());
+            double sin_theta = sqrt(1.0 - cos_theta*cos_theta);
+
+            return compute(reflectedRay, objects, lights, ambient, recursive);
+        }
         hitColor *= lambert(savedHitPoint, lights, ambient);
         hitColor = dropShadow(savedHitPoint, hitColor, objects, lights, ambient);
         return hitColor;
     }
 
-
     Math::Vector3D Camera::pointAt(double u, double v, std::vector<std::shared_ptr<IObject>> &objects, std::vector<std::shared_ptr<ILight>> &lights, std::shared_ptr<Ambient> &ambient) const {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 5);
+        hitColor = compute(r, objects, lights, ambient, 50);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }

@@ -27,7 +27,7 @@ namespace Math {
         _z = vector._z;
     }
 
-    float Vector3D::length() const {
+    double Vector3D::length() const {
         return std::sqrt((float) (_x * _x) + (float) (_y * _y) + (float) (_z * _z));
     }
 

@@ -49,7 +49,7 @@ namespace Math {
 
             // Methods
             [[nodiscard]] double dot(const Vector3D &vector) const;
-            [[nodiscard]] float length() const;
+            [[nodiscard]] double length() const;
 
             // Variables
             double _x;
