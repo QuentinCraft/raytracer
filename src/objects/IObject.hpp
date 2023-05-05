@@ -9,12 +9,13 @@
 #define IOBJECT_HPP_
 
 #include "maths/Vector3D.hpp"
-#include "objects/PipeLine.hpp"
 #include "maths/Ray.hpp"
+
 #include <optional>
 #include <functional>
 
 namespace RayTracer {
+    struct PipeLine;
 
     class IObject {
         public:

@@ -6,6 +6,7 @@
 */
 
 #include "Plane.hpp"
+#include "objects/PipeLine.hpp"
 
 namespace RayTracer {
     Plane::Plane() {
@@ -37,12 +38,37 @@ namespace RayTracer {
         if (denominator < 1e-6) {
             Math::Vector3D p0l0 = _origin - rayBis._origin;
             if (Math::Utils::equal(denominator, 0))
-                denominator = 0.001;
+                denominator = 0.000000001;
             double D = p0l0.dot(_normal) / denominator;
             if (Math::Utils::sup(D, 0)) {
                 PipeLine pipe;
+                pipe.object = std::make_shared<Plane>(*this);
                 pipe._position = ray._origin + ray._direction * D;
-                pipe._color = _color;
+                double scale = 0.2;
+                char ax;
+                char ay;
+                char az;
+                if (Math::Utils::inf(pipe._position._x, 0))
+                    ax = fmodf(std::abs(pipe._position._x) * scale, 1) < 0.5;
+                else
+                    ax = fmodf(std::abs(pipe._position._x) * scale, 1) > 0.5;
+
+                if (Math::Utils::inf(pipe._position._y, 0))
+                    ay = fmodf(std::abs(pipe._position._y) * scale, 1) < 0.5;
+                else
+                    ay = fmodf(std::abs(pipe._position._y) * scale, 1) > 0.5;
+
+                if (Math::Utils::inf(pipe._position._z, 0))
+                    az = fmodf(std::abs(pipe._position._z) * scale, 1) < 0.5;
+                else
+                    az = fmodf(std::abs(pipe._position._z) * scale, 1) > 0.5;
+
+
+                float pattern = (ax) ^ (ay) ^ (az);
+                if (pattern)
+                    pipe._color = {0.9 - _color._x, 0.9 - _color._y, 0.9 - _color._z};
+                else
+                    pipe._color = _color;
                 pipe.id = _id;
                 return pipe;
             }

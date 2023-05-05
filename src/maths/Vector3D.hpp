@@ -9,6 +9,7 @@
 #define BSRAYTRACER_VECTOR3D_HPP
 
 #include <valarray>
+#include <iostream>
 
 namespace Math {
     class Vector3D {
@@ -49,14 +50,14 @@ namespace Math {
 
             // Methods
             [[nodiscard]] double dot(const Vector3D &vector) const;
-            [[nodiscard]] float length() const;
+            [[nodiscard]] double length() const;
 
             // Variables
             double _x;
             double _y;
             double _z;
     };
-
-} // Math
+    std::ostream &operator<<(std::ostream& os, const Vector3D& v);
+    } // Math
 
 #endif //BSRAYTRACER_VECTOR3D_HPP

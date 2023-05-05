@@ -27,7 +27,7 @@ namespace Math {
         _z = vector._z;
     }
 
-    float Vector3D::length() const {
+    double Vector3D::length() const {
         return std::sqrt((float) (_x * _x) + (float) (_y * _y) + (float) (_z * _z));
     }
 
@@ -162,6 +162,11 @@ namespace Math {
 
     bool Vector3D::operator==(const Vector3D &vector) const {
         return Math::Utils::equal(_x, vector._x) && Math::Utils::equal(_y, vector._y) && Math::Utils::equal(_z, vector._z);
+    }
+
+    std::ostream &operator<<(std::ostream& os, const Vector3D& v) {
+        os << "(" << v._x << ", " << v._y << ", " << v._z << ")";
+        return os;
     }
 
 } // Math

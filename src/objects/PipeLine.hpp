@@ -9,13 +9,17 @@
 #define RAYTRACER_PIPELINE_HPP
 
 #include "maths/Vector3D.hpp"
+#include "objects/AObject.hpp"
+
+#include <memory>
 
 namespace RayTracer {
     struct PipeLine {
         Math::Vector3D _position;
         Math::Vector3D _color;
-        int id;
         std::string _info;
+        std::shared_ptr<AObject> object;
+        int id;
     };
 };
 

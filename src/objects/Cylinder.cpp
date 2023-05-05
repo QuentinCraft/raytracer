@@ -6,6 +6,7 @@
 */
 
 #include "Cylinder.hpp"
+#include "objects/PipeLine.hpp"
 
 namespace RayTracer {
     Cylinder::Cylinder() {
@@ -44,6 +45,7 @@ namespace RayTracer {
             if (Math::Utils::inf(t, 0))
                 return std::nullopt;
             PipeLine pipe;
+            pipe.object = std::make_shared<Cylinder>(*this);
             pipe._position = hitPoint;
             pipe._color = _color;
             pipe.id = _id;
@@ -71,6 +73,7 @@ namespace RayTracer {
 
         if (Math::Utils::inf(dist_top, _radius) || Math::Utils::equal(dist_top, _radius)) {
             PipeLine pipe;
+            pipe.object = std::make_shared<Cylinder>(*this);
             pipe._position = hitPoint_top;
             pipe._color = _color;
             pipe.id = _id;
@@ -80,6 +83,7 @@ namespace RayTracer {
 
         if (Math::Utils::inf(dist_bot, _radius) || Math::Utils::equal(dist_bot, _radius)) {
             PipeLine pipe;
+            pipe.object = std::make_shared<Cylinder>(*this);
             pipe._position = hitPoint_bot;
             pipe._color = _color;
             pipe.id = _id;

@@ -48,6 +48,7 @@ add_executable(raytracer
         src/objects/IObject.hpp
         src/objects/AObject.hpp
         src/objects/PipeLine.hpp
+        src/objects/Cylinder.cpp
 
         src/lights/ILight.hpp
         src/lights/ALight.hpp
@@ -73,10 +74,27 @@ add_executable(raytracer
         src/utils/loader/LibraryLoader.cpp
 
         src/scenes/IScene.hpp
+        feat/reflection-refraction
+        src/scenes/Scene.cpp
         src/objects/Cylinder.cpp
         src/lights/Ambient.cpp
         src/lights/Ambient.hpp
-        src/scenes/Scene.cpp src/utils/factory/ObjectFactory.hpp src/utils/factory/ObjectFactory.cpp src/utils/builder/IBuilder.hpp src/utils/builder/ABuilder.hpp src/objects/SphereBuilder.hpp src/objects/PlaneBuilder.hpp src/utils/config/data/IData.hpp src/utils/config/data/AData.hpp src/utils/factory/IObjectFactory.hpp src/utils/string/StringUtils.hpp src/objects/PlaneData.hpp src/objects/SphereData.hpp src/utils/loader/PluginsManager.hpp src/utils/loader/IPluginsManager.hpp)
+      
+        src/utils/factory/ObjectFactory.hpp
+        src/utils/factory/ObjectFactory.cpp
+        src/utils/builder/IBuilder.hpp
+        src/utils/builder/ABuilder.hpp
+        src/objects/SphereBuilder.hpp
+        src/objects/PlaneBuilder.hpp
+        src/utils/config/data/IData.hpp
+        src/utils/config/data/AData.hpp
+        src/utils/factory/IObjectFactory.hpp
+        src/utils/string/StringUtils.hpp
+        src/objects/PlaneData.hpp
+        src/objects/SphereData.hpp
+        src/utils/loader/PluginsManager.hpp
+        src/utils/loader/IPluginsManager.hpp)
+
 
 
 target_link_libraries(raytracer config++ -g)
