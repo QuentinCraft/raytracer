@@ -27,7 +27,7 @@ namespace RayTracer::Utils {
 
             // Load library
             template<typename T>
-            T loadLib(std::string &lib) {
+            T loadLib(const std::string &lib) {
                 if (!_loader->open(lib))
                     throw RayTracer::Utils::Error(std::string("Error Cannot load [" + lib + "]"));
                 T (*c_fct)() = (T (*)())(_loader->getFunction("entryPoint"));

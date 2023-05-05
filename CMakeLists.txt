@@ -7,6 +7,30 @@ include_directories(src)
 
 set(CMAKE_CXX_FLAGS "-O3")
 
+###### PLUGINS ######
+
+###### SPHERE ######
+set(OBJ_SPHERE_SRC
+        src/objects/Sphere.cpp
+        src/objects/SphereEntryPoint.cpp
+        src/maths/Vector3D.cpp
+)
+
+add_library(sphere SHARED ${OBJ_SPHERE_SRC})
+set_target_properties(sphere PROPERTIES PREFIX raytracer_)
+set_target_properties(sphere PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
+###### PLANE ######
+set(OBJ_PLANE_SRC
+        src/objects/Plane.cpp
+        src/objects/PlaneEntryPoint.cpp
+        src/maths/Vector3D.cpp
+)
+
+add_library(plane SHARED ${OBJ_PLANE_SRC})
+set_target_properties(plane PROPERTIES PREFIX raytracer_)
+set_target_properties(plane PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
 add_executable(raytracer
         src/main.cpp
 
@@ -24,6 +48,7 @@ add_executable(raytracer
         src/objects/IObject.hpp
         src/objects/AObject.hpp
         src/objects/PipeLine.hpp
+        src/objects/Cylinder.cpp
 
         src/lights/ILight.hpp
         src/lights/ALight.hpp
@@ -49,10 +74,28 @@ add_executable(raytracer
         src/utils/loader/LibraryLoader.cpp
 
         src/scenes/IScene.hpp
+        feat/reflection-refraction
         src/scenes/Scene.cpp
         src/objects/Cylinder.cpp
         src/lights/Ambient.cpp
-        src/lights/Ambient.hpp)
+        src/lights/Ambient.hpp
+      
+        src/utils/factory/ObjectFactory.hpp
+        src/utils/factory/ObjectFactory.cpp
+        src/utils/builder/IBuilder.hpp
+        src/utils/builder/ABuilder.hpp
+        src/objects/SphereBuilder.hpp
+        src/objects/PlaneBuilder.hpp
+        src/utils/config/data/IData.hpp
+        src/utils/config/data/AData.hpp
+        src/utils/factory/IObjectFactory.hpp
+        src/utils/string/StringUtils.hpp
+        src/objects/PlaneData.hpp
+        src/objects/SphereData.hpp
+        src/utils/loader/PluginsManager.hpp
+        src/utils/loader/IPluginsManager.hpp)
+
 
 
 target_link_libraries(raytracer config++ -g)
+set_target_properties(raytracer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
