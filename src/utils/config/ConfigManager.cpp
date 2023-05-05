@@ -57,9 +57,9 @@ RayTracer::Utils::Config::Light RayTracer::Utils::ConfigManager::_getLight(
             Math::Vector3D vec;
             Math::Vector3D vec_intensity;
 
-            vec._x = static_cast<int>(point["x"]);
-            vec._y = static_cast<int>(point["y"]);
-            vec._z = static_cast<int>(point["z"]);
+            vec._x = point["x"];
+            vec._y = point["y"];
+            vec._z = point["z"];
             libconfig::Setting& intensity = point["intensity"];
             vec_intensity._x = intensity["x"];
             vec_intensity._y = intensity["y"];
@@ -71,9 +71,9 @@ RayTracer::Utils::Config::Light RayTracer::Utils::ConfigManager::_getLight(
             const libconfig::Setting& dir = directional[i];
             Math::Vector3D vec;
 
-            vec._x = static_cast<int>(dir["x"]);
-            vec._y = static_cast<int>(dir["y"]);
-            vec._z = static_cast<int>(dir["z"]);
+            vec._x = dir["x"];
+            vec._y = dir["y"];
+            vec._z = dir["z"];
             light.directional_lights.push_back(vec);
         }
 
@@ -91,14 +91,14 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         int y = primitive["y"];
         int z = primitive["z"];
         int r = primitive["r"];
-        int colorX = color["r"];
-        int colorY = color["g"];
-        int colorZ = color["b"];
+        float colorX = color["r"];
+        float colorY = color["g"];
+        float colorZ = color["b"];
         std::cout << "[Sphere]----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
         std::unique_ptr<IData> data = std::make_unique<RayTracer::SphereData>();
-        data->setPoint(Math::Vector3D(x, y, z));
+        data->setCenter(Math::Vector3D(x, y, z));
         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
         data->setRadius(r);
         IBuilder *builder = _builder->createObjectBuilder("sphere");
@@ -176,13 +176,13 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     return cnf;
 }
 
-std::vector<std::unique_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager::createObjects(RayTracer::Utils::Config &conf) {
-    std::vector<std::unique_ptr<RayTracer::IObject>> objects;
+std::vector<std::shared_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager::createObjects(RayTracer::Utils::Config &conf) {
+    std::vector<std::shared_ptr<RayTracer::IObject>> objects;
 
     for (auto &x : conf.primitives) {
         std::cout << "building object [" << x.first->getBuilderName() << "]";
-        objects.push_back(x.first->applyData(x.second).build());
-        x.first->reset();
+        objects.emplace_back(x.first->applyData(x.second).build());
+//        x.first->reset();
         std::cout << " [OK]" << std::endl;
     }
     return objects;
@@ -200,12 +200,17 @@ std::unique_ptr<RayTracer::ICamera> RayTracer::Utils::ConfigManager::createCamer
     return std::move(x);
 }
 
-std::vector<std::unique_ptr<RayTracer::ILight>> RayTracer::Utils::ConfigManager::createLight(RayTracer::Utils::Config &conf) {
-    std::vector<std::unique_ptr<RayTracer::ILight>> points;
+std::shared_ptr<RayTracer::Ambient> RayTracer::Utils::ConfigManager::createAmbientLight(RayTracer::Utils::Config &conf)
+{
+    return std::make_shared<RayTracer::Ambient>(Math::Vector3D(conf.light.ambient, conf.light.ambient, conf.light.ambient));
+}
+
+std::vector<std::shared_ptr<RayTracer::ILight>> RayTracer::Utils::ConfigManager::createLight(RayTracer::Utils::Config &conf) {
+    std::vector<std::shared_ptr<RayTracer::ILight>> points;
 
     for (auto &point : conf.light.points) {
         std::cout << "building object [light]";
-        points.push_back(std::make_unique<RayTracer::Spot>(point.first, point.second));
+        points.push_back(std::make_shared<RayTracer::Spot>(point.first, point.second));
         std::cout << " [OK]" << std::endl;
     }
     return points;

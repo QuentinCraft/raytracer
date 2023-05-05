@@ -13,16 +13,23 @@
 #include "lights/ILight.hpp"
 #include "lights/Ambient.hpp"
 #include "cameras/ICamera.hpp"
+#include <iostream>
 #include <memory>
 
 namespace RayTracer {
 
-    class Scene : IScene {
+    class Scene : public IScene {
         public:
             Scene();
-            ~Scene() override = default;
+            ~Scene() override {
+                std::cout << "Scene destructor" << std::endl;
+                std::cout << "Scene destructor after" << std::endl;
 
-            std::unique_ptr<ICamera> _camera;
+            };
+
+        void setObjects(const std::vector<std::shared_ptr<IObject>> &objects);
+
+        std::unique_ptr<ICamera> _camera;
             std::vector<std::shared_ptr<IObject>> _objects;
             std::vector<std::shared_ptr<ILight>> _lights;
             std::shared_ptr<Ambient> _ambientLight;

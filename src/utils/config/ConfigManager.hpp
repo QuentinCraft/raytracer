@@ -32,11 +32,14 @@ namespace RayTracer::Utils {
             ConfigManager(const std::string &plugins) {
                 _builder = std::make_unique<ObjectFactory>(plugins);
             };
-            ~ConfigManager() = default;
+            ~ConfigManager() {
+                std::cout << "ConfigManager destructor" << std::endl;
+            };
             Config getConf(const std::string& path);
             std::unique_ptr<ICamera> createCamera(Config &conf);
-            std::vector<std::unique_ptr<ILight>> createLight(Config &conf);
-            std::vector<std::unique_ptr<IObject>> createObjects(Config &conf);
+            std::vector<std::shared_ptr<ILight>> createLight(Config &conf);
+            std::vector<std::shared_ptr<IObject>> createObjects(Config &conf);
+            std::shared_ptr<Ambient> createAmbientLight(Config &conf);
         private:
             Config::Camera _getCamera(const libconfig::Setting& root);
             Config::Light _getLight(const libconfig::Setting& root);

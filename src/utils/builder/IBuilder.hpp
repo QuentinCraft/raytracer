@@ -23,7 +23,7 @@ namespace RayTracer {
             virtual IBuilder &setPoint(Math::Vector3D const &point) = 0;
             virtual IBuilder &setRadius(double radius) = 0;
             virtual IBuilder &setNormal(Math::Vector3D const &normal) = 0;
-            virtual std::unique_ptr<RayTracer::IObject> build() = 0;
+            virtual std::shared_ptr<RayTracer::IObject> build() = 0;
             virtual std::string &getBuilderName() = 0;
             virtual void reset() = 0;
 
