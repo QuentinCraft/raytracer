@@ -74,7 +74,6 @@ add_executable(raytracer
         src/utils/loader/LibraryLoader.cpp
 
         src/scenes/IScene.hpp
-        feat/reflection-refraction
         src/scenes/Scene.cpp
         src/objects/Cylinder.cpp
         src/lights/Ambient.cpp
