@@ -14,6 +14,8 @@ set(OBJ_SPHERE_SRC
         src/objects/Sphere.cpp
         src/objects/SphereEntryPoint.cpp
         src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
 )
 
 add_library(sphere SHARED ${OBJ_SPHERE_SRC})
@@ -25,6 +27,8 @@ set(OBJ_PLANE_SRC
         src/objects/Plane.cpp
         src/objects/PlaneEntryPoint.cpp
         src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
 )
 
 add_library(plane SHARED ${OBJ_PLANE_SRC})

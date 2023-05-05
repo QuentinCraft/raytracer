@@ -30,7 +30,7 @@ namespace RayTracer::Utils {
             }
             bool open(const std::string &path) override {
                 if (_handle) close();
-                _handle = dlopen(path.c_str(), RTLD_LAZY);
+                _handle = dlopen(path.c_str(), RTLD_NOW);
 
                 if (_handle)
                     return true;

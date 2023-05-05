@@ -176,13 +176,13 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     return cnf;
 }
 
-std::vector<std::unique_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager::createObjects(RayTracer::Utils::Config &conf) {
-    std::vector<std::unique_ptr<RayTracer::IObject>> objects;
+std::vector<std::shared_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager::createObjects(RayTracer::Utils::Config &conf) {
+    std::vector<std::shared_ptr<RayTracer::IObject>> objects;
 
     for (auto &x : conf.primitives) {
         std::cout << "building object [" << x.first->getBuilderName() << "]";
-        objects.push_back(x.first->applyData(x.second).build());
-        x.first->reset();
+        objects.emplace_back(x.first->applyData(x.second).build());
+//        x.first->reset();
         std::cout << " [OK]" << std::endl;
     }
     return objects;
