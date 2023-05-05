@@ -164,4 +164,9 @@ namespace Math {
         return Math::Utils::equal(_x, vector._x) && Math::Utils::equal(_y, vector._y) && Math::Utils::equal(_z, vector._z);
     }
 
+    std::ostream &operator<<(std::ostream& os, const Vector3D& v) {
+        os << "(" << v._x << ", " << v._y << ", " << v._z << ")";
+        return os;
+    }
+
 } // Math
