@@ -21,11 +21,7 @@ namespace RayTracer {
     class Scene : public IScene {
         public:
             Scene();
-            ~Scene() override {
-                std::cout << "Scene destructor" << std::endl;
-                std::cout << "Scene destructor after" << std::endl;
-
-            };
+            ~Scene() override {};
 
         void setObjects(const std::vector<std::shared_ptr<IObject>> &objects);
 

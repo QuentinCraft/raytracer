@@ -29,7 +29,7 @@ namespace RayTracer {
             Sphere(Sphere &&sphere) = default;
 
             // Destructor
-            ~Sphere() override {std::cout << "Sphere destroyed" << std::endl;};
+            ~Sphere() override {};
 
             // Operators
             bool operator==(Sphere const &sphere) const;
