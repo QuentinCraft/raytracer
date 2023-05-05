@@ -24,14 +24,13 @@ namespace RayTracer {
 
     std::optional<PipeLine> Cone::hits(Ray const& ray) const {
         Math::Vector3D rayOrigin = ray._origin - _origin;
-        Math::Vector3D rayDirection = ray._direction.normalized();
 
         //equation for the open angle of a cone 2 * tan^-1 (r/h)
         double angle = 2.0 * std::atan(_radius / _height);
         double cosAngle2 = std::cos(angle) * std::cos(angle);
 
-        double a = rayDirection._x * rayDirection._x + rayDirection._z * rayDirection._z - cosAngle2 * rayDirection._y * rayDirection._y;
-        double b = 2.0 * (rayOrigin._x * rayDirection._x + rayOrigin._z * rayDirection._z - cosAngle2 * rayOrigin._y * rayDirection._y);
+        double a = ray._direction._x * ray._direction._x + ray._direction._z * ray._direction._z - cosAngle2 * ray._direction._y * ray._direction._y;
+        double b = 2.0 * (rayOrigin._x * ray._direction._x + rayOrigin._z * ray._direction._z - cosAngle2 * rayOrigin._y * ray._direction._y);
         double c = rayOrigin._x * rayOrigin._x + rayOrigin._z * rayOrigin._z - cosAngle2 * rayOrigin._y * rayOrigin._y;
 
         double discriminant = b * b - 4 * a * c;
@@ -45,12 +44,13 @@ namespace RayTracer {
 
         double t = std::min(t1, t2);
 
-        Math::Vector3D hitPoint = ray._origin + rayDirection * t;
+        Math::Vector3D hitPoint = ray._origin + ray._direction * t;
         if (hitPoint._y < _origin._y) {
             return std::nullopt;
         }
-        if  ((Math::Utils::sup(hitPoint._y, _origin._y - _height / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y - _height / 2.0)) &&
-            (Math::Utils::inf(hitPoint._y, _origin._y + _height / 2.0) || Math::Utils::equal(hitPoint._y, _origin._y + _height / 2.0))) {
+
+        if  ((Math::Utils::sup(hitPoint._y, _origin._y - _height) || Math::Utils::equal(hitPoint._y, _origin._y - _height)) &&
+            (Math::Utils::inf(hitPoint._y, _origin._y + _height) || Math::Utils::equal(hitPoint._y, _origin._y + _height))) {
             // if (Math::Utils::inf(discriminant, 0))
             //     return std::nullopt;
             if (Math::Utils::inf(t, 0))
@@ -63,7 +63,7 @@ namespace RayTracer {
             return pipe;
         }
 
-        double t_top = (_origin._y + _height / 2.0 - ray._origin._y) / ray._direction._y;
+        double t_top = (_origin._y + _height - ray._origin._y) / ray._direction._y;
         if (t_top <= 0)
             return std::nullopt;
 
@@ -71,7 +71,8 @@ namespace RayTracer {
         //calculate the distance between the hitpoint and the base of the cone
         double dist_top = sqrt((hitPoint_top._x - _origin._x) * (hitPoint_top._x - _origin._x) + (hitPoint_top._z - _origin._z) * (hitPoint_top._z - _origin._z));
 
-        if (Math::Utils::inf(dist_top, _radius /  2 * 5 * std::atan(cosAngle2)) || Math::Utils::equal(dist_top, _radius /  2 * 5 * std::atan(cosAngle2))) {
+double t_radius = _radius / std::sin(angle / 2);
+double t_angle = 2 * std::atan2(t_radius, _height);        if (Math::Utils::inf(dist_top, t_angle) || Math::Utils::equal(dist_top, t_angle)) {
             PipeLine pipe;
             pipe._position = hitPoint_top;
             pipe._color = _color;
@@ -80,21 +81,14 @@ namespace RayTracer {
             return pipe;
         }
 
-        double distanceToOrigin = sqrt(hitPoint._x * hitPoint._x + hitPoint._z * hitPoint._z);
-        double coneRadiusAtY = _radius * (1 - hitPoint._y / _height);
-        if (distanceToOrigin > coneRadiusAtY) {
-            return std::nullopt;
-        }
-
         return std::nullopt;
     }
 
-
     Math::Vector3D Cone::normal(const PipeLine &pipe) const {
         if (pipe._info == "TopCone")
-            return Math::Vector3D(0, -1, 0);
+            return Math::Vector3D(0, 1, 0);
         else if (pipe._info == "Cone")
-            return  Math::Vector3D((_origin - pipe._position)._x, 0, (_origin - pipe._position)._z);
+            return Math::Vector3D((_origin - pipe._position)._x, 0, (_origin - pipe._position)._z).normalized();
         return Math::Vector3D();
     }
 
