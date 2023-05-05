@@ -91,14 +91,14 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         int y = primitive["y"];
         int z = primitive["z"];
         int r = primitive["r"];
-        int colorX = color["r"];
-        int colorY = color["g"];
-        int colorZ = color["b"];
+        float colorX = color["r"];
+        float colorY = color["g"];
+        float colorZ = color["b"];
         std::cout << "[Sphere]----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
         std::unique_ptr<IData> data = std::make_unique<RayTracer::SphereData>();
-        data->setPoint(Math::Vector3D(x, y, z));
+        data->setCenter(Math::Vector3D(x, y, z));
         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
         data->setRadius(r);
         IBuilder *builder = _builder->createObjectBuilder("sphere");
