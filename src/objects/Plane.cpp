@@ -44,15 +44,31 @@ namespace RayTracer {
                 PipeLine pipe;
                 pipe.object = std::make_shared<Plane>(*this);
                 pipe._position = ray._origin + ray._direction * D;
-//                double sines = std::floor(pipe._position._x) + std::floor(pipe._position._y) + std::floor(pipe._position._z);
-//
-//                sines = (sines * 0.5) * 10;
                 double scale = 0.2;
-                float pattern = (fmodf(std::abs(pipe._position._x) * scale, 1) > 0.5) ^ (fmodf(std::abs(pipe._position._y) * scale, 1) > 0.5) ^ (fmodf(std::abs(pipe._position._z) * scale, 1) > 0.5);
-                if (pattern)
-                    pipe._color = _color;
+                char ax;
+                char ay;
+                char az;
+                if (Math::Utils::inf(pipe._position._x, 0))
+                    ax = fmodf(std::abs(pipe._position._x) * scale, 1) < 0.5;
                 else
-                    pipe._color = {1, 1, 1};
+                    ax = fmodf(std::abs(pipe._position._x) * scale, 1) > 0.5;
+
+                if (Math::Utils::inf(pipe._position._y, 0))
+                    ay = fmodf(std::abs(pipe._position._y) * scale, 1) < 0.5;
+                else
+                    ay = fmodf(std::abs(pipe._position._y) * scale, 1) > 0.5;
+
+                if (Math::Utils::inf(pipe._position._z, 0))
+                    az = fmodf(std::abs(pipe._position._z) * scale, 1) < 0.5;
+                else
+                    az = fmodf(std::abs(pipe._position._z) * scale, 1) > 0.5;
+
+
+                float pattern = (ax) ^ (ay) ^ (az);
+                if (pattern)
+                    pipe._color = {0.9 - _color._x, 0.9 - _color._y, 0.9 - _color._z};
+                else
+                    pipe._color = _color;
                 pipe.id = _id;
                 return pipe;
             }

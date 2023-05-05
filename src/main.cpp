@@ -41,7 +41,7 @@ int main() {
 
     scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.7, 0.7, 0.7));
 
-    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 3, -20), 4000, 4000, 110);
+    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 3, -20), 800, 800, 110);
 
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
