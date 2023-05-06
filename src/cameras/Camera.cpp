@@ -68,15 +68,6 @@ namespace RayTracer {
         }
         return savedHitPoint;
     }
-    static Math::Vector3D lambert(PipeLine &object, std::vector<std::shared_ptr<ILight>> &lights,
-                                  std::shared_ptr<Ambient> &ambient) {
-        Math::Vector3D normal = object._object->normal(object).normalized();
-        Math::Vector3D lightDir(lights.front()->getOrigin(), object._position);
-        double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
-        Math::Vector3D hitColor(object._color);
-        hitColor *= (ambient->getIntensity() + dot);
-        return hitColor;
-    }
 
     static Math::Vector3D getLitColor(const Math::Vector3D& viewDir, const Math::Vector3D& surfacePointPosition, const Math::Vector3D& objectColor, const std::shared_ptr<ILight>& pointLight, const Math::Vector3D& surfaceNormal, const Ambient &ambientLight, const std::shared_ptr<IMaterial> &material)
     {
@@ -93,7 +84,7 @@ namespace RayTracer {
         Math::Vector3D diffuse = objectColor * material->getDiffuse() * std::max(coeff, 0.0) * lightIntensity;
 
         Math::Vector3D halfwayDir = (lightDir + viewDir).normalized();
-        Math::Vector3D specular = objectColor * std::pow(std::max((surfaceNormal * -1).dot(halfwayDir), 0.0), material->getShininess()) * material->getSpecular() * lightIntensity;
+        Math::Vector3D specular = objectColor * std::pow(std::max((surfaceNormal * -1).dot(halfwayDir), 0.0), (material->getShininess())) * material->getSpecular() * lightIntensity;
 
         Math::Vector3D color = ambient + (diffuse) + specular;
 
@@ -138,7 +129,7 @@ namespace RayTracer {
         else
             hitColor = savedHitPoint._color;
 
-        if (savedHitPoint._color == Math::Vector3D(1, 0, 1)) {
+        if (savedHitPoint._material->getReflection()) {
             Math::Vector3D reflect = r._direction - (savedHitPoint._object->normal(savedHitPoint) * r._direction.dot(savedHitPoint._object->normal(savedHitPoint)) * 2);
             Ray reflectedRay(savedHitPoint._position, reflect);
             PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
@@ -147,11 +138,10 @@ namespace RayTracer {
             } else {
                 if (recursive <= 0)
                     savedHitPoint._color = {0, 0, 0};
-                savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive - 1) * 0.9;
+                savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive - 1) *  savedHitPoint._color;
             }
-        }
-        if (savedHitPoint._color == Math::Vector3D(0, 1, 0) && recursive > 0) {
-            double etai_over_etat = 1.7;
+        } else if (!Math::Utils::equal(savedHitPoint._material->getRefraction(), 0) && recursive > 0) {
+            double ref = savedHitPoint._material->getRefraction();
 
             Math::Vector3D uv = r._direction.normalized();
             Math::Vector3D n = savedHitPoint._object->normal(
@@ -159,16 +149,15 @@ namespace RayTracer {
 
             if (Math::Utils::sup(r._direction.dot(n), 0)) {
                 n = n * -1;
-                etai_over_etat = 1.0 / etai_over_etat;
+                ref = 1.0 / ref;
             }
 
             auto cos_theta = fmin((uv * -1).dot(n), 1.0);
-            Math::Vector3D r_out_perp = (uv + (n * cos_theta)) * etai_over_etat;
+            Math::Vector3D r_out_perp = (uv + (n * cos_theta)) * ref;
             Math::Vector3D r_out_parallel = n * -sqrt(fabs(1.0 - r_out_perp.length()));
             Ray reflectedRay(savedHitPoint._position, (r_out_perp + r_out_parallel.normalized()).normalized());
-            double sin_theta = sqrt(1.0 - cos_theta*cos_theta);
 
-            savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive);
+            savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive) * savedHitPoint._color;
         }
         hitColor = phong(savedHitPoint, lights, r, *ambient);
         hitColor = dropShadow(savedHitPoint, hitColor, objects, lights, ambient);
@@ -179,7 +168,7 @@ namespace RayTracer {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 50);
+        hitColor = compute(r, objects, lights, ambient, 20);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }

@@ -55,7 +55,6 @@ add_executable(raytracer
         src/lights/Spot.hpp
 
         src/materials/IMaterial.hpp
-        src/materials/Plastic.cpp
         src/materials/Plastic.hpp
         src/materials/AMaterial.cpp
         src/materials/AMaterial.hpp
@@ -95,7 +94,7 @@ add_executable(raytracer
         src/objects/PlaneData.hpp
         src/objects/SphereData.hpp
         src/utils/loader/PluginsManager.hpp
-        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/materials/Chrome.cpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp)
+        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp)
 
 
 

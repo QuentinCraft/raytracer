@@ -19,16 +19,16 @@ namespace RayTracer {
 
             [[nodiscard]] std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> getTexture(const Math::Vector3D &coordinate) const override;
 
-            const std::unordered_map<std::string, std::shared_ptr<AMaterial>> &getMaterials() const override;
+            const std::map<std::string, std::shared_ptr<AMaterial>> &getMaterials() const override;
 
-            void setMaterials(const std::unordered_map<std::string, std::shared_ptr<AMaterial>> &materials) override;
+            void setMaterials(const std::map<std::string, std::shared_ptr<AMaterial>> &materials) override;
 
-            const std::unordered_map<std::string, std::shared_ptr<Math::Vector3D>> &getColors() const override;
+            const std::map<std::string, std::shared_ptr<Math::Vector3D>> &getColors() const override;
 
-            void setColors(const std::unordered_map<std::string, std::shared_ptr<Math::Vector3D>> &colors) override;
+            void setColors(const std::map<std::string, std::shared_ptr<Math::Vector3D>> &colors) override;
 
-            std::unordered_map<std::string, std::shared_ptr<AMaterial>> _materials;
-            std::unordered_map<std::string, std::shared_ptr<Math::Vector3D>> _colors;
+            std::map<std::string, std::shared_ptr<AMaterial>> _materials;
+            std::map<std::string, std::shared_ptr<Math::Vector3D>> _colors;
     };
 
 } // RayTracer

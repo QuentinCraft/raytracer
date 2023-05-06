@@ -50,19 +50,19 @@ namespace RayTracer {
         return {material, color};
     }
 
-    const std::unordered_map<std::string, std::shared_ptr<AMaterial>> &ChessBoard::getMaterials() const {
+    const std::map<std::string, std::shared_ptr<AMaterial>> &ChessBoard::getMaterials() const {
         return _materials;
     }
 
-    void ChessBoard::setMaterials(const std::unordered_map<std::string, std::shared_ptr<AMaterial>> &materials) {
+    void ChessBoard::setMaterials(const std::map<std::string, std::shared_ptr<AMaterial>> &materials) {
         _materials = materials;
     }
 
-    const std::unordered_map<std::string, std::shared_ptr<Math::Vector3D>> &ChessBoard::getColors() const {
+    const std::map<std::string, std::shared_ptr<Math::Vector3D>> &ChessBoard::getColors() const {
         return _colors;
     }
 
-    void ChessBoard::setColors(const std::unordered_map<std::string, std::shared_ptr<Math::Vector3D>> &colors) {
+    void ChessBoard::setColors(const std::map<std::string, std::shared_ptr<Math::Vector3D>> &colors) {
         _colors = colors;
     }
 } // RayTracer
