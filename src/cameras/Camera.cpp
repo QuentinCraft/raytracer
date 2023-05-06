@@ -52,7 +52,7 @@ namespace RayTracer {
                                  std::vector<std::shared_ptr<ILight>> &lights,
                                  std::shared_ptr<Ambient> &ambient) {
         PipeLine savedHitPoint;
-        savedHitPoint.object = nullptr;
+        savedHitPoint._object = nullptr;
         int i = 0;
         for (auto &object : objects) {
             std::optional<PipeLine> hitPoint = object->hits(r);
@@ -70,7 +70,7 @@ namespace RayTracer {
     }
     static Math::Vector3D lambert(PipeLine &object, std::vector<std::shared_ptr<ILight>> &lights,
                                   std::shared_ptr<Ambient> &ambient) {
-        Math::Vector3D normal = object.object->normal(object).normalized();
+        Math::Vector3D normal = object._object->normal(object).normalized();
         Math::Vector3D lightDir(lights.front()->getOrigin(), object._position);
         double dot = std::max(normal.dot(lightDir.normalized()), 0.0);
         Math::Vector3D hitColor(object._color);
@@ -78,7 +78,7 @@ namespace RayTracer {
         return hitColor;
     }
 
-    static Math::Vector3D getLitColor(const Math::Vector3D& viewDir, const Math::Vector3D& surfacePointPosition, const Math::Vector3D& objectColor, const std::shared_ptr<ILight>& pointLight, const Math::Vector3D& surfaceNormal)
+    static Math::Vector3D getLitColor(const Math::Vector3D& viewDir, const Math::Vector3D& surfacePointPosition, const Math::Vector3D& objectColor, const std::shared_ptr<ILight>& pointLight, const Math::Vector3D& surfaceNormal, const Ambient &ambientLight, const std::shared_ptr<IMaterial> &material)
     {
         Math::Vector3D lightVector = surfacePointPosition - pointLight->getOrigin();
         Math::Vector3D lightDir = lightVector.normalized();
@@ -87,27 +87,23 @@ namespace RayTracer {
 
         double coeff = (lightDir * -1).dot(surfaceNormal);
 
-        double material_diffuse = 0.4;
-        double material_specular = 0.28;
-        double material_shininess = 74.3;
-        double material_ambience = 0.2;
 
-        Math::Vector3D ambient = objectColor * material_ambience;
+        Math::Vector3D ambient = objectColor * ambientLight.getIntensity();
 
-        Math::Vector3D diffuse = objectColor * material_diffuse * std::max(coeff, 0.0) * lightIntensity;
+        Math::Vector3D diffuse = objectColor * material->getDiffuse() * std::max(coeff, 0.0) * lightIntensity;
 
         Math::Vector3D halfwayDir = (lightDir + viewDir).normalized();
-        Math::Vector3D specular = objectColor * std::pow(std::max((surfaceNormal * -1).dot(halfwayDir), 0.0), material_shininess) * material_specular * lightIntensity;
+        Math::Vector3D specular = objectColor * std::pow(std::max((surfaceNormal * -1).dot(halfwayDir), 0.0), material->getShininess()) * material->getSpecular() * lightIntensity;
 
         Math::Vector3D color = ambient + (diffuse) + specular;
 
         return color / 255;
     }
 
-    static Math::Vector3D phong(PipeLine &object, std::vector<std::shared_ptr<ILight>> &lights, const Ray &r) {
+    static Math::Vector3D phong(PipeLine &object, std::vector<std::shared_ptr<ILight>> &lights, const Ray &r, const Ambient &ambient) {
 
-        Math::Vector3D normal = object.object->normal(object).normalized();
-        return getLitColor(r._direction, object._position, object._color * 255, lights.front(), normal * -1);
+        Math::Vector3D normal = object._object->normal(object).normalized();
+        return getLitColor(r._direction, object._position, object._color, lights.front(), normal * -1, ambient, object._material);
     }
 
     static Math::Vector3D dropShadow(PipeLine &savedHitPoint, Math::Vector3D hitColor,
@@ -116,7 +112,7 @@ namespace RayTracer {
                                      std::shared_ptr<Ambient> &ambient) {
         Ray bouncingRay(savedHitPoint._position, (lights.front()->getOrigin() - savedHitPoint._position).normalized());
         for (auto &object : objects) {
-            if (object == savedHitPoint.object)
+            if (object == savedHitPoint._object)
                 continue;
             std::optional<PipeLine> pipe = object->hits(bouncingRay);
             if (pipe.has_value()) {
@@ -137,16 +133,16 @@ namespace RayTracer {
         Math::Vector3D hitColor;
 
         PipeLine savedHitPoint = closestPoint(r, objects, lights, ambient);
-        if (savedHitPoint.object == nullptr)
+        if (savedHitPoint._object == nullptr)
             return {0.3, 0.3, 1};
         else
             hitColor = savedHitPoint._color;
 
         if (savedHitPoint._color == Math::Vector3D(1, 0, 1)) {
-            Math::Vector3D reflect = r._direction - (savedHitPoint.object->normal(savedHitPoint) * r._direction.dot(savedHitPoint.object->normal(savedHitPoint)) * 2);
+            Math::Vector3D reflect = r._direction - (savedHitPoint._object->normal(savedHitPoint) * r._direction.dot(savedHitPoint._object->normal(savedHitPoint)) * 2);
             Ray reflectedRay(savedHitPoint._position, reflect);
             PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
-            if (savedHitPoint2.object == nullptr) {
+            if (savedHitPoint2._object == nullptr) {
                 savedHitPoint._color = {0.3, 0.3, 1};
             } else {
                 if (recursive <= 0)
@@ -158,7 +154,7 @@ namespace RayTracer {
             double etai_over_etat = 1.7;
 
             Math::Vector3D uv = r._direction.normalized();
-            Math::Vector3D n = savedHitPoint.object->normal(
+            Math::Vector3D n = savedHitPoint._object->normal(
                     savedHitPoint).normalized();
 
             if (Math::Utils::sup(r._direction.dot(n), 0)) {
@@ -174,7 +170,7 @@ namespace RayTracer {
 
             savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive);
         }
-        hitColor = phong(savedHitPoint, lights, r);
+        hitColor = phong(savedHitPoint, lights, r, *ambient);
         hitColor = dropShadow(savedHitPoint, hitColor, objects, lights, ambient);
         return hitColor;
     }

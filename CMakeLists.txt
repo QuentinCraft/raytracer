@@ -24,8 +24,7 @@ set_target_properties(sphere PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT
 set(OBJ_PLANE_SRC
         src/objects/Plane.cpp
         src/objects/PlaneEntryPoint.cpp
-        src/maths/Vector3D.cpp
-)
+        src/maths/Vector3D.cpp)
 
 add_library(plane SHARED ${OBJ_PLANE_SRC})
 set_target_properties(plane PROPERTIES PREFIX raytracer_)
@@ -56,6 +55,10 @@ add_executable(raytracer
         src/lights/Spot.hpp
 
         src/materials/IMaterial.hpp
+        src/materials/Plastic.cpp
+        src/materials/Plastic.hpp
+        src/materials/AMaterial.cpp
+        src/materials/AMaterial.hpp
 
         src/utils/config/Config.hpp
         src/utils/Error.hpp
@@ -92,7 +95,7 @@ add_executable(raytracer
         src/objects/PlaneData.hpp
         src/objects/SphereData.hpp
         src/utils/loader/PluginsManager.hpp
-        src/utils/loader/IPluginsManager.hpp)
+        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/materials/Chrome.cpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp)
 
 
 

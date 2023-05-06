@@ -18,7 +18,7 @@ namespace RayTracer {
     class IBuilder {
         public:
             virtual ~IBuilder() = default;
-            virtual IBuilder &setColor(Math::Vector3D const &color) = 0;
+            virtual IBuilder &setTexture(std::shared_ptr<ITexture> const &texture) = 0;
             virtual IBuilder &setCenter(Math::Vector3D const &center) = 0;
             virtual IBuilder &setPoint(Math::Vector3D const &point) = 0;
             virtual IBuilder &setRadius(double radius) = 0;

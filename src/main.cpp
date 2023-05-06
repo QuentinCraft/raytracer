@@ -21,29 +21,45 @@
 #include "utils/loader/LibraryLoader.hpp"
 #include "utils/loader/PluginsManager.hpp"
 
+#include "texture/ChessBoard.hpp"
+#include "texture/ATexture.hpp"
+#include "texture/ITexture.hpp"
+
+#include "materials/Plastic.hpp"
+#include "materials/Chrome.hpp"
+
+
 #include <ctime>
 
 int main() {
     std::ofstream file("render.ppm");
 
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
+    RayTracer::Chrome chrome;
+    RayTracer::Plastic plastic;
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-4, 4, 10), 4, Math::Vector3D(0.7, 0.5, 0.5)));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 4, 0), 4, Math::Vector3D(0.3, 0.7, 0.3)));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, Math::Vector3D(0.8, 0.3, 0.8)));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 2, -13), 1, Math::Vector3D(0, 1, 0)));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-10, 4, -11), 4, Math::Vector3D(1, 0, 1)));
+    std::shared_ptr<RayTracer::ChessBoard> chessBoard = std::make_shared<RayTracer::ChessBoard>(chrome, plastic, Math::Vector3D(255, 255, 255), Math::Vector3D(1, 1, 1));
+    std::shared_ptr<RayTracer::ChessBoard> basic = std::make_shared<RayTracer::ChessBoard>(chrome, plastic, Math::Vector3D(255, 255, 255), Math::Vector3D(1, 1, 1));
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), Math::Vector3D(0.67, 0.67, 0.67)));
-//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 6, 0), Math::Vector3D(0, -1, 0), Math::Vector3D(1, 0, 1)));
-//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 6), Math::Vector3D(0, 0, -1), Math::Vector3D(1, 0, 1)));
-//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, -6), Math::Vector3D(0, 0, 1), Math::Vector3D(1, 0, 1)));
-//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(-6, 0, 0), Math::Vector3D(1, 0, 0), Math::Vector3D(1, 0, 1)));
-//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(6, 0, 0), Math::Vector3D(-1, 0, 0), Math::Vector3D(1, 0, 1)));
 
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-5, 7, -20), Math::Vector3D(35, 35, 35)));
 
-    scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.1, 0.1, 0.1));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-4, 4, 10), 4, chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 4, 0), 4, chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-10, 4, -11), 4, chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 2, -13), 1, chessBoard));
+
+
+    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 20, 0), Math::Vector3D(0, -1, 0), chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, -20), Math::Vector3D(0, 0, 1), chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 20), Math::Vector3D(0, 0, -1), chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(-20, 0, 0), Math::Vector3D(1, 0, 0), chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(20, 0, 0), Math::Vector3D(-1, 0, 0), chessBoard));
+
+    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-5, 2, -20), Math::Vector3D(35, 35, 35)));
+
+    scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.2, 0.2, 0.2));
 
     scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 3, -25), 800, 800, 110);
 

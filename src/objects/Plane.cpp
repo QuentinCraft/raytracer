@@ -7,27 +7,20 @@
 
 #include "Plane.hpp"
 #include "objects/PipeLine.hpp"
+#include "texture/ChessBoard.hpp"
+#include <iostream>
+#include <iomanip>
 
 namespace RayTracer {
     Plane::Plane() {
         _origin = Math::Vector3D();
         _normal = Math::Vector3D().normalized();
-        _color = Math::Vector3D(255, 255, 255);
         _id = -1;
     }
 
     Plane::Plane(const Math::Vector3D& point, const Math::Vector3D& normal) {
-        _color = Math::Vector3D(255, 255, 255);
         _origin = point;
         _normal = normal.normalized();
-        _id = -1;
-    }
-
-    Plane::Plane(const Math::Vector3D &point, const Math::Vector3D &normal,
-                 const Math::Vector3D &color) {
-        _origin = point;
-        _normal = normal.normalized();
-        _color = color;
         _id = -1;
     }
 
@@ -42,34 +35,12 @@ namespace RayTracer {
             double D = p0l0.dot(_normal) / denominator;
             if (Math::Utils::sup(D, 0)) {
                 PipeLine pipe;
-                pipe.object = std::make_shared<Plane>(*this);
+                pipe._object = std::make_shared<Plane>(*this);
                 pipe._position = ray._origin + ray._direction * D;
-                double scale = 0.2;
-                char ax;
-                char ay;
-                char az;
-                if (Math::Utils::inf(pipe._position._x, 0))
-                    ax = fmodf(std::abs(pipe._position._x) * scale, 1) < 0.5;
-                else
-                    ax = fmodf(std::abs(pipe._position._x) * scale, 1) > 0.5;
-
-                if (Math::Utils::inf(pipe._position._y, 0))
-                    ay = fmodf(std::abs(pipe._position._y) * scale, 1) < 0.5;
-                else
-                    ay = fmodf(std::abs(pipe._position._y) * scale, 1) > 0.5;
-
-                if (Math::Utils::inf(pipe._position._z, 0))
-                    az = fmodf(std::abs(pipe._position._z) * scale, 1) < 0.5;
-                else
-                    az = fmodf(std::abs(pipe._position._z) * scale, 1) > 0.5;
-
-
-                float pattern = (ax) ^ (ay) ^ (az);
-                if (pattern)
-                    pipe._color = {0.9 - _color._x, 0.9 - _color._y, 0.9 - _color._z};
-                else
-                    pipe._color = _color;
-                pipe.id = _id;
+                std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+                pipe._material = mat.first;
+                pipe._color = mat.second;
+                pipe._id = _id;
                 return pipe;
             }
         }
@@ -82,6 +53,13 @@ namespace RayTracer {
 
     bool Plane::operator==(const Plane &plane) const {
         return _origin == plane._origin && _normal == plane._normal;
+    }
+
+    Plane::Plane(const Math::Vector3D &point, const Math::Vector3D &normal, const std::shared_ptr<ITexture> &texture) {
+        _origin = point;
+        _normal = normal.normalized();
+        _id = -1;
+        _texture = texture;
     }
 
 

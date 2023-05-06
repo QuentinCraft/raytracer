@@ -10,6 +10,7 @@
 
 #include "maths/Vector3D.hpp"
 #include "objects/AObject.hpp"
+#include "materials/AMaterial.hpp"
 
 #include <memory>
 
@@ -18,8 +19,9 @@ namespace RayTracer {
         Math::Vector3D _position;
         Math::Vector3D _color;
         std::string _info;
-        std::shared_ptr<AObject> object;
-        int id;
+        std::shared_ptr<AObject> _object;
+        std::shared_ptr<IMaterial> _material;
+        int _id;
     };
 };
 

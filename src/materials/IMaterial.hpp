@@ -11,7 +11,20 @@
 namespace RayTracer {
 
     class IMaterial {
-        virtual ~IMaterial() = default;
+        public:
+            virtual ~IMaterial() = default;
+
+            [[nodiscard]] virtual double getDiffuse() const = 0;
+
+            virtual void setDiffuse(double diffuse) = 0;
+
+            [[maybe_unused]] virtual double getSpecular() const = 0;
+
+            virtual void setSpecular(double specular) = 0;
+
+            [[nodiscard]] virtual double getShininess() const = 0;
+
+            virtual void setShininess(double shininess) = 0;
     };
 
 };

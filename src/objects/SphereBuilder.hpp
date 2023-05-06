@@ -18,7 +18,7 @@ namespace RayTracer {
             ~SphereBuilder() {};
             std::unique_ptr<RayTracer::IObject> build() override
             {
-                _object = std::make_unique<RayTracer::Sphere>(_center, _radius, _color);
+                _object = std::make_unique<RayTracer::Sphere>(_center, _radius, _texture);
                 return std::move(_object);
             }
     };

@@ -31,9 +31,6 @@ namespace RayTracer {
             [[nodiscard]] virtual const Math::Vector3D &getOrigin() const = 0;
             virtual void setOrigin(const Math::Vector3D &origin) = 0;
 
-            [[nodiscard]] virtual const Math::Vector3D &getColor() const = 0;
-            virtual void setColor(const Math::Vector3D &color) = 0;
-
             [[nodiscard]] virtual const Math::Vector3D &getRotation() const = 0;
             virtual void setRotation(const Math::Vector3D &rotation) = 0;
 

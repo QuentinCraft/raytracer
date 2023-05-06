@@ -17,7 +17,7 @@ namespace RayTracer {
             ~PlaneBuilder() {};
             std::unique_ptr<RayTracer::IObject> build() override
             {
-                _object = std::make_unique<RayTracer::Plane>(_point, _normal, _color);
+                _object = std::make_unique<RayTracer::Plane>(_point, _normal);
                 return std::move(_object);
             }
     };

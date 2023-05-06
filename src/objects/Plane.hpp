@@ -23,7 +23,7 @@ namespace RayTracer {
             // Constructors
             Plane();
             Plane(const Math::Vector3D& point, const Math::Vector3D& normal);
-            Plane(const Math::Vector3D& point, const Math::Vector3D& normal, const Math::Vector3D& color);
+            Plane(const Math::Vector3D& point, const Math::Vector3D& normal, const std::shared_ptr<ITexture>& texture);
             Plane(Plane const &Plane) = default;
             Plane(Plane &&Plane) = default;
 
