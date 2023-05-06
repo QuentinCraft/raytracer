@@ -50,7 +50,6 @@ namespace RayTracer {
 
         double t = t1;
         if (y1 < _origin._y || y1 > _origin._y + _height) {
-            pipe._info = "TopCone";
             t = t2;
         } else if (y2 >= _origin._y && y2 <= _origin._y + _height && y2 < y1) {
             t = t2;
@@ -60,6 +59,17 @@ namespace RayTracer {
         if (hitPoint._y < _origin._y || hitPoint._y > _origin._y + _height)
             return std::nullopt;
 
+        double t_top = (_origin._y + _height - ray._origin._y) / ray._direction._y;
+
+        Math::Vector3D hitPoint_top = ray._origin + ray._direction * t_top;
+
+        double dist_top = sqrt((hitPoint_top._x - _origin._x) * (hitPoint_top._x - _origin._x) + (hitPoint_top._z - _origin._z) * (hitPoint_top._z - _origin._z));
+
+        if (Math::Utils::inf(dist_top, _radius) || Math::Utils::equal(dist_top, _radius)) {
+            pipe._position = hitPoint_top;
+            pipe._info = "TopCone";
+        }
+
         pipe._position = hitPoint;
         pipe._color = _color;
         pipe.id = _id;
@@ -67,22 +77,10 @@ namespace RayTracer {
     }
 
     Math::Vector3D Cone::normal(const PipeLine &pipe) const {
-        Math::Vector3D hitPoint = pipe._position - _origin;
-        double dist = sqrt(hitPoint._x * hitPoint._x + hitPoint._z * hitPoint._z);
-        double cosTheta = dist / sqrt(dist * dist + _height * _height);
-        double sinTheta = _height / sqrt(dist * dist + _height * _height);
-        if (pipe._info == "TopCone") {
-            std::cout << "Top hitted" << std::endl;
-            return {0, 1, 0};
-        } else if (pipe._info == "Cone") {
-            if (Math::Utils::sup(hitPoint._y, _origin._y + _height)) {
-                return {0, sinTheta, 0};
-            } else if (Math::Utils::inf(hitPoint._y, _origin._y)) {
-                return {0, -sinTheta, 0};
-            } else {
-                return Math::Vector3D(hitPoint._x * cosTheta, sinTheta, hitPoint._z * cosTheta).normalized();
-            }
-        }
+        if (pipe._info == "TopCone")
+            return Math::Vector3D(0, -1, 0);
+        else if (pipe._info == "Cone")
+            return Math::Vector3D((_origin - pipe._position)._x, 0, (_origin - pipe._position)._z * -1);
         return Math::Vector3D();
     }
 

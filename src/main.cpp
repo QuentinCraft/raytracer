@@ -25,12 +25,12 @@ int main() {
 
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Cone>(Math::Vector3D(0, 6, 0), 6, 3, Math::Vector3D(1, 0, 0)));
-    scene->_objects.push_back(std::make_shared<RayTracer::Cylinder>(Math::Vector3D(0, 1, 0), 6, 3, Math::Vector3D(1, 0, 0)));
+    scene->_objects.push_back(std::make_shared<RayTracer::Cone>(Math::Vector3D(0, 6, 0), 3, 6, Math::Vector3D(1, 0, 0)));
+    scene->_objects.push_back(std::make_shared<RayTracer::Cylinder>(Math::Vector3D(0, 1, 0), 3, 6, Math::Vector3D(1, 0, 0)));
 
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), Math::Vector3D(0.5, 0.5, 1)));
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 6), Math::Vector3D(0, 0, -1), Math::Vector3D(0.5, 0.5, 1)));
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(0, 10, -15), Math::Vector3D(1, 1, 1)));
+    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(8, 10, 0), Math::Vector3D(1, 1, 1)));
 
     scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.25, 0.25, 0.25));
 
