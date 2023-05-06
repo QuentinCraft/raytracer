@@ -39,15 +39,15 @@ int main() {
     RayTracer::Plastic plastic;
 
     std::shared_ptr<RayTracer::ChessBoard> chessBoard = std::make_shared<RayTracer::ChessBoard>(chrome, plastic, Math::Vector3D(255, 255, 255), Math::Vector3D(1, 1, 1));
-    std::shared_ptr<RayTracer::ChessBoard> basic = std::make_shared<RayTracer::ChessBoard>(chrome, plastic, Math::Vector3D(255, 255, 255), Math::Vector3D(1, 1, 1));
+    std::shared_ptr<RayTracer::ATexture> basic = std::make_shared<RayTracer::ATexture>();
 
 
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-4, 4, 10), 4, chessBoard));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 4, 0), 4, chessBoard));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-10, 4, -11), 4, chessBoard));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, chessBoard));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 2, -13), 1, chessBoard));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-4, 4, 10), 4, basic));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 4, 0), 4, basic));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-10, 4, -11), 4, basic));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, basic));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 2, -13), 1, basic));
 
 
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), chessBoard));
@@ -57,7 +57,7 @@ int main() {
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(-20, 0, 0), Math::Vector3D(1, 0, 0), chessBoard));
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(20, 0, 0), Math::Vector3D(-1, 0, 0), chessBoard));
 
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-5, 2, -20), Math::Vector3D(35, 35, 35)));
+    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-1, 2, -15), Math::Vector3D(35, 35, 35)));
 
     scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.2, 0.2, 0.2));
 

@@ -12,7 +12,7 @@ namespace RayTracer {
 
     std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> ATexture::getTexture(const Math::Vector3D &coordinate) const {
         _materials;
-        return {std::make_shared<AMaterial>(), Math::Vector3D(255, 0, 255)};
+        return {std::make_shared<AMaterial>(), Math::Vector3D(50, 50, 50)};
     }
 
     const std::unordered_map<std::string, std::shared_ptr<AMaterial>> &ATexture::getMaterials() const {
