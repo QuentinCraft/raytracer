@@ -5,3 +5,4 @@ raytracer
 .idea
 vgcore*
 cmake-build-debug
+render.ppm

@@ -14,7 +14,7 @@ namespace RayTracer {
     struct PipeLine {
         Math::Vector3D _position;
         Math::Vector3D _color;
-        int id;
+        double id;
         std::string _info;
     };
 };
