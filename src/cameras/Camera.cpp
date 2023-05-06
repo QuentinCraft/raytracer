@@ -83,7 +83,7 @@ namespace RayTracer {
         Math::Vector3D lightVector = surfacePointPosition - pointLight->getOrigin();
         Math::Vector3D lightDir = lightVector.normalized();
 
-        double lightIntensity = (0.01 / lightVector.dot(lightVector)) * (pointLight->getIntensity()._x * 1000);
+        Math::Vector3D lightIntensity = (pointLight->getIntensity() * 1000) * (0.01 / lightVector.dot(lightVector));
 
         double coeff = (lightDir * -1).dot(surfaceNormal);
 

@@ -18,8 +18,8 @@ namespace RayTracer {
 
     class ATexture : public ITexture {
         public:
-            ~ATexture() override = default;
             ATexture();
+            ~ATexture() override = default;
 
             std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> getTexture(const Math::Vector3D &coordinate) const override;
 

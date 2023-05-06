@@ -17,21 +17,20 @@ namespace RayTracer {
             AMaterial();
             ~AMaterial() override = default;
 
-            double _diffuse;
+            [[nodiscard]] Math::Vector3D getDiffuse() const override;
 
-            [[nodiscard]] double getDiffuse() const override;
+            void setDiffuse(Math::Vector3D diffuse) override;
 
-            void setDiffuse(double diffuse) override;
+            [[nodiscard]] Math::Vector3D getSpecular() const override;
 
-            [[nodiscard]] double getSpecular() const override;
-
-            void setSpecular(double specular) override;
+            void setSpecular(Math::Vector3D specular) override;
 
             [[nodiscard]] double getShininess() const override;
 
             void setShininess(double shininess) override;
 
-            double _specular;
+            Math::Vector3D _diffuse;
+            Math::Vector3D _specular;
             double _shininess;
 
     };

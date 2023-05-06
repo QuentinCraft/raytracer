@@ -9,24 +9,24 @@
 
 namespace RayTracer {
     AMaterial::AMaterial() {
-        _diffuse = 0.4;
-        _specular = 0.28;
+        _diffuse = {0.4, 0.4, 0.4};
+        _specular = {0.28, 0.28, 0.28};
         _shininess = 74.3;
     }
 
-    double AMaterial::getDiffuse() const {
+    Math::Vector3D AMaterial::getDiffuse() const {
         return _diffuse;
     }
 
-    void AMaterial::setDiffuse(double diffuse) {
+    void AMaterial::setDiffuse(Math::Vector3D diffuse) {
         _diffuse = diffuse;
     }
 
-    double AMaterial::getSpecular() const {
+    Math::Vector3D AMaterial::getSpecular() const {
         return _specular;
     }
 
-    void AMaterial::setSpecular(double specular) {
+    void AMaterial::setSpecular(Math::Vector3D specular) {
         _specular = specular;
     }
 
