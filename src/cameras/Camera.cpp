@@ -5,9 +5,17 @@
 ** Camera3D.cpp
 */
 #include <iostream>
+#include <random>
 #include "Camera.hpp"
 
 namespace RayTracer {
+
+
+    static double randomDouble(double n) {
+        static std::uniform_real_distribution<double> distribution(-n, n);
+        static std::mt19937 generator;
+        return distribution(generator);
+    }
 
     static double distance(const Math::Vector3D& a, const Math::Vector3D& b) {
         return sqrt(pow(a._x - b._x, 2) + pow(a._y - b._y, 2) + pow(a._z - b._z, 2));
@@ -100,21 +108,47 @@ namespace RayTracer {
     static Math::Vector3D dropShadow(PipeLine &savedHitPoint,
                                      std::vector<std::shared_ptr<IObject>> &objects,
                                      std::shared_ptr<ILight> &light,
-                                     std::shared_ptr<Ambient> &ambient) {
-        Ray bouncingRay(savedHitPoint._position, (light->getOrigin() - savedHitPoint._position).normalized());
-        for (auto &object : objects) {
-            if (object == savedHitPoint._object)
-                continue;
-            std::optional<PipeLine> pipe = object->hits(bouncingRay);
-            if (pipe.has_value()) {
-                if (canConnect(savedHitPoint._position, pipe.value()._position, light->getOrigin()))
-                    continue;
-                if (Math::Utils::inf(Math::Utils::distance(bouncingRay._origin, light->getOrigin()), Math::Utils::distance(bouncingRay._origin, pipe.value()._position)))
-                    continue;
-                return ambient->getIntensity();
+                                     std::shared_ptr<Ambient> &ambient, int sampling) {
+
+        Math::Vector3D finalColor = {0, 0, 0};
+        double div = 1;
+
+        for (int s = 0; s < sampling; s++) {
+            Math::Vector3D temp = savedHitPoint._position;
+            temp._x += randomDouble(5);
+            temp._z += randomDouble(5);
+            Ray bouncingRay(temp, (light->getOrigin() - temp).normalized());
+            bool status = true;
+            for (auto &object : objects) {
+                if (status) {
+                    if (object != savedHitPoint._object) {
+                        std::optional<PipeLine> pipe = object->hits(bouncingRay);
+                        if (pipe.has_value()) {
+                            if (!canConnect(temp, pipe.value()._position, light->getOrigin())) {
+                                if (!Math::Utils::inf(Math::Utils::distance(bouncingRay._origin, light->getOrigin()), Math::Utils::distance(bouncingRay._origin, pipe.value()._position))) {
+                                    div++;
+                                    finalColor += ambient->getIntensity();
+                                    status = false;
+                                } else {
+                                    div++;
+                                    finalColor += 1;
+                                }
+                            } else {
+                                div++;
+                                finalColor += 1;
+                            }
+                        } else {
+                            div++;
+                            finalColor += 1;
+                        }
+                    } else {
+                        div++;
+                        finalColor += 1;
+                    }
+                }
             }
         }
-        return {1, 1, 1};
+        return finalColor / div;
     }
 
     static Math::Vector3D compute(Ray &r, std::vector<std::shared_ptr<IObject>> &objects,
@@ -138,9 +172,7 @@ namespace RayTracer {
                 hitColor = savedHitPoint._color;
 
             if (savedHitPoint._material->getReflection()) {
-                Math::Vector3D reflect = r._direction - (savedHitPoint._object->normal(savedHitPoint) *
-                                                         r._direction.dot(
-                                                                 savedHitPoint._object->normal(savedHitPoint)) * 2);
+                Math::Vector3D reflect = r._direction - (savedHitPoint._object->normal(savedHitPoint) * r._direction.dot(savedHitPoint._object->normal(savedHitPoint)) * 2);
                 Ray reflectedRay(savedHitPoint._position, reflect);
                 PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
                 if (savedHitPoint2._object == nullptr) {
@@ -175,7 +207,7 @@ namespace RayTracer {
             std::vector<Math::Vector3D> dropShadows;
             for (auto &light: lights) {
                 phongs.push_back(phong(savedHitPoint, light, r, *ambient));
-                dropShadows.push_back(dropShadow(savedHitPoint, objects, light, ambient));
+                dropShadows.push_back(dropShadow(savedHitPoint, objects, light, ambient, sampling));
             }
             hitColor = {0, 0, 0};
             for (auto &phong: phongs) {

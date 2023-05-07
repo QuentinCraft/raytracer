@@ -47,28 +47,28 @@ int main() {
 
     std::shared_ptr<RayTracer::ATexture> basic = std::make_shared<RayTracer::ATexture>();
     std::shared_ptr<RayTracer::ATexture> redChrome = std::make_shared<RayTracer::ATexture>(chrome, Math::Vector3D(200, 50, 50));
-    chrome.setSpread(0.15);
+    chrome.setSpread(0.05);
     std::shared_ptr<RayTracer::ATexture> basicChrome = std::make_shared<RayTracer::ATexture>(chrome, Math::Vector3D(235, 228, 235));
     std::shared_ptr<RayTracer::ATexture> basicPlastic = std::make_shared<RayTracer::ATexture>(plastic, Math::Vector3D(150, 80, 150));
     std::shared_ptr<RayTracer::ATexture> basicEmerald = std::make_shared<RayTracer::ATexture>(emerald, Math::Vector3D(230, 230, 230));
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-3, 4, -4), 4, basicPlastic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-10, 4, -11), 4, basicChrome));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, redChrome));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 2, -13), 1, basicEmerald));
+    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 6, -5), 6, basicPlastic));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-10, 4, -11), 4, basicChrome));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 4, -10), 4, redChrome));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 2, -13), 1, basicEmerald));
 
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), chessBoardChrome));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 20, 0), Math::Vector3D(0, -1, 0), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, -20), Math::Vector3D(0, 0, 1), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 20), Math::Vector3D(0, 0, -1), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(-20, 0, 0), Math::Vector3D(1, 0, 0), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(20, 0, 0), Math::Vector3D(-1, 0, 0), basic));
+    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), basic));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 20, 0), Math::Vector3D(0, -1, 0), basic));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, -20), Math::Vector3D(0, 0, 1), basic));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 20), Math::Vector3D(0, 0, -1), basic));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(-20, 0, 0), Math::Vector3D(1, 0, 0), basic));
+//    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(20, 0, 0), Math::Vector3D(-1, 0, 0), basic));
 
     scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.15, 0.15, 0.15));
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-10, 9, -21), Math::Vector3D(3, 3, 70)));
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(10, 9, -21), Math::Vector3D(70, 3, 3)));
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(0, 30, 0), Math::Vector3D(70, 70, 70)));
+//    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-10, 9, -21), Math::Vector3D(3, 3, 70)));
+//    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(10, 9, -21), Math::Vector3D(70, 3, 3)));
+    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(0, 20, -10), Math::Vector3D(35, 35, 35)));
 
     scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(-2, 3, -25), 800, 800, 110);
 
