@@ -39,6 +39,8 @@ int main() {
     RayTracer::Plastic plastic;
     RayTracer::AMaterial emerald(Math::Vector3D(0.07568, 0.61424, 0.07568), Math::Vector3D(0.633, 0.727811, 0.633), 76.8, 1.57, false);
 
+    std::srand(std::time(nullptr));
+
     std::shared_ptr<RayTracer::ChessBoard> chessBoardChrome = std::make_shared<RayTracer::ChessBoard>(chrome, chrome, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
     std::shared_ptr<RayTracer::ChessBoard> chessBoardPlastic = std::make_shared<RayTracer::ChessBoard>(plastic, plastic, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
     std::shared_ptr<RayTracer::ChessBoard> chessBoardPlasticChrome = std::make_shared<RayTracer::ChessBoard>(plastic, chrome, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
@@ -65,9 +67,11 @@ int main() {
     scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(20, 0, 0), Math::Vector3D(-1, 0, 0), basic));
 
     scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.15, 0.15, 0.15));
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-1, 9, -21), Math::Vector3D(70, 70, 70)));
+    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-10, 9, -21), Math::Vector3D(3, 3, 70)));
+    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(10, 9, -21), Math::Vector3D(70, 3, 3)));
+    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(0, 30, 0), Math::Vector3D(70, 70, 70)));
 
-    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 3, -25), 800, 800, 110);
+    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(-2, 3, -25), 800, 800, 110);
 
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
