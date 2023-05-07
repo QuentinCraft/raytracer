@@ -112,7 +112,6 @@ namespace RayTracer {
                 if (Math::Utils::inf(Math::Utils::distance(bouncingRay._origin, light->getOrigin()), Math::Utils::distance(bouncingRay._origin, pipe.value()._position)))
                     continue;
                 return ambient->getIntensity();
-                break;
             }
         }
         return {1, 1, 1};
@@ -120,66 +119,82 @@ namespace RayTracer {
 
     static Math::Vector3D compute(Ray &r, std::vector<std::shared_ptr<IObject>> &objects,
                                   std::vector<std::shared_ptr<ILight>> &lights,
-                                  std::shared_ptr<Ambient> &ambient, int recursive) {
+                                  std::shared_ptr<Ambient> &ambient, int recursive, int sampling, double spread) {
         Math::Vector3D hitColor;
+        Math::Vector3D finalColor;
+        int div = 0;
 
-        PipeLine savedHitPoint = closestPoint(r, objects, lights, ambient);
-        if (savedHitPoint._object == nullptr)
-            return {0.3, 0.3, 1};
-        else
-            hitColor = savedHitPoint._color;
+        for (int s = 0; s < sampling; s++) {
+            if (!Math::Utils::equal(spread, 0)) {
+                r._direction._x += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
+                r._direction._y += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
+            } else
+                s = sampling;
 
-        if (savedHitPoint._material->getReflection()) {
-            Math::Vector3D reflect = r._direction - (savedHitPoint._object->normal(savedHitPoint) * r._direction.dot(savedHitPoint._object->normal(savedHitPoint)) * 2);
-            Ray reflectedRay(savedHitPoint._position, reflect);
-            PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
-            if (savedHitPoint2._object == nullptr) {
-                savedHitPoint._color = {0.3, 0.3, 1};
-            } else {
-                if (recursive <= 0)
-                    savedHitPoint._color = {0, 0, 0};
-                savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive - 1) *  savedHitPoint._color;
+            PipeLine savedHitPoint = closestPoint(r, objects, lights, ambient);
+            if (savedHitPoint._object == nullptr)
+                return {0.3, 0.3, 1};
+            else
+                hitColor = savedHitPoint._color;
+
+            if (savedHitPoint._material->getReflection()) {
+                Math::Vector3D reflect = r._direction - (savedHitPoint._object->normal(savedHitPoint) *
+                                                         r._direction.dot(
+                                                                 savedHitPoint._object->normal(savedHitPoint)) * 2);
+                Ray reflectedRay(savedHitPoint._position, reflect);
+                PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
+                if (savedHitPoint2._object == nullptr) {
+                    savedHitPoint._color = {0.3, 0.3, 1};
+                } else {
+                    if (recursive <= 0)
+                        savedHitPoint._color = {0, 0, 0};
+                    savedHitPoint._color =
+                            compute(reflectedRay, objects, lights, ambient, recursive - 1, (sampling /= 2), savedHitPoint._material->getSpread()) * savedHitPoint._color;
+                }
+            } else if (!Math::Utils::equal(savedHitPoint._material->getRefraction(), 0) && recursive > 0) {
+                double ref = savedHitPoint._material->getRefraction();
+
+                Math::Vector3D uv = r._direction.normalized();
+                Math::Vector3D n = savedHitPoint._object->normal(
+                        savedHitPoint).normalized();
+
+                if (Math::Utils::sup(r._direction.dot(n), 0)) {
+                    n = n * -1;
+                    ref = 1.0 / ref;
+                }
+
+                auto cos_theta = fmin((uv * -1).dot(n), 1.0);
+                Math::Vector3D r_out_perp = (uv + (n * cos_theta)) * ref;
+                Math::Vector3D r_out_parallel = n * -sqrt(fabs(1.0 - r_out_perp.length()));
+                Ray reflectedRay(savedHitPoint._position, (r_out_perp + r_out_parallel.normalized()).normalized());
+
+                savedHitPoint._color =
+                        compute(reflectedRay, objects, lights, ambient, recursive, (sampling /= 2), savedHitPoint._material->getSpread()) * savedHitPoint._color;
             }
-        } else if (!Math::Utils::equal(savedHitPoint._material->getRefraction(), 0) && recursive > 0) {
-            double ref = savedHitPoint._material->getRefraction();
-
-            Math::Vector3D uv = r._direction.normalized();
-            Math::Vector3D n = savedHitPoint._object->normal(
-                    savedHitPoint).normalized();
-
-            if (Math::Utils::sup(r._direction.dot(n), 0)) {
-                n = n * -1;
-                ref = 1.0 / ref;
+            std::vector<Math::Vector3D> phongs;
+            std::vector<Math::Vector3D> dropShadows;
+            for (auto &light: lights) {
+                phongs.push_back(phong(savedHitPoint, light, r, *ambient));
+                dropShadows.push_back(dropShadow(savedHitPoint, objects, light, ambient));
             }
-
-            auto cos_theta = fmin((uv * -1).dot(n), 1.0);
-            Math::Vector3D r_out_perp = (uv + (n * cos_theta)) * ref;
-            Math::Vector3D r_out_parallel = n * -sqrt(fabs(1.0 - r_out_perp.length()));
-            Ray reflectedRay(savedHitPoint._position, (r_out_perp + r_out_parallel.normalized()).normalized());
-
-            savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive) * savedHitPoint._color;
+            hitColor = {0, 0, 0};
+            for (auto &phong: phongs) {
+                hitColor += phong;
+            }
+            for (auto &dropShadow: dropShadows) {
+                hitColor *= dropShadow;
+            }
+            finalColor += hitColor;
+            div++;
         }
-        std::vector<Math::Vector3D> phongs;
-        std::vector<Math::Vector3D> dropShadows;
-        for (auto &light : lights) {
-            phongs.push_back(phong(savedHitPoint, light, r, *ambient));
-            dropShadows.push_back(dropShadow(savedHitPoint, objects, light, ambient));
-        }
-        hitColor = {0, 0, 0};
-        for (auto &phong : phongs) {
-            hitColor += phong;
-        }
-        for (auto &dropShadow : dropShadows) {
-            hitColor *= dropShadow;
-        }
-        return hitColor;
+        return finalColor / div;
     }
 
     Math::Vector3D Camera::pointAt(double u, double v, std::vector<std::shared_ptr<IObject>> &objects, std::vector<std::shared_ptr<ILight>> &lights, std::shared_ptr<Ambient> &ambient) const {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 20);
+        hitColor = compute(r, objects, lights, ambient, 20, 64, 0);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }

@@ -14,13 +14,14 @@ namespace RayTracer {
 
     class Plastic : public AMaterial {
         public:
-            Plastic() : AMaterial() {
-                _diffuse = {0.5, 0.5, 0.5};
-                _specular = {0.7, 0.6, 0.6};
-                _shininess = 0.25 * 128;
-                _reflection = false;
-                _refraction = 0;
-            }
+            Plastic() : AMaterial(
+                {0.5, 0.5, 0.5},
+                {0.7, 0.6, 0.6},
+                0.25 * 128,
+                0,
+                false,
+                0.0001
+            ) {}
     };
 
 } // RayTracer

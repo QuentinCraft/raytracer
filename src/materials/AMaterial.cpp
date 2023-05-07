@@ -14,6 +14,7 @@ namespace RayTracer {
         _shininess = 74.3;
         _refraction = 0;
         _reflection = false;
+        _spread = 0.0001;
     }
 
     Math::Vector3D AMaterial::getDiffuse() const {
@@ -57,12 +58,21 @@ namespace RayTracer {
     }
 
     AMaterial::AMaterial(Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction,
-                         bool reflection) {
+                         bool reflection, double spread) {
         _diffuse = diffuse;
         _specular = specular;
         _shininess = shininess;
 
         _refraction = refraction;
         _reflection = reflection;
+        _spread = spread;
+    }
+
+    void AMaterial::setSpread(double spread) {
+        _spread = spread;
+    }
+
+    double AMaterial::getSpread() const {
+        return _spread;
     }
 } // RayTracer

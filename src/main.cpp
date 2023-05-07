@@ -37,9 +37,7 @@ int main() {
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
     RayTracer::Chrome chrome;
     RayTracer::Plastic plastic;
-    RayTracer::AMaterial emerald(Math::Vector3D(0.07568, 0.61424, 0.07568), Math::Vector3D(0.633, 0.727811, 0.633), 76.8, 1.57, false);
-
-    std::srand(std::time(nullptr));
+    RayTracer::AMaterial emerald(Math::Vector3D(0.07568, 0.61424, 0.07568), Math::Vector3D(0.633, 0.727811, 0.633), 76.8, 1.57, false, 0.002);
 
     std::shared_ptr<RayTracer::ChessBoard> chessBoardChrome = std::make_shared<RayTracer::ChessBoard>(chrome, chrome, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
     std::shared_ptr<RayTracer::ChessBoard> chessBoardPlastic = std::make_shared<RayTracer::ChessBoard>(plastic, plastic, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
@@ -48,8 +46,9 @@ int main() {
 
 
     std::shared_ptr<RayTracer::ATexture> basic = std::make_shared<RayTracer::ATexture>();
-    std::shared_ptr<RayTracer::ATexture> basicChrome = std::make_shared<RayTracer::ATexture>(chrome, Math::Vector3D(235, 228, 235));
     std::shared_ptr<RayTracer::ATexture> redChrome = std::make_shared<RayTracer::ATexture>(chrome, Math::Vector3D(200, 50, 50));
+    chrome.setSpread(0.15);
+    std::shared_ptr<RayTracer::ATexture> basicChrome = std::make_shared<RayTracer::ATexture>(chrome, Math::Vector3D(235, 228, 235));
     std::shared_ptr<RayTracer::ATexture> basicPlastic = std::make_shared<RayTracer::ATexture>(plastic, Math::Vector3D(150, 80, 150));
     std::shared_ptr<RayTracer::ATexture> basicEmerald = std::make_shared<RayTracer::ATexture>(emerald, Math::Vector3D(230, 230, 230));
 
