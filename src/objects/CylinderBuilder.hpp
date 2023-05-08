@@ -15,7 +15,7 @@ namespace RayTracer {
 
     class CylinderBuilder : public ABuilder {
         public:
-            CylinderBuilder() : ABuilder("12345") {};
+            CylinderBuilder() : ABuilder("cylinder") {};
             ~CylinderBuilder() {};
             std::shared_ptr<RayTracer::IObject> build() override
             {

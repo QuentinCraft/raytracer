@@ -13,7 +13,7 @@ namespace RayTracer {
 
     class CylinderData : public Utils::AData {
         public:
-            CylinderData() : Utils::AData() {_type = "12345";};
+            CylinderData() : Utils::AData() {_type = "cylinder";};
             ~CylinderData() {};
     };
 
