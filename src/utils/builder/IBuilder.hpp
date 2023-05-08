@@ -26,6 +26,7 @@ namespace RayTracer {
             virtual std::shared_ptr<RayTracer::IObject> build() = 0;
             virtual std::string &getBuilderName() = 0;
             virtual void reset() = 0;
+            virtual std::unique_ptr<Utils::IData> createData() = 0;
 
             virtual IBuilder &applyData(std::unique_ptr<Utils::IData> &data) = 0;
     };

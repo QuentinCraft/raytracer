@@ -9,6 +9,7 @@
 #define SPHEREBUILDER_HPP_
 #include "utils/builder/ABuilder.hpp"
 #include "Sphere.hpp"
+#include "SphereData.hpp"
 
 namespace RayTracer {
 
@@ -20,6 +21,11 @@ namespace RayTracer {
             {
                 _object = std::make_shared<RayTracer::Sphere>(_center, _radius, _color);
                 return std::move(_object);
+            }
+
+            std::unique_ptr<RayTracer::Utils::IData> createData() override
+            {
+                return std::make_unique<RayTracer::SphereData>();
             }
     };
 

@@ -8,6 +8,7 @@
 #define PLANEBUILDER_HPP_
 #include "utils/builder/ABuilder.hpp"
 #include "Plane.hpp"
+#include "PlaneData.hpp"
 
 namespace RayTracer {
 
@@ -19,6 +20,11 @@ namespace RayTracer {
             {
                 _object = std::make_shared<RayTracer::Plane>(_point, _normal, _color);
                 return std::move(_object);
+            }
+
+            std::unique_ptr<RayTracer::Utils::IData> createData() override
+            {
+                return std::make_unique<RayTracer::PlaneData>();
             }
     };
 

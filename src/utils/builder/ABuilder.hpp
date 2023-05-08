@@ -65,6 +65,7 @@ namespace RayTracer {
                 _point = data->getPoint();
                 _radius = data->getRadius();
                 _normal = data->getNormal();
+                //_length = data->getLength();
                 return *this;
             }
         protected:
@@ -73,6 +74,7 @@ namespace RayTracer {
             Math::Vector3D _point;
             Math::Vector3D _normal;
             double _radius;
+            double _length;
             std::string _builderName;
             std::shared_ptr<RayTracer::IObject> _object;
     };

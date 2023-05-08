@@ -28,7 +28,9 @@ namespace RayTracer::Utils {
                 for (const auto &entry : std::filesystem::directory_iterator(_path)) {
                     if (entry.path().extension() == ".so") {
                         std::cout << "Loading... " << entry.path();
-                        builders.push_back(std::move<std::unique_ptr<IBuilder>>(_loader->loadLib<std::unique_ptr<IBuilder>>(entry.path())));
+                        std::unique_ptr lib = _loader->loadLib<std::unique_ptr<IBuilder>>(entry.path());
+                        std::cout << " name : " << lib->getBuilderName();
+                        builders.push_back(std::move(lib));
                         std::cout << " [OK]" << std::endl;
                     }
                 }

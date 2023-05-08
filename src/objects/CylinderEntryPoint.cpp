@@ -1,18 +1,17 @@
 /*
 ** EPITECH PROJECT, 2023
-** raytracer
+** CylinderEntryPoint.cpp
 ** File description:
-** PlaneEntryPoint.cpp
+** CylinderEntryPoint
 */
 
 #include "utils/builder/IBuilder.hpp"
-#include "PlaneBuilder.hpp"
-#include <memory>
+#include "CylinderBuilder.hpp"
 
 extern "C"
 {
     std::unique_ptr<RayTracer::IBuilder> entryPoint(void)
     {
-        return std::make_unique<RayTracer::PlaneBuilder>();
+        return std::make_unique<RayTracer::CylinderBuilder>();
     }
 }
