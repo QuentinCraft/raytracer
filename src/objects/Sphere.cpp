@@ -10,7 +10,7 @@
 
 namespace RayTracer {
     Sphere::Sphere() {
-        _id = 0;
+        _id = globalId++;
         _origin = Math::Vector3D();
         _rotation = Math::Vector3D();
         _scale = Math::Vector3D();
@@ -50,7 +50,7 @@ namespace RayTracer {
 
     Sphere::Sphere(const Math::Vector3D &center, double radius,
                    const std::shared_ptr<ITexture> &texture) {
-        _id = 0;
+        _id = globalId++;
         _origin = center;
         _radius = radius;
         _rotation = Math::Vector3D();
@@ -62,6 +62,7 @@ namespace RayTracer {
     Sphere::Sphere(const Math::Vector3D &center, double radius) {
         _origin = center;
         _radius = radius;
+        _id = globalId++;
         _texture = std::make_shared<ATexture>();
     }
 

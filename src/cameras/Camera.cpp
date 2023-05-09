@@ -107,6 +107,7 @@ namespace RayTracer {
 
     static Math::Vector3D dropShadow(PipeLine &savedHitPoint,
                                      std::vector<std::shared_ptr<IObject>> &objects,
+                                     std::vector<std::shared_ptr<ILight>> &lights,
                                      std::shared_ptr<ILight> &light,
                                      std::shared_ptr<Ambient> &ambient, int sampling) {
 
@@ -114,29 +115,20 @@ namespace RayTracer {
         double div = 1;
 
         for (int s = 0; s < sampling; s++) {
-            Math::Vector3D temp = savedHitPoint._position;
-            temp._x += randomDouble(5);
-            temp._z += randomDouble(5);
-            Ray bouncingRay(temp, (light->getOrigin() - temp).normalized());
+            Math::Vector3D sampleVec = light->getOrigin() - savedHitPoint._position;
+            sampleVec._x += randomDouble(20);
+            sampleVec._y += randomDouble(20);
+            sampleVec._z += randomDouble(20);
+            Ray bouncingRay(savedHitPoint._position, (sampleVec).normalized());
             bool status = true;
             for (auto &object : objects) {
                 if (status) {
                     if (object != savedHitPoint._object) {
                         std::optional<PipeLine> pipe = object->hits(bouncingRay);
                         if (pipe.has_value()) {
-                            if (!canConnect(temp, pipe.value()._position, light->getOrigin())) {
-                                if (!Math::Utils::inf(Math::Utils::distance(bouncingRay._origin, light->getOrigin()), Math::Utils::distance(bouncingRay._origin, pipe.value()._position))) {
-                                    div++;
-                                    finalColor += ambient->getIntensity();
-                                    status = false;
-                                } else {
-                                    div++;
-                                    finalColor += 1;
-                                }
-                            } else {
-                                div++;
-                                finalColor += 1;
-                            }
+                            div++;
+                            finalColor += ambient->getIntensity();
+                            status = false;
                         } else {
                             div++;
                             finalColor += 1;
@@ -162,6 +154,7 @@ namespace RayTracer {
             if (!Math::Utils::equal(spread, 0)) {
                 r._direction._x += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
                 r._direction._y += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
+                r._direction._z += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
             } else
                 s = sampling;
 
@@ -207,7 +200,7 @@ namespace RayTracer {
             std::vector<Math::Vector3D> dropShadows;
             for (auto &light: lights) {
                 phongs.push_back(phong(savedHitPoint, light, r, *ambient));
-                dropShadows.push_back(dropShadow(savedHitPoint, objects, light, ambient, sampling));
+                dropShadows.push_back(dropShadow(savedHitPoint, objects, lights, light, ambient, sampling));
             }
             hitColor = {0, 0, 0};
             for (auto &phong: phongs) {
@@ -226,7 +219,7 @@ namespace RayTracer {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 20, 64, 0);
+        hitColor = compute(r, objects, lights, ambient, 20, 128, 0);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }
