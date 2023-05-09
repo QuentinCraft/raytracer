@@ -116,16 +116,17 @@ namespace RayTracer {
 
         for (int s = 0; s < sampling; s++) {
             Math::Vector3D sampleVec = light->getOrigin() - savedHitPoint._position;
-            sampleVec._x += randomDouble(20);
-            sampleVec._y += randomDouble(20);
-            sampleVec._z += randomDouble(20);
+            double dist = Math::Utils::distance(light->getOrigin(), savedHitPoint._position);
+            sampleVec._x += randomDouble(1);
+            sampleVec._y += randomDouble(1);
+            sampleVec._z += randomDouble(1);
             Ray bouncingRay(savedHitPoint._position, (sampleVec).normalized());
             bool status = true;
             for (auto &object : objects) {
                 if (status) {
                     if (object != savedHitPoint._object) {
                         std::optional<PipeLine> pipe = object->hits(bouncingRay);
-                        if (pipe.has_value()) {
+                        if (pipe.has_value() && Math::Utils::distance(pipe.value()._position, bouncingRay._origin) < dist) {
                             div++;
                             finalColor += ambient->getIntensity();
                             status = false;
@@ -219,7 +220,7 @@ namespace RayTracer {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 20, 128, 0);
+        hitColor = compute(r, objects, lights, ambient, 20, 32, 0);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }
