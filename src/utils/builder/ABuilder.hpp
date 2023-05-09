@@ -65,7 +65,7 @@ namespace RayTracer {
                 _point = data->getPoint();
                 _radius = data->getRadius();
                 _normal = data->getNormal();
-                //_length = data->getLength();
+                _length = data->getLength();
                 return *this;
             }
         protected:

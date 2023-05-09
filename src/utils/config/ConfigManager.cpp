@@ -137,27 +137,27 @@ void RayTracer::Utils::ConfigManager::_getPlane(
 }
 
 void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &primitive) {
-    // try {
-    //     const libconfig::Setting& color = primitive["color"];
-    //     int x = primitive["x"];
-    //     int y = primitive["y"];
-    //     int z = primitive["z"];
-    //     float colorX = color["r"];
-    //     float colorY = color["g"];
-    //     float colorZ = color["b"];
-    //     float radius = primitive["r"];
-    //     float length = primitive["l"];
-    //     std::cout << "[Cylinder]-----------------------" << std::endl;
-    //     std::unique_ptr<IData> data = std::make_unique<RayTracer::CylinderData>();
-    //     data->setCenter(Math::Vector3D(x, y, z));
-    //     data->setRadius(radius);
-    //     data->setLength(length);
-    //     data->setColor(Math::Vector3D(colorX, colorY, colorZ));
-    //     IBuilder *builder = _builder->createObjectBuilder("cylinder");
-    //     _primitives.push_back({builder, std::move(data)});
-    // } catch (libconfig::SettingNotFoundException &e) {
-    //     throw Error("Error: Invalid settings in [Primitives/Cylinder] part");
-    // }
+     try {
+         const libconfig::Setting& color = primitive["color"];
+         int x = primitive["x"];
+         int y = primitive["y"];
+         int z = primitive["z"];
+         float colorX = color["r"];
+         float colorY = color["g"];
+         float colorZ = color["b"];
+         float radius = primitive["r"];
+         float length = primitive["l"];
+         std::cout << "[Cylinder]-----------------------" << std::endl;
+         auto builder = _builder->createObjectBuilder("cylinder");
+         std::unique_ptr<IData> data = builder->createData();
+         data->setCenter(Math::Vector3D(x, y, z));
+         data->setRadius(radius);
+         data->setLength(length);
+         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+         _primitives.emplace_back(builder, std::move(data));
+     } catch (libconfig::SettingNotFoundException &e) {
+         throw Error("Error: Invalid settings in [Primitives/Cylinder] part");
+     }
 }
 
 std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayTracer::Utils::IData>>> RayTracer::Utils::ConfigManager::_getPrimitives(
@@ -173,6 +173,8 @@ std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayT
                     _getSphere(primitive[x]);
                 if (item == "planes")
                     _getPlane(primitive[x]);
+                if (item == "cylinders")
+                    _getCylinder(primitive[x]);
             }
         }
     } catch (libconfig::SettingNotFoundException &e) {
