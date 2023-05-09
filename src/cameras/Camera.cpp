@@ -113,32 +113,45 @@ namespace RayTracer {
 
         Math::Vector3D finalColor = {0, 0, 0};
         double div = 1;
+        bool status;
+        int correct = 0;
+        int count = 0;
 
         for (int s = 0; s < sampling; s++) {
             Math::Vector3D sampleVec = light->getOrigin() - savedHitPoint._position;
             double dist = Math::Utils::distance(light->getOrigin(), savedHitPoint._position);
-            sampleVec._x += randomDouble(1);
-            sampleVec._y += randomDouble(1);
-            sampleVec._z += randomDouble(1);
+            sampleVec._x += randomDouble(5);
+            sampleVec._z += randomDouble(5);
+            sampleVec._y += randomDouble(5);
             Ray bouncingRay(savedHitPoint._position, (sampleVec).normalized());
-            bool status = true;
+            status = true;
+            correct = -1;
+            count = 0;
             for (auto &object : objects) {
+                count++;
                 if (status) {
                     if (object != savedHitPoint._object) {
                         std::optional<PipeLine> pipe = object->hits(bouncingRay);
-                        if (pipe.has_value() && Math::Utils::distance(pipe.value()._position, bouncingRay._origin) < dist) {
-                            div++;
-                            finalColor += ambient->getIntensity();
-                            status = false;
+                        if (pipe.has_value()) {
+                            if (Math::Utils::inf(Math::Utils::distance(pipe.value()._position, bouncingRay._origin), dist)) {
+                                div++;
+                                finalColor += ambient->getIntensity();
+                                correct = count;
+                                status = false;
+                            }
                         } else {
-                            div++;
-                            finalColor += 1;
+                            if (correct == count) {
+                                div++;
+                                finalColor += 1;
+                                status = false;
+                            }
                         }
-                    } else {
-                        div++;
-                        finalColor += 1;
                     }
                 }
+            }
+            if (correct == -1) {
+                div++;
+                finalColor += 1;
             }
         }
         return finalColor / div;
@@ -220,7 +233,7 @@ namespace RayTracer {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 20, 32, 0);
+        hitColor = compute(r, objects, lights, ambient, 20, 128, 0);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }
