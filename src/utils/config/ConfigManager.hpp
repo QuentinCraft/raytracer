@@ -45,9 +45,10 @@ namespace RayTracer::Utils {
             Config::Light _getLight(const libconfig::Setting& root);
             void _getSphere(const libconfig::Setting& primitive);
             void _getPlane(const libconfig::Setting& primitive);
-            void _getPrimitives(const libconfig::Setting &root);
+            void _getCylinder(const libconfig::Setting& primitive);
+            std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayTracer::Utils::IData>>> _getPrimitives(const libconfig::Setting &root);
             //
-            std::vector<std::pair<IBuilder *, std::unique_ptr<IData>>> _primitives;
+            std::vector<std::pair<std::shared_ptr<IBuilder>, std::unique_ptr<IData>>> _primitives;
             std::unique_ptr<ObjectFactory> _builder;
     };
 

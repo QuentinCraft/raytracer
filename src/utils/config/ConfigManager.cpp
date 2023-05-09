@@ -7,8 +7,6 @@
 
 #include "ConfigManager.hpp"
 #include "utils/string/StringUtils.hpp"
-#include "objects/PlaneData.hpp"
-#include "objects/SphereData.hpp"
 #include "utils/factory/ObjectFactory.hpp"
 #include "cameras/Camera.hpp"
 
@@ -97,13 +95,12 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         std::cout << "[Sphere]----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
-        std::unique_ptr<IData> data = std::make_unique<RayTracer::SphereData>();
+        auto builder = _builder->createObjectBuilder("sphere");
+        std::unique_ptr<IData> data = builder->createData();
         data->setCenter(Math::Vector3D(x, y, z));
         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
         data->setRadius(r);
-        IBuilder *builder = _builder->createObjectBuilder("sphere");
-        _primitives.push_back({builder, std::move(data)});
-
+        _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Primitives/Sphere] part");
     }
@@ -114,31 +111,58 @@ void RayTracer::Utils::ConfigManager::_getPlane(
         const libconfig::Setting &primitive) {
     try {
         const libconfig::Setting& color = primitive["color"];
-        std::string axis = primitive["axis"];
-        int position = primitive["position"];
-        double pos = static_cast<double>(position);
-        int colorX = color["r"];
-        int colorY = color["g"];
-        int colorZ = color["b"];
+        const libconfig::Setting& normal = primitive["normal"];
+        int x = primitive["x"];
+        int y = primitive["y"];
+        int z = primitive["z"];
+        float colorX = color["r"];
+        float colorY = color["g"];
+        float colorZ = color["b"];
+        float normalX = normal["x"];
+        float normalY = normal["y"];
+        float normalZ = normal["z"];
         std::cout << "[Plane]-----------------------" << std::endl;
-        std::cout << "axis : " << axis << std::endl;
-        std::cout << "pos : " << position << std::endl;
+        std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
+        std::cout << "normal : " << normalX << ", " << normalY << ", " << normalZ << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
-        std::unique_ptr<IData> data = std::make_unique<RayTracer::PlaneData>();
-        data->setAxis(axis);
-        data->setColor((Math::Vector3D){(axis == "X") ? pos : 0,
-                         (axis == "Y") ? pos : 0,
-                         (axis == "Z") ? pos : 0});
+        auto builder = _builder->createObjectBuilder("plane");
+        std::unique_ptr<IData> data = builder->createData();
         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
-        IBuilder *builder = _builder->createObjectBuilder("plane");
-        _primitives.push_back({builder, std::move(data)});
+        data->setPoint(Math::Vector3D(x, y, z));
+        data->setNormal(Math::Vector3D(normalX, normalY, normalZ));
+        _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Primitives/Plane] part");
     }
 }
 
-void RayTracer::Utils::ConfigManager::_getPrimitives(
+void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &primitive) {
+     try {
+         const libconfig::Setting& color = primitive["color"];
+         int x = primitive["x"];
+         int y = primitive["y"];
+         int z = primitive["z"];
+         float colorX = color["r"];
+         float colorY = color["g"];
+         float colorZ = color["b"];
+         float radius = primitive["r"];
+         float length = primitive["l"];
+         std::cout << "[Cylinder]-----------------------" << std::endl;
+         auto builder = _builder->createObjectBuilder("cylinder");
+         std::unique_ptr<IData> data = builder->createData();
+         data->setCenter(Math::Vector3D(x, y, z));
+         data->setRadius(radius);
+         data->setLength(length);
+         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+         _primitives.emplace_back(builder, std::move(data));
+     } catch (libconfig::SettingNotFoundException &e) {
+         throw Error("Error: Invalid settings in [Primitives/Cylinder] part");
+     }
+}
+
+std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayTracer::Utils::IData>>> RayTracer::Utils::ConfigManager::_getPrimitives(
         const libconfig::Setting &root) {
+    std::vector<std::pair<std::shared_ptr<IBuilder>, std::unique_ptr<IData>>> data;
     try {
         const libconfig::Setting& primitives = root["primitives"];
         for (int i = 0; i < primitives.getLength(); i++) {
@@ -149,11 +173,15 @@ void RayTracer::Utils::ConfigManager::_getPrimitives(
                     _getSphere(primitive[x]);
                 if (item == "planes")
                     _getPlane(primitive[x]);
+                if (item == "cylinders")
+                    _getCylinder(primitive[x]);
             }
         }
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Primitives] part");
     }
+    data = std::move(_primitives);
+    return data;
 }
 
 RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::string& path) {
@@ -171,8 +199,7 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     const libconfig::Setting& root = config.getRoot();
     cnf.camera = _getCamera(root);
     cnf.light = _getLight(root);
-    _getPrimitives(root);
-    cnf.primitives = std::move(_primitives);
+    cnf.primitives = _getPrimitives(root);
     return cnf;
 }
 
@@ -180,9 +207,9 @@ std::vector<std::shared_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager
     std::vector<std::shared_ptr<RayTracer::IObject>> objects;
 
     for (auto &x : conf.primitives) {
-        std::cout << "building object [" << x.first->getBuilderName() << "]";
+        std::cout << "building object [" << x.first->getBuilderName() << "]" << " addr : " << x.first << " ";
         objects.emplace_back(x.first->applyData(x.second).build());
-//        x.first->reset();
+        x.first->reset();
         std::cout << " [OK]" << std::endl;
     }
     return objects;

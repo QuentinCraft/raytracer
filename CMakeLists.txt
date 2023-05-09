@@ -9,6 +9,19 @@ set(CMAKE_CXX_FLAGS "-O3")
 
 ###### PLUGINS ######
 
+### CYLINDER #####
+set(OBJ_CYLINDER_SRC
+       src/objects/Cylinder.cpp
+       src/objects/CylinderEntryPoint.cpp
+       src/maths/Vector3D.cpp
+       src/maths/Ray.cpp
+       src/maths/Utils.cpp
+)
+
+add_library(cylinder SHARED ${OBJ_CYLINDER_SRC})
+set_target_properties(cylinder PROPERTIES PREFIX raytracer_)
+set_target_properties(cylinder PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
 ###### SPHERE ######
 set(OBJ_SPHERE_SRC
         src/objects/Sphere.cpp

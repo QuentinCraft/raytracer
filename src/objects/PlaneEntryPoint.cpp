@@ -11,8 +11,8 @@
 
 extern "C"
 {
-    std::unique_ptr<RayTracer::IBuilder> entryPoint(void)
+    RayTracer::IBuilder *entryPoint(void)
     {
-         return std::make_unique<RayTracer::PlaneBuilder>();
+        return new RayTracer::PlaneBuilder();
     }
 }
