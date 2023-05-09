@@ -13,7 +13,6 @@ extern "C"
 {
     RayTracer::IBuilder *entryPoint(void)
     {
-        std::cout << "je  test" << std::endl;
         return new RayTracer::PlaneBuilder();
     }
 }

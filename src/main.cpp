@@ -72,11 +72,9 @@ int main(int argc, char **argv)
     std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
     RayTracer::Utils::Config config = configManager->getConf(argv[1]);
-    std::cout << "here" << std::endl;
 
     scene->_camera = configManager->createCamera(config);
     scene->_objects = configManager->createObjects(config);
-    std::cout << "after" << std::endl;
     scene->_ambientLight = configManager->createAmbientLight(config);
     scene->_lights = configManager->createLight(config);
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
