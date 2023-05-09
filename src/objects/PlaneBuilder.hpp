@@ -18,6 +18,8 @@ namespace RayTracer {
             ~PlaneBuilder() {};
             std::shared_ptr<RayTracer::IObject> build() override
             {
+                printf("builder plane: %p\n", this);
+
                 _object = std::make_shared<RayTracer::Plane>(_point, _normal, _color);
                 return std::move(_object);
             }

@@ -16,7 +16,7 @@ namespace RayTracer::Utils {
         public:
             virtual ~IPluginsManager() = default;
 
-            virtual std::vector<std::unique_ptr<IBuilder>> loadPlugins() = 0;
+            virtual std::vector<std::shared_ptr<IBuilder>> loadPlugins() = 0;
     };
 
 }

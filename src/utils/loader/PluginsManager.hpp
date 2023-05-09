@@ -22,15 +22,15 @@ namespace RayTracer::Utils {
         public:
             PluginsManager(const std::string &path) : _path(path) {_loader = std::make_unique<LibraryLoader>();};
             ~PluginsManager() override = default;
-            std::vector<std::unique_ptr<IBuilder>> loadPlugins() override {
-                std::vector<std::unique_ptr<IBuilder>> builders;
+            std::vector<std::shared_ptr<IBuilder>> loadPlugins() override {
+                std::vector<std::shared_ptr<IBuilder>> builders;
 
                 for (const auto &entry : std::filesystem::directory_iterator(_path)) {
                     if (entry.path().extension() == ".so") {
-                        std::cout << "Loading... " << entry.path();
-                        std::unique_ptr lib = _loader->loadLib<std::unique_ptr<IBuilder>>(entry.path());
+                        std::cout << "Loading... " << entry.path() << std::endl;
+                        auto lib = _loader->loadLib<IBuilder *>(entry.path());
                         std::cout << " name : " << lib->getBuilderName();
-                        builders.push_back(std::move(lib));
+                        builders.push_back(std::shared_ptr<IBuilder>(lib));
                         std::cout << " [OK]" << std::endl;
                     }
                 }

@@ -15,7 +15,7 @@ namespace RayTracer::Utils {
     class IObjectFactory {
         public:
             virtual ~IObjectFactory() = default;
-            virtual IBuilder * createObjectBuilder(const std::string &type) = 0;
+            virtual std::shared_ptr<RayTracer::IBuilder> createObjectBuilder(const std::string &type) = 0;
     };
 
 }
