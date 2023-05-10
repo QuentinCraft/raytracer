@@ -24,7 +24,8 @@ namespace RayTracer {
         public:
             // Constructors
             Sphere();
-            Sphere(const Math::Vector3D& center, double radius, const Math::Vector3D& color);
+            Sphere(const Math::Vector3D& center, double radius);
+            Sphere(const Math::Vector3D& center, double radius, const std::shared_ptr<ITexture>& texture);
             Sphere(Sphere const &sphere) = default;
             Sphere(Sphere &&sphere) = default;
 

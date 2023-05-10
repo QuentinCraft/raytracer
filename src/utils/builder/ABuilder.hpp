@@ -10,6 +10,7 @@
 #include "IBuilder.hpp"
 #include "objects/IObject.hpp"
 #include "maths/Vector3D.hpp"
+#include "texture/ATexture.hpp"
 
 namespace RayTracer {
 
@@ -18,9 +19,9 @@ namespace RayTracer {
             ABuilder(const std::string &name) {_builderName = name;};
             ~ABuilder() {};
 
-            IBuilder &setColor(Math::Vector3D const &color) override
+            IBuilder &setTexture(std::shared_ptr<ITexture> const &texture) override
             {
-                _color = color;
+                _texture = texture;
                 return *this;
             }
             IBuilder &setCenter(Math::Vector3D const &center) override
@@ -53,14 +54,14 @@ namespace RayTracer {
             }
             void reset() override
             {
-                _color = Math::Vector3D(0, 0, 0);
+                _texture = std::make_shared<ATexture>();
                 _center = Math::Vector3D(0, 0, 0);
                 _radius = 0;
                 _normal = Math::Vector3D(0, 0, 0);
             }
             IBuilder &applyData(std::unique_ptr<Utils::IData> &data) override
             {
-                _color = data->getColor();
+                _texture = data->getTexture();
                 _center = data->getCenter();
                 _point = data->getPoint();
                 _radius = data->getRadius();
@@ -69,7 +70,7 @@ namespace RayTracer {
                 return *this;
             }
         protected:
-            Math::Vector3D _color;
+            std::shared_ptr<ITexture> _texture;
             Math::Vector3D _center;
             Math::Vector3D _point;
             Math::Vector3D _normal;

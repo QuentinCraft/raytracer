@@ -95,10 +95,12 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         std::cout << "[Sphere]----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+
         auto builder = _builder->createObjectBuilder("sphere");
         std::unique_ptr<IData> data = builder->createData();
         data->setCenter(Math::Vector3D(x, y, z));
-        data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        data->setPoint(Math::Vector3D(x, y, z));
+        //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
         data->setRadius(r);
         _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
@@ -125,9 +127,10 @@ void RayTracer::Utils::ConfigManager::_getPlane(
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
         std::cout << "normal : " << normalX << ", " << normalY << ", " << normalZ << std::endl;
         std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+
         auto builder = _builder->createObjectBuilder("plane");
         std::unique_ptr<IData> data = builder->createData();
-        data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
         data->setPoint(Math::Vector3D(x, y, z));
         data->setNormal(Math::Vector3D(normalX, normalY, normalZ));
         _primitives.emplace_back(builder, std::move(data));

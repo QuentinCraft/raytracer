@@ -21,6 +21,14 @@
 #include "utils/loader/LibraryLoader.hpp"
 #include "utils/loader/PluginsManager.hpp"
 
+#include "texture/ChessBoard.hpp"
+#include "texture/ATexture.hpp"
+#include "texture/ITexture.hpp"
+
+#include "materials/Plastic.hpp"
+#include "materials/Chrome.hpp"
+
+
 #include <ctime>
 
 int main(int argc, char **argv)
@@ -32,12 +40,14 @@ int main(int argc, char **argv)
     std::ofstream file("render.ppm");
     std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
+
     RayTracer::Utils::Config config = configManager->getConf(argv[1]);
 
     scene->_camera = configManager->createCamera(config);
     scene->_objects = configManager->createObjects(config);
     scene->_ambientLight = configManager->createAmbientLight(config);
     scene->_lights = configManager->createLight(config);
+
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
     for (int y = 0; y < scene->_camera->getWidth(); y++) {

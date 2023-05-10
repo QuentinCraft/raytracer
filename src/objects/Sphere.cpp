@@ -12,19 +12,9 @@ namespace RayTracer {
     Sphere::Sphere() {
         _id = 0;
         _origin = Math::Vector3D();
-        _color = Math::Vector3D();
         _rotation = Math::Vector3D();
         _scale = Math::Vector3D();
         _radius = 0;
-    }
-
-    Sphere::Sphere(const Math::Vector3D& center, double radius, const Math::Vector3D& color) {
-        _id = 0;
-        _origin = center;
-        _radius = radius;
-        _color = color;
-        _rotation = Math::Vector3D();
-        _scale = Math::Vector3D();
     }
 
     std::optional<PipeLine> Sphere::hits(Ray const &ray) const {
@@ -42,33 +32,11 @@ namespace RayTracer {
             return std::nullopt;
         PipeLine pipe;
         pipe._position = ray._origin + rayBis._direction * D;
-        pipe.id = _id;
-//        double scale = 0.2;
-//        char ax;
-//        char ay;
-//        char az;
-//        if (Math::Utils::inf(pipe._position._x, 0))
-//            ax = fmodf(std::abs(pipe._position._x) * scale, 1) < 0.5;
-//        else
-//            ax = fmodf(std::abs(pipe._position._x) * scale, 1) > 0.5;
-//
-//        if (Math::Utils::inf(pipe._position._y, 0))
-//            ay = fmodf(std::abs(pipe._position._y) * scale, 1) < 0.5;
-//        else
-//            ay = fmodf(std::abs(pipe._position._y) * scale, 1) > 0.5;
-//
-//        if (Math::Utils::inf(pipe._position._z, 0))
-//            az = fmodf(std::abs(pipe._position._z) * scale, 1) < 0.5;
-//        else
-//            az = fmodf(std::abs(pipe._position._z) * scale, 1) > 0.5;
-//
-//
-//        float pattern = (ax) ^ (ay) ^ (az);
-//        if (pattern)
-//            pipe._color = {0.9 - _color._x, 0.9 - _color._y, 0.9 - _color._z};
-//        else
-            pipe._color = _color;
-        pipe.object = std::make_shared<Sphere>(*this);
+        pipe._id = _id;
+        std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+        pipe._material = mat.first;
+        pipe._color = mat.second;
+        pipe._object = std::make_shared<Sphere>(*this);
         return pipe;
     }
 
@@ -77,7 +45,24 @@ namespace RayTracer {
     }
 
     bool Sphere::operator==(const Sphere &sphere) const {
-        return _origin == sphere._origin && _radius == sphere._radius && _color == sphere._color;
+        return _origin == sphere._origin && _radius == sphere._radius;
+    }
+
+    Sphere::Sphere(const Math::Vector3D &center, double radius,
+                   const std::shared_ptr<ITexture> &texture) {
+        _id = 0;
+        _origin = center;
+        _radius = radius;
+        _rotation = Math::Vector3D();
+        _scale = Math::Vector3D();
+        _texture = texture;
+
+    }
+
+    Sphere::Sphere(const Math::Vector3D &center, double radius) {
+        _origin = center;
+        _radius = radius;
+        _texture = std::make_shared<ATexture>();
     }
 
 } // RayTracer

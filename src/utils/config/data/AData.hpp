@@ -16,7 +16,7 @@ namespace RayTracer::Utils {
             ~AData() {};
 
             void setType(std::string type) override { _type = type; };
-            void setColor(Math::Vector3D color) override { _color = color; };
+            void setTexture(std::shared_ptr<ITexture> texture) override { _texture = texture; };
             void setCenter(Math::Vector3D center) override { _center = center; };
             void setPoint(Math::Vector3D point) override { _point = point; };
             void setNormal(Math::Vector3D normal) override { _normal = normal; };
@@ -24,7 +24,7 @@ namespace RayTracer::Utils {
             void setLength(double length) override { _length = length; };
 
             std::string &getType() override { return _type; };
-            Math::Vector3D &getColor() override { return _color; };
+            std::shared_ptr<ITexture> &getTexture() override { return _texture; };
             Math::Vector3D &getCenter() override { return _center; };
             Math::Vector3D &getPoint() override { return _point; };
             Math::Vector3D &getNormal() override { return _normal; };
@@ -35,7 +35,7 @@ namespace RayTracer::Utils {
 
         protected:
             std::string _type;
-            Math::Vector3D _color;
+            std::shared_ptr<ITexture> _texture;
             Math::Vector3D _center;
             Math::Vector3D _point;
             Math::Vector3D _normal;

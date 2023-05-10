@@ -19,7 +19,7 @@ namespace RayTracer {
             ~SphereBuilder() {};
             std::shared_ptr<RayTracer::IObject> build() override
             {
-                _object = std::make_shared<RayTracer::Sphere>(_center, _radius, _color);
+                _object = std::make_unique<RayTracer::Sphere>(_center, _radius, _texture);
                 return std::move(_object);
             }
 
