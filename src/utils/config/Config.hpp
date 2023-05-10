@@ -9,6 +9,8 @@
 #include <iostream>
 #include <vector>
 #include "maths/Vector3D.hpp"
+#include "utils/builder/IBuilder.hpp"
+#include "utils/config/data/IData.hpp"
 
 namespace RayTracer::Utils {
 
@@ -26,9 +28,11 @@ namespace RayTracer::Utils {
         struct Light {
             double ambient, diffuse;
 
-            std::vector <Math::Vector3D> points;
+            std::vector <std::pair<Math::Vector3D, Math::Vector3D>> points;
             std::vector <Math::Vector3D> directional_lights;
         } light;
+
+        std::vector<std::pair<std::shared_ptr<IBuilder>, std::unique_ptr<IData>>> primitives;
     };
 
 }

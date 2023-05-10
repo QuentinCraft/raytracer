@@ -6,3 +6,5 @@ raytracer
 vgcore*
 cmake-build-debug
 render.ppm
+cmake-build-release
+plugins

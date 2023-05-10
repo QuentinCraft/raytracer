@@ -9,15 +9,15 @@
 
 namespace Math {
     bool Utils::equal(double a, double b) {
-        return (a - b) < 0.0001 && (a - b) > -0.0001;
+        return (a - b) < 0.0000001 && (a - b) > -0.0000001;
     }
 
     bool Utils::inf(double a, double b) {
-        return (a - b) < 0.0001;
+        return (a - b) < 0.0000000001;
     }
 
     bool Utils::sup(double a, double b) {
-        return (a - b) > 0.0001;
+        return (a - b) > 0.0000000001;
     }
 
     Vector3D Utils::toRGB(Vector3D x) {

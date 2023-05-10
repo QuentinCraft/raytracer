@@ -6,20 +6,19 @@
 */
 
 #include "Cylinder.hpp"
+#include "objects/PipeLine.hpp"
 
 namespace RayTracer {
     Cylinder::Cylinder() {
         _origin = Math::Vector3D();
         _radius = 0;
         _length = 0;
-        _color = Math::Vector3D(255, 255, 255);
     }
 
     Cylinder::Cylinder(const Math::Vector3D& center, double radius, double length, const Math::Vector3D& color) {
         _origin = center;
         _radius = radius;
         _length = length;
-        _color = color;
     }
 
     std::optional<PipeLine> Cylinder::hits(Ray const& ray) const {
@@ -43,9 +42,9 @@ namespace RayTracer {
             if (Math::Utils::inf(t, 0))
                 return std::nullopt;
             PipeLine pipe;
+            pipe._object = std::make_shared<Cylinder>(*this);
             pipe._position = hitPoint;
-            pipe._color = _color;
-            pipe.id = _id;
+            pipe._id = _id;
             pipe._info = "Cylinder";
             return pipe;
         }
@@ -70,18 +69,18 @@ namespace RayTracer {
 
         if (Math::Utils::inf(dist_top, _radius) || Math::Utils::equal(dist_top, _radius)) {
             PipeLine pipe;
+            pipe._object = std::make_shared<Cylinder>(*this);
             pipe._position = hitPoint_top;
-            pipe._color = _color;
-            pipe.id = _id;
+            pipe._id = _id;
             pipe._info = "TopCylinder";
             return pipe;
         }
 
         if (Math::Utils::inf(dist_bot, _radius) || Math::Utils::equal(dist_bot, _radius)) {
             PipeLine pipe;
+            pipe._object = std::make_shared<Cylinder>(*this);
             pipe._position = hitPoint_bot;
-            pipe._color = _color;
-            pipe.id = _id;
+            pipe._id = _id;
             pipe._info = "BotCylinder";
             return pipe;
         }
@@ -91,17 +90,17 @@ namespace RayTracer {
 
     Math::Vector3D Cylinder::normal(const PipeLine &pipe) const {
         if (pipe._info == "TopCylinder" ) {
-            return Math::Vector3D(0, -1, 0);
+            return {0, -1, 0};
         } else if (pipe._info == "BotCylinder") {
-            return Math::Vector3D(0, 1, 0);
+            return {0, 1, 0};
         } else if (pipe._info == "Cylinder") {
-            return Math::Vector3D((_origin - pipe._position)._x, 0, (_origin - pipe._position)._z);
+            return {(_origin - pipe._position)._x, 0, (_origin - pipe._position)._z};
         }
         return Math::Vector3D();
     }
 
     bool Cylinder::operator==(const Cylinder &cylinder) const {
-        return _origin == cylinder._origin && _radius == cylinder._radius && _color == cylinder._color;
+        return _origin == cylinder._origin && _radius == cylinder._radius;
     }
 
 } // RayTracer

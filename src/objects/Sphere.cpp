@@ -6,24 +6,15 @@
 */
 
 #include "Sphere.hpp"
+#include "objects/PipeLine.hpp"
 
 namespace RayTracer {
     Sphere::Sphere() {
         _id = 0;
         _origin = Math::Vector3D();
-        _color = Math::Vector3D();
         _rotation = Math::Vector3D();
         _scale = Math::Vector3D();
         _radius = 0;
-    }
-
-    Sphere::Sphere(const Math::Vector3D& center, double radius, const Math::Vector3D& color) {
-        _id = 0;
-        _origin = center;
-        _radius = radius;
-        _color = color;
-        _rotation = Math::Vector3D();
-        _scale = Math::Vector3D();
     }
 
     std::optional<PipeLine> Sphere::hits(Ray const &ray) const {
@@ -41,8 +32,11 @@ namespace RayTracer {
             return std::nullopt;
         PipeLine pipe;
         pipe._position = ray._origin + rayBis._direction * D;
-        pipe.id = _id;
-        pipe._color = _color;
+        pipe._id = _id;
+        std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+        pipe._material = mat.first;
+        pipe._color = mat.second;
+        pipe._object = std::make_shared<Sphere>(*this);
         return pipe;
     }
 
@@ -51,8 +45,24 @@ namespace RayTracer {
     }
 
     bool Sphere::operator==(const Sphere &sphere) const {
-        return _origin == sphere._origin && _radius == sphere._radius && _color == sphere._color;
+        return _origin == sphere._origin && _radius == sphere._radius;
     }
 
+    Sphere::Sphere(const Math::Vector3D &center, double radius,
+                   const std::shared_ptr<ITexture> &texture) {
+        _id = 0;
+        _origin = center;
+        _radius = radius;
+        _rotation = Math::Vector3D();
+        _scale = Math::Vector3D();
+        _texture = texture;
+
+    }
+
+    Sphere::Sphere(const Math::Vector3D &center, double radius) {
+        _origin = center;
+        _radius = radius;
+        _texture = std::make_shared<ATexture>();
+    }
 
 } // RayTracer

@@ -19,22 +19,37 @@
 #include "objects/Cone.hpp"
 
 #include "utils/config/ConfigManager.hpp"
+#include "utils/loader/LibraryLoader.hpp"
+#include "utils/loader/PluginsManager.hpp"
 
-int main() {
+#include "texture/ChessBoard.hpp"
+#include "texture/ATexture.hpp"
+#include "texture/ITexture.hpp"
+
+
+#include "materials/Plastic.hpp"
+#include "materials/Chrome.hpp"
+
+
+#include <ctime>
+
+int main(int argc, char **argv)
+{
+    if (argc == 1) {
+        std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
+        return 84;
+    }
     std::ofstream file("render.ppm");
-
+    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Cone>(Math::Vector3D(0, 6, 0), 3, 6, Math::Vector3D(1, 0, 0)));
-    scene->_objects.push_back(std::make_shared<RayTracer::Cylinder>(Math::Vector3D(0, 1, 0), 3, 6, Math::Vector3D(1, 0, 0)));
+    RayTracer::Utils::Config config = configManager->getConf(argv[1]);
 
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), Math::Vector3D(0.5, 0.5, 1)));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 6), Math::Vector3D(0, 0, -1), Math::Vector3D(0.5, 0.5, 1)));
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(8, 10, 0), Math::Vector3D(1, 1, 1)));
 
-    scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.25, 0.25, 0.25));
-
-    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 10, -25), 800, 800, 110);
+    scene->_camera = configManager->createCamera(config);
+    scene->_objects = configManager->createObjects(config);
+    scene->_ambientLight = configManager->createAmbientLight(config);
+    scene->_lights = configManager->createLight(config);
 
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
