@@ -203,29 +203,46 @@ void RayTracer::Utils::ConfigManager::_getTextures(const libconfig::Setting &roo
             std::cout << "[Texture]-----------------------" << std::endl;
             const libconfig::Setting& texture = textures[i];
             std::string name = texture["name"];
-            std::string material1 = texture["material1"];
-            std::string material2 = texture["material2"];
             std::string type = texture["type"];
-            const libconfig::Setting& color1 = texture["color1"];
-            const libconfig::Setting& color2 = texture["color2"];
-            float color1X = color1["r"];
-            float color1Y = color1["g"];
-            float color1Z = color1["b"];
-            float color2X = color2["r"];
-            float color2Y = color2["g"];
-            float color2Z = color2["b"];
-            std::cout << name << std::endl;
-            std::cout << "color1 : " << color1X << ", " << color1Y << ", " << color1Z << std::endl;
-            std::cout << "color2 : " << color2X << ", " << color2Y << ", " << color2Z << std::endl;
-            auto matA = _builder->createMaterial(material1);
-            auto matB = _builder->createMaterial(material2);
-            if (!matA || !matB)
-                throw Error("Error: Invalid material name in [Textures] part");
-            auto builder = _builder->createTextureBuilder(type);
-            const auto &mat1 = *matA.get();
-            const auto &mat2 = *matB.get();
-            _textures.push_back({name, builder->build(mat1, mat2, Math::Vector3D(color1X, color1Y, color1Z),
-                                                Math::Vector3D(color2X, color2Y, color2Z))});
+            if (type == "chessBoard" || type == "duo") {
+                std::string material1 = texture["material1"];
+                std::string material2 = texture["material2"];
+                const libconfig::Setting &color1 = texture["color1"];
+                const libconfig::Setting &color2 = texture["color2"];
+                float color1X = color1["r"];
+                float color1Y = color1["g"];
+                float color1Z = color1["b"];
+                float color2X = color2["r"];
+                float color2Y = color2["g"];
+                float color2Z = color2["b"];
+                std::cout << name << std::endl;
+                std::cout << "color1 : " << color1X << ", " << color1Y << ", " << color1Z << std::endl;
+                std::cout << "color2 : " << color2X << ", " << color2Y << ", " << color2Z << std::endl;
+                auto matA = _builder->createMaterial(material1);
+                auto matB = _builder->createMaterial(material2);
+                if (!matA || !matB)
+                    throw Error("Error: Invalid material name in [Textures] part");
+                auto builder = _builder->createTextureBuilder(type);
+                const auto &mat1 = *matA.get();
+                const auto &mat2 = *matB.get();
+                _textures.push_back({name, builder->build(mat1, mat2, Math::Vector3D(color1X, color1Y, color1Z),
+                                                          Math::Vector3D(color2X, color2Y, color2Z))});
+            }
+            if (type == "solo") {
+                std::string material = texture["material"];
+                const libconfig::Setting &color = texture["color"];
+                float colorX = color["r"];
+                float colorY = color["g"];
+                float colorZ = color["b"];
+                std::cout << name << std::endl;
+                std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+                auto mat = _builder->createMaterial(material);
+                if (!mat)
+                    throw Error("Error: Invalid material name in [Textures] part");
+                auto builder = _builder->createTextureBuilder(type);
+                const auto &mat1 = *mat.get();
+                _textures.push_back({name, builder->build(mat1, Math::Vector3D(colorX, colorY, colorZ))});
+            }
         }
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("Error: Invalid settings in [Textures] part");

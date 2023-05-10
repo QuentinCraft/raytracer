@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     scene->_objects = configManager->createObjects(config);
     scene->_ambientLight = configManager->createAmbientLight(config);
     scene->_lights = configManager->createLight(config);
-
+//
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
     for (int y = 0; y < scene->_camera->getWidth(); y++) {

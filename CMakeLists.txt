@@ -99,6 +99,20 @@ add_library(chessboard SHARED ${OBJ_CHESSBOARD_SRC})
 set_target_properties(chessboard PROPERTIES PREFIX raytracer_)
 set_target_properties(chessboard PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/textures)
 
+###### SOLO ######
+set(OBJ_SOLO_SRC
+        src/texture/SoloEntryPoint.cpp
+        src/materials/AMaterial.cpp
+        src/texture/ATexture.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        )
+
+add_library(solo SHARED ${OBJ_SOLO_SRC})
+set_target_properties(solo PROPERTIES PREFIX raytracer_)
+set_target_properties(solo PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/textures)
+
 
 add_executable(raytracer
         src/main.cpp
