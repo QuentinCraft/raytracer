@@ -98,12 +98,16 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         data->setCenter(Math::Vector3D(x, y, z));
         data->setPoint(Math::Vector3D(x, y, z));
         //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        bool found = false;
         for (auto &i : _textures) {
             if (i.first == texture) {
                 data->setTexture(i.second);
+                found = true;
                 break;
             }
         }
+        if (!found)
+            throw Error("Error: Invalid texture in [Primitives/Sphere] part");
         data->setRadius(r);
         _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
@@ -131,12 +135,16 @@ void RayTracer::Utils::ConfigManager::_getPlane(
         auto builder = _builder->createObjectBuilder("plane");
         std::unique_ptr<IData> data = builder->createData();
         //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        bool found = false;
         for (auto &i : _textures) {
             if (i.first == texture) {
                 data->setTexture(i.second);
+                found = true;
                 break;
             }
         }
+        if (!found)
+            throw Error("Error: Invalid texture in [Primitives/Plane] part");
         data->setPoint(Math::Vector3D(x, y, z));
         data->setNormal(Math::Vector3D(normalX, normalY, normalZ));
         _primitives.emplace_back(builder, std::move(data));
@@ -159,12 +167,16 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
          data->setCenter(Math::Vector3D(x, y, z));
          data->setRadius(radius);
          data->setLength(length);
+         bool found = false;
          for (auto &i : _textures) {
              if (i.first == texture) {
                  data->setTexture(i.second);
+                 found = true;
                  break;
              }
          }
+         if (!found)
+             throw Error("Error: Invalid texture in [Primitives/Cylinder] part");
          //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
          _primitives.emplace_back(builder, std::move(data));
      } catch (libconfig::SettingNotFoundException &e) {
@@ -220,9 +232,9 @@ void RayTracer::Utils::ConfigManager::_getTextures(const libconfig::Setting &roo
                 std::cout << "color2 : " << color2X << ", " << color2Y << ", " << color2Z << std::endl;
                 auto matA = _builder->createMaterial(material1);
                 auto matB = _builder->createMaterial(material2);
-                if (!matA || !matB)
-                    throw Error("Error: Invalid material name in [Textures] part");
                 auto builder = _builder->createTextureBuilder(type);
+                if (!matA || !matB || !builder)
+                    throw Error("Error: Invalid material name in [Textures] part");
                 const auto &mat1 = *matA.get();
                 const auto &mat2 = *matB.get();
                 _textures.push_back({name, builder->build(mat1, mat2, Math::Vector3D(color1X, color1Y, color1Z),
@@ -237,9 +249,9 @@ void RayTracer::Utils::ConfigManager::_getTextures(const libconfig::Setting &roo
                 std::cout << name << std::endl;
                 std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
                 auto mat = _builder->createMaterial(material);
-                if (!mat)
-                    throw Error("Error: Invalid material name in [Textures] part");
                 auto builder = _builder->createTextureBuilder(type);
+                if (!mat || !builder)
+                    throw Error("Error: Invalid material name in [Textures] part");
                 const auto &mat1 = *mat.get();
                 _textures.push_back({name, builder->build(mat1, Math::Vector3D(colorX, colorY, colorZ))});
             }
