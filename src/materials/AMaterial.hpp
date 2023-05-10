@@ -17,7 +17,7 @@ namespace RayTracer {
             AMaterial();
             AMaterial(AMaterial const &material) = default;
             AMaterial(AMaterial &&material) = default;
-            AMaterial(Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction, bool reflection);
+            AMaterial(Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction, bool reflection, double spread);
             ~AMaterial() override = default;
 
             [[nodiscard]] Math::Vector3D getDiffuse() const override;
@@ -35,7 +35,11 @@ namespace RayTracer {
             [[nodiscard]] bool getReflection() const override;
             void setReflection(bool reflection) override;
 
+            [[nodiscard]] double getSpread() const override;
+            void setSpread(double spread) override;
+
             double _refraction;
+            double _spread;
             bool _reflection;
             Math::Vector3D _diffuse;
             Math::Vector3D _specular;

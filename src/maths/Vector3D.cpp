@@ -164,6 +164,22 @@ namespace Math {
         return Math::Utils::equal(_x, vector._x) && Math::Utils::equal(_y, vector._y) && Math::Utils::equal(_z, vector._z);
     }
 
+    Vector3D Vector3D::operator-(double value) const {
+        Vector3D result;
+
+        result._x = _x - value;
+        result._y = _y - value;
+        result._z = _z - value;
+        return result;
+    }
+
+    Vector3D &Vector3D::operator-=(double value) {
+        _x -= value;
+        _y -= value;
+        _z -= value;
+        return *this;
+    }
+
     std::ostream &operator<<(std::ostream& os, const Vector3D& v) {
         os << "(" << v._x << ", " << v._y << ", " << v._z << ")";
         return os;

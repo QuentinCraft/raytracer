@@ -30,6 +30,9 @@ namespace RayTracer {
 
             [[nodiscard]] virtual bool getReflection() const = 0;
             virtual void setReflection(bool reflection) = 0;
+
+            [[nodiscard]] virtual double getSpread() const = 0;
+            virtual void setSpread(double spread) = 0;
     };
 
 };

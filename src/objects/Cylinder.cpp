@@ -12,12 +12,14 @@ namespace RayTracer {
     Cylinder::Cylinder() {
         _origin = Math::Vector3D();
         _radius = 0;
+        _id = globalId++;
         _length = 0;
     }
 
     Cylinder::Cylinder(const Math::Vector3D& center, double radius, double length, const Math::Vector3D& color) {
         _origin = center;
         _radius = radius;
+        _id = globalId++;
         _length = length;
     }
 

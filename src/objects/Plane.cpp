@@ -15,13 +15,13 @@ namespace RayTracer {
     Plane::Plane() {
         _origin = Math::Vector3D();
         _normal = Math::Vector3D().normalized();
-        _id = -1;
+        _id = globalId++;
     }
 
     Plane::Plane(const Math::Vector3D& point, const Math::Vector3D& normal) {
         _origin = point;
         _normal = normal.normalized();
-        _id = -1;
+        _id = globalId++;
     }
 
     std::optional<PipeLine> Plane::hits(Ray const &ray) const {
@@ -58,7 +58,7 @@ namespace RayTracer {
     Plane::Plane(const Math::Vector3D &point, const Math::Vector3D &normal, const std::shared_ptr<ITexture> &texture) {
         _origin = point;
         _normal = normal.normalized();
-        _id = -1;
+        _id = globalId++;
         _texture = texture;
     }
 

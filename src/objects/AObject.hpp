@@ -12,20 +12,22 @@
 #include "lights/Spot.hpp"
 #include "texture/ATexture.hpp"
 
+extern int globalId;
+
 namespace RayTracer {
     class AObject : public IObject {
         public:
 
             // Constructors
             AObject() {
-                _id = 0;
+                _id = globalId++;
                 _origin = Math::Vector3D();
                 _rotation = Math::Vector3D();
                 _scale = Math::Vector3D();
             }
 
             AObject(double id, const Math::Vector3D& origin, const Math::Vector3D& color, const Math::Vector3D& rotation, const Math::Vector3D& scale) {
-                _id = id;
+                _id = globalId++;
                 _origin = origin;
                 _rotation = rotation;
                 _scale = scale;

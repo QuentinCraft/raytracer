@@ -38,9 +38,11 @@ namespace Math {
             Vector3D &operator/=(const Vector3D &vector);
 
             Vector3D operator*(double value) const;
-            Vector3D operator+(double value) const;
             Vector3D &operator*=(double value);
+            Vector3D operator+(double value) const;
             Vector3D &operator+=(double value);
+            Vector3D operator-(double value) const;
+            Vector3D &operator-=(double value);
             Vector3D operator/(double value) const;
             Vector3D &operator/=(double value);
 

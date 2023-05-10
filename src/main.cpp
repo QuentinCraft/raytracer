@@ -29,12 +29,15 @@
 
 #include "materials/Plastic.hpp"
 #include "materials/Chrome.hpp"
-
+#include <chrono>
 
 #include <ctime>
 
-int main(int argc, char **argv)
-{
+int globalId = 0;
+
+int main(int argc, char **argv) {
+    auto begin = std::chrono::high_resolution_clock::now();
+
     if (argc == 1) {
         std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
         return 84;
@@ -63,5 +66,8 @@ int main(int argc, char **argv)
     }
     file.close();
 
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    std::cout << "Time: " << std::round((elapsed.count() * 1e-9) / 0.01) * 0.01 << " seconds." << std::endl;
     return 0;
 }
