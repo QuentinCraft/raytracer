@@ -44,7 +44,7 @@ namespace RayTracer {
                 _normal = normal;
                 return *this;
             }
-            std::shared_ptr<RayTracer::IObject> build() override
+            std::shared_ptr<RayTracer::IObject> build(int *globalId) override
             {
                 return std::move(_object);
             }
@@ -76,6 +76,7 @@ namespace RayTracer {
             Math::Vector3D _normal;
             double _radius;
             double _length;
+            int *_globalId;
             std::string _builderName;
             std::shared_ptr<RayTracer::IObject> _object;
     };

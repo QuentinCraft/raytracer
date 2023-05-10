@@ -37,6 +37,34 @@ namespace RayTracer::Utils {
 
                 return builders;
             };
+            std::vector<std::shared_ptr<AMaterial>> loadMaterials() override {
+                std::vector<std::shared_ptr<AMaterial>> materials;
+
+                for (const auto &entry : std::filesystem::directory_iterator(_path + "/materials")) {
+                    if (entry.path().extension() == ".so") {
+                        std::cout << "Loading... " << entry.path();
+                        auto lib = _loader->loadLib<AMaterial *>(entry.path());
+                        std::cout << " name : " << lib->getName();
+                        materials.push_back(std::shared_ptr<AMaterial>(lib));
+                        std::cout << " [OK]" << std::endl;
+                    }
+                }
+                return materials;
+            }
+            std::vector<std::shared_ptr<ITextureBuilder>> loadTextureBuilders() override {
+                std::vector<std::shared_ptr<ITextureBuilder>> textureBuilders;
+
+                for (const auto &entry : std::filesystem::directory_iterator(_path + "/textures")) {
+                    if (entry.path().extension() == ".so") {
+                        std::cout << "Loading... " << entry.path();
+                        auto lib = _loader->loadLib<ITextureBuilder *>(entry.path());
+                        std::cout << " name : " << lib->getName();
+                        textureBuilders.push_back(std::shared_ptr<ITextureBuilder>(lib));
+                        std::cout << " [OK]" << std::endl;
+                    }
+                }
+                return textureBuilders;
+            }
         private:
             std::string _path;
             std::unique_ptr<RayTracer::Utils::LibraryLoader> _loader;

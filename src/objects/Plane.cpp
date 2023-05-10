@@ -12,16 +12,16 @@
 #include <iomanip>
 
 namespace RayTracer {
-    Plane::Plane() {
+    Plane::Plane(int *globalId) : RayTracer::AObject(globalId) {
         _origin = Math::Vector3D();
         _normal = Math::Vector3D().normalized();
-        _id = globalId++;
+        _id = (*globalId)++;
     }
 
-    Plane::Plane(const Math::Vector3D& point, const Math::Vector3D& normal) {
+    Plane::Plane(int *globalId, const Math::Vector3D& point, const Math::Vector3D& normal) : RayTracer::AObject(globalId) {
         _origin = point;
         _normal = normal.normalized();
-        _id = globalId++;
+        _id = (*globalId)++;
     }
 
     std::optional<PipeLine> Plane::hits(Ray const &ray) const {
@@ -55,10 +55,10 @@ namespace RayTracer {
         return _origin == plane._origin && _normal == plane._normal;
     }
 
-    Plane::Plane(const Math::Vector3D &point, const Math::Vector3D &normal, const std::shared_ptr<ITexture> &texture) {
+    Plane::Plane(int *globalId, const Math::Vector3D &point, const Math::Vector3D &normal, const std::shared_ptr<ITexture> &texture) : RayTracer::AObject(globalId) {
         _origin = point;
         _normal = normal.normalized();
-        _id = globalId++;
+        _id = (*globalId)++;
         _texture = texture;
     }
 

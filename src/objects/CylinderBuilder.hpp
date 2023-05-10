@@ -19,9 +19,9 @@ namespace RayTracer {
             CylinderBuilder() : ABuilder("cylinder") {_builderName = "cylinder";};
             ~CylinderBuilder() {};
 
-            std::shared_ptr<RayTracer::IObject> build() override
+            std::shared_ptr<RayTracer::IObject> build(int *globalId) override
             {
-                _object = std::make_shared<RayTracer::Cylinder>(_center, _radius, _length);
+                _object = std::make_shared<RayTracer::Cylinder>(globalId, _center, _radius, _length);
                 return std::move(_object);
             }
 

@@ -16,6 +16,8 @@ set(OBJ_CYLINDER_SRC
        src/maths/Vector3D.cpp
        src/maths/Ray.cpp
        src/maths/Utils.cpp
+       src/texture/ATexture.cpp
+       src/materials/AMaterial.cpp
 )
 
 add_library(cylinder SHARED ${OBJ_CYLINDER_SRC})
@@ -29,6 +31,8 @@ set(OBJ_SPHERE_SRC
         src/maths/Vector3D.cpp
         src/maths/Ray.cpp
         src/maths/Utils.cpp
+        src/texture/ATexture.cpp
+        src/materials/AMaterial.cpp
 )
 
 add_library(sphere SHARED ${OBJ_SPHERE_SRC})
@@ -42,11 +46,59 @@ set(OBJ_PLANE_SRC
         src/maths/Vector3D.cpp
         src/maths/Ray.cpp
         src/maths/Utils.cpp
+        src/texture/ATexture.cpp
+        src/materials/AMaterial.cpp
 )
 
 add_library(plane SHARED ${OBJ_PLANE_SRC})
 set_target_properties(plane PROPERTIES PREFIX raytracer_)
 set_target_properties(plane PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
+###################################################
+
+###### CHROME ######
+set(OBJ_CHROME_SRC
+        src/materials/ChromeEntryPoint.cpp
+        src/materials/AMaterial.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        )
+
+add_library(chrome SHARED ${OBJ_CHROME_SRC})
+set_target_properties(chrome PROPERTIES PREFIX raytracer_)
+set_target_properties(chrome PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/materials)
+
+###### PLASTIC ######
+set(OBJ_PLASTIC_SRC
+        src/materials/PlasticEntryPoint.cpp
+        src/materials/AMaterial.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        )
+
+add_library(plastic SHARED ${OBJ_PLASTIC_SRC})
+set_target_properties(plastic PROPERTIES PREFIX raytracer_)
+set_target_properties(plastic PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/materials)
+
+###################################################
+
+###### CHESSBOARD ######
+set(OBJ_CHESSBOARD_SRC
+        src/texture/ChessBoardEntryPoint.cpp
+        src/texture/ChessBoard.cpp
+        src/materials/AMaterial.cpp
+        src/texture/ATexture.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        )
+
+add_library(chessboard SHARED ${OBJ_CHESSBOARD_SRC})
+set_target_properties(chessboard PROPERTIES PREFIX raytracer_)
+set_target_properties(chessboard PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/textures)
+
 
 add_executable(raytracer
         src/main.cpp
@@ -114,7 +166,7 @@ add_executable(raytracer
         src/objects/PlaneData.hpp
         src/objects/SphereData.hpp
         src/utils/loader/PluginsManager.hpp
-        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp)
+        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp src/texture/ITextureBuilder.hpp)
 
 
 

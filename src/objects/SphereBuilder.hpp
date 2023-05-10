@@ -17,9 +17,9 @@ namespace RayTracer {
         public:
             SphereBuilder() : ABuilder("sphere") {};
             ~SphereBuilder() {};
-            std::shared_ptr<RayTracer::IObject> build() override
+            std::shared_ptr<RayTracer::IObject> build(int *globalId) override
             {
-                _object = std::make_unique<RayTracer::Sphere>(_center, _radius, _texture);
+                _object = std::make_unique<RayTracer::Sphere>(globalId, _center, _radius, _texture);
                 return std::move(_object);
             }
 

@@ -9,18 +9,18 @@
 #include "objects/PipeLine.hpp"
 
 namespace RayTracer {
-    Cylinder::Cylinder() {
+    Cylinder::Cylinder(int *globalId) : RayTracer::AObject(globalId) {
         _origin = Math::Vector3D();
         _radius = 0;
         _length = 0;
-        _id = globalId++;
+        _id = (*globalId)++;
     }
 
-    Cylinder::Cylinder(const Math::Vector3D& center, double radius, double length) {
+    Cylinder::Cylinder(int *globalId, const Math::Vector3D& center, double radius, double length) : RayTracer::AObject(globalId) {
         _origin = center;
         _radius = radius;
         _length = length;
-        _id = globalId++;
+        _id = (*globalId)++;
     }
 
     std::optional<PipeLine> Cylinder::hits(Ray const& ray) const {

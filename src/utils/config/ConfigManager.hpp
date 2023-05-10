@@ -31,8 +31,10 @@ namespace RayTracer::Utils {
         public:
             ConfigManager(const std::string &plugins) {
                 _builder = std::make_unique<ObjectFactory>(plugins);
+                _globalId = 0;
             };
             ~ConfigManager() {
+                _textures.clear();
                 std::cout << "ConfigManager destructor" << std::endl;
             };
             Config getConf(const std::string& path);
@@ -46,9 +48,12 @@ namespace RayTracer::Utils {
             void _getSphere(const libconfig::Setting& primitive);
             void _getPlane(const libconfig::Setting& primitive);
             void _getCylinder(const libconfig::Setting& primitive);
+            void _getTextures(const libconfig::Setting& root);
             std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayTracer::Utils::IData>>> _getPrimitives(const libconfig::Setting &root);
             //
             std::vector<std::pair<std::shared_ptr<IBuilder>, std::unique_ptr<IData>>> _primitives;
+            int _globalId;
+            std::vector<std::pair<std::string, std::shared_ptr<ITexture>>> _textures;
             std::unique_ptr<ObjectFactory> _builder;
     };
 

@@ -9,6 +9,7 @@
 #define RAYTRACER_IMATERIAL_HPP
 
 #include "maths/Vector3D.hpp"
+#include <iostream>
 
 namespace RayTracer {
 
@@ -33,6 +34,8 @@ namespace RayTracer {
 
             [[nodiscard]] virtual double getSpread() const = 0;
             virtual void setSpread(double spread) = 0;
+
+            [[nodiscard]] virtual std::string getName() const = 0;
     };
 
 };

@@ -8,13 +8,14 @@
 #include "AMaterial.hpp"
 
 namespace RayTracer {
-    AMaterial::AMaterial() {
+    AMaterial::AMaterial(std::string name) {
         _diffuse = {0.4, 0.4, 0.4};
         _specular = {0.28, 0.28, 0.28};
         _shininess = 74.3;
         _refraction = 0;
         _reflection = false;
         _spread = 0.0001;
+        _name = std::move(name);
     }
 
     Math::Vector3D AMaterial::getDiffuse() const {
@@ -57,7 +58,7 @@ namespace RayTracer {
         _reflection = reflection;
     }
 
-    AMaterial::AMaterial(Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction,
+    AMaterial::AMaterial(std::string name, Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction,
                          bool reflection, double spread) {
         _diffuse = diffuse;
         _specular = specular;
@@ -66,6 +67,7 @@ namespace RayTracer {
         _refraction = refraction;
         _reflection = reflection;
         _spread = spread;
+        _name = std::move(name);
     }
 
     void AMaterial::setSpread(double spread) {

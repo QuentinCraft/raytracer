@@ -84,23 +84,26 @@ RayTracer::Utils::Config::Light RayTracer::Utils::ConfigManager::_getLight(
 void RayTracer::Utils::ConfigManager::_getSphere(
         const libconfig::Setting &primitive) {
     try {
-        const libconfig::Setting& color = primitive["color"];
         int x = primitive["x"];
         int y = primitive["y"];
         int z = primitive["z"];
         int r = primitive["r"];
-        float colorX = color["r"];
-        float colorY = color["g"];
-        float colorZ = color["b"];
+        std::string texture = primitive["texture"];
         std::cout << "[Sphere]----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
-        std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+        std::cout << "texture : " << texture << std::endl;
 
         auto builder = _builder->createObjectBuilder("sphere");
         std::unique_ptr<IData> data = builder->createData();
         data->setCenter(Math::Vector3D(x, y, z));
         data->setPoint(Math::Vector3D(x, y, z));
         //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        for (auto &i : _textures) {
+            if (i.first == texture) {
+                data->setTexture(i.second);
+                break;
+            }
+        }
         data->setRadius(r);
         _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
@@ -112,25 +115,28 @@ void RayTracer::Utils::ConfigManager::_getSphere(
 void RayTracer::Utils::ConfigManager::_getPlane(
         const libconfig::Setting &primitive) {
     try {
-        const libconfig::Setting& color = primitive["color"];
         const libconfig::Setting& normal = primitive["normal"];
         int x = primitive["x"];
         int y = primitive["y"];
         int z = primitive["z"];
-        float colorX = color["r"];
-        float colorY = color["g"];
-        float colorZ = color["b"];
+        std::string texture = primitive["texture"];
         float normalX = normal["x"];
         float normalY = normal["y"];
         float normalZ = normal["z"];
         std::cout << "[Plane]-----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
         std::cout << "normal : " << normalX << ", " << normalY << ", " << normalZ << std::endl;
-        std::cout << "color : " << colorX << ", " << colorY << ", " << colorZ << std::endl;
+        std::cout << "texture : " << texture << std::endl;
 
         auto builder = _builder->createObjectBuilder("plane");
         std::unique_ptr<IData> data = builder->createData();
         //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+        for (auto &i : _textures) {
+            if (i.first == texture) {
+                data->setTexture(i.second);
+                break;
+            }
+        }
         data->setPoint(Math::Vector3D(x, y, z));
         data->setNormal(Math::Vector3D(normalX, normalY, normalZ));
         _primitives.emplace_back(builder, std::move(data));
@@ -141,13 +147,10 @@ void RayTracer::Utils::ConfigManager::_getPlane(
 
 void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &primitive) {
      try {
-         const libconfig::Setting& color = primitive["color"];
          int x = primitive["x"];
          int y = primitive["y"];
          int z = primitive["z"];
-         float colorX = color["r"];
-         float colorY = color["g"];
-         float colorZ = color["b"];
+         std::string texture = primitive["texture"];
          float radius = primitive["r"];
          float length = primitive["l"];
          std::cout << "[Cylinder]-----------------------" << std::endl;
@@ -156,6 +159,12 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
          data->setCenter(Math::Vector3D(x, y, z));
          data->setRadius(radius);
          data->setLength(length);
+         for (auto &i : _textures) {
+             if (i.first == texture) {
+                 data->setTexture(i.second);
+                 break;
+             }
+         }
          //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
          _primitives.emplace_back(builder, std::move(data));
      } catch (libconfig::SettingNotFoundException &e) {
@@ -187,6 +196,42 @@ std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayT
     return data;
 }
 
+void RayTracer::Utils::ConfigManager::_getTextures(const libconfig::Setting &root) {
+    try {
+        const libconfig::Setting& textures = root["textures"];
+        for (int i = 0; i < textures.getLength(); i++) {
+            std::cout << "[Texture]-----------------------" << std::endl;
+            const libconfig::Setting& texture = textures[i];
+            std::string name = texture["name"];
+            std::string material1 = texture["material1"];
+            std::string material2 = texture["material2"];
+            std::string type = texture["type"];
+            const libconfig::Setting& color1 = texture["color1"];
+            const libconfig::Setting& color2 = texture["color2"];
+            float color1X = color1["r"];
+            float color1Y = color1["g"];
+            float color1Z = color1["b"];
+            float color2X = color2["r"];
+            float color2Y = color2["g"];
+            float color2Z = color2["b"];
+            std::cout << name << std::endl;
+            std::cout << "color1 : " << color1X << ", " << color1Y << ", " << color1Z << std::endl;
+            std::cout << "color2 : " << color2X << ", " << color2Y << ", " << color2Z << std::endl;
+            auto matA = _builder->createMaterial(material1);
+            auto matB = _builder->createMaterial(material2);
+            if (!matA || !matB)
+                throw Error("Error: Invalid material name in [Textures] part");
+            auto builder = _builder->createTextureBuilder(type);
+            const auto &mat1 = *matA.get();
+            const auto &mat2 = *matB.get();
+            _textures.push_back({name, builder->build(mat1, mat2, Math::Vector3D(color1X, color1Y, color1Z),
+                                                Math::Vector3D(color2X, color2Y, color2Z))});
+        }
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("Error: Invalid settings in [Textures] part");
+    }
+}
+
 RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::string& path) {
     RayTracer::Utils::Config cnf;
     libconfig::Config config;
@@ -200,9 +245,12 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     }
 
     const libconfig::Setting& root = config.getRoot();
+    _textures.push_back({"basic", std::make_shared<RayTracer::ATexture>()});
+    _getTextures(root);
     cnf.camera = _getCamera(root);
     cnf.light = _getLight(root);
     cnf.primitives = _getPrimitives(root);
+
     return cnf;
 }
 
@@ -211,7 +259,7 @@ std::vector<std::shared_ptr<RayTracer::IObject>> RayTracer::Utils::ConfigManager
 
     for (auto &x : conf.primitives) {
         std::cout << "building object [" << x.first->getBuilderName() << "]" << " addr : " << x.first << " ";
-        objects.emplace_back(x.first->applyData(x.second).build());
+        objects.emplace_back(x.first->applyData(x.second).build(&_globalId));
         x.first->reset();
         std::cout << " [OK]" << std::endl;
     }

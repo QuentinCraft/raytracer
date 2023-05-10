@@ -33,7 +33,6 @@
 
 #include <ctime>
 
-int globalId = 0;
 
 int main(int argc, char **argv) {
     auto begin = std::chrono::high_resolution_clock::now();
@@ -46,8 +45,13 @@ int main(int argc, char **argv) {
     std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
 
-    RayTracer::Utils::Config config = configManager->getConf(argv[1]);
-
+    RayTracer::Utils::Config config;
+    try {
+        config = configManager->getConf(argv[1]);
+    } catch (RayTracer::Utils::Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
 
     scene->_camera = configManager->createCamera(config);
     scene->_objects = configManager->createObjects(config);

@@ -15,13 +15,14 @@ namespace RayTracer {
     class Chrome : public AMaterial {
         public:
             Chrome() : AMaterial(
+                "chrome",
                  {0.4, 0.4, 0.4},
                  {0.774597, 0.774597, 0.774597},
                  0.25 * 128,
                  0,
                  true,
                  0.0
-            ) {};
+            ) {_name = "chrome";};
     };
 
 } // RayTracer

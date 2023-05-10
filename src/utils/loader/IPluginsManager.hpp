@@ -9,6 +9,7 @@
 	#define IPLUGINSMANAGER_HPP_
 
 #include "utils/builder/IBuilder.hpp"
+#include "texture/ITextureBuilder.hpp"
 
 namespace RayTracer::Utils {
 
@@ -17,6 +18,8 @@ namespace RayTracer::Utils {
             virtual ~IPluginsManager() = default;
 
             virtual std::vector<std::shared_ptr<IBuilder>> loadPlugins() = 0;
+            virtual std::vector<std::shared_ptr<AMaterial>> loadMaterials() = 0;
+            virtual std::vector<std::shared_ptr<ITextureBuilder>> loadTextureBuilders() = 0;
     };
 
 }

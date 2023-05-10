@@ -9,12 +9,12 @@
 
 namespace RayTracer {
     ATexture::ATexture() {
-        _materials["default"] = std::make_shared<AMaterial>();
+        _materials["default"] = std::make_shared<AMaterial>("basic");
         _colors["default"] = std::make_shared<Math::Vector3D>(Math::Vector3D(100, 100, 100));
     }
 
     ATexture::ATexture(const Math::Vector3D &color) {
-        _materials["default"] = std::make_shared<AMaterial>();
+        _materials["default"] = std::make_shared<AMaterial>("basic");
         _colors["default"] = std::make_shared<Math::Vector3D>(color);
     }
 

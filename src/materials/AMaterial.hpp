@@ -14,10 +14,10 @@ namespace RayTracer {
 
     class AMaterial : public IMaterial {
         public:
-            AMaterial();
+            AMaterial(std::string name);
             AMaterial(AMaterial const &material) = default;
             AMaterial(AMaterial &&material) = default;
-            AMaterial(Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction, bool reflection, double spread);
+            AMaterial(std::string name, Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction, bool reflection, double spread);
             ~AMaterial() override = default;
 
             [[nodiscard]] Math::Vector3D getDiffuse() const override;
@@ -38,12 +38,17 @@ namespace RayTracer {
             [[nodiscard]] double getSpread() const override;
             void setSpread(double spread) override;
 
+            [[nodiscard]] std::string getName() const override {
+                return _name;
+            }
+
             double _refraction;
             double _spread;
             bool _reflection;
             Math::Vector3D _diffuse;
             Math::Vector3D _specular;
             double _shininess;
+            std::string _name;
 
     };
 

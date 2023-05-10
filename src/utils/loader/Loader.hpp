@@ -35,6 +35,7 @@ namespace RayTracer::Utils {
                 if (_handle)
                     return true;
                 _error = dlerror();
+                std::cerr << "\n Library Loader error : " << _error << std::endl;
 
                 return false;
             }

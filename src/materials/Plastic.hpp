@@ -15,13 +15,14 @@ namespace RayTracer {
     class Plastic : public AMaterial {
         public:
             Plastic() : AMaterial(
+                "plastic",
                 {0.5, 0.5, 0.5},
                 {0.7, 0.6, 0.6},
                 0.25 * 128,
                 0,
                 false,
                 0.0001
-            ) {}
+            ) {_name = "plastic";}
     };
 
 } // RayTracer

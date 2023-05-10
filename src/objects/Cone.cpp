@@ -9,13 +9,13 @@
 #include "objects/PipeLine.hpp"
 
 namespace RayTracer {
-    Cone::Cone() {
+    Cone::Cone(int *globalId) : AObject(globalId) {
         _origin = Math::Vector3D();
         _radius = 0;
         _height = 0;
     }
 
-    Cone::Cone(const Math::Vector3D& center, double radius, double height) {
+    Cone::Cone(int *globalId, const Math::Vector3D& center, double radius, double height) : RayTracer::AObject(globalId) {
         _origin = center;
         _radius = radius;
         _height = height;

@@ -23,8 +23,8 @@ namespace RayTracer {
     class Cylinder : public AObject {
         public:
             // Constructors
-            Cylinder();
-            Cylinder(const Math::Vector3D& center, double radius, double length);
+            Cylinder(int *globalId);
+            Cylinder(int *globalId, const Math::Vector3D& center, double radius, double length);
             Cylinder(Cylinder const &cylinder) = default;
             Cylinder(Cylinder &&cylinder) = default;
 
