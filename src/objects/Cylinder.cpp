@@ -16,10 +16,11 @@ namespace RayTracer {
         _id = (*globalId)++;
     }
 
-    Cylinder::Cylinder(int *globalId, const Math::Vector3D& center, double radius, double length) : RayTracer::AObject(globalId) {
+    Cylinder::Cylinder(int *globalId, const Math::Vector3D& center, double radius, double length, const std::shared_ptr<ITexture>& texture) : RayTracer::AObject(globalId) {
         _origin = center;
         _radius = radius;
         _length = length;
+        _texture = texture;
         _id = (*globalId)++;
     }
 
@@ -47,6 +48,9 @@ namespace RayTracer {
             pipe._object = std::make_shared<Cylinder>(*this);
             pipe._position = hitPoint;
             pipe._id = _id;
+            std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+            pipe._material = mat.first;
+            pipe._color = mat.second;
             pipe._info = "Cylinder";
             return pipe;
         }

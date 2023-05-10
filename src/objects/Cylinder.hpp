@@ -24,7 +24,7 @@ namespace RayTracer {
         public:
             // Constructors
             Cylinder(int *globalId);
-            Cylinder(int *globalId, const Math::Vector3D& center, double radius, double length);
+            Cylinder(int *globalId, const Math::Vector3D& center, double radius, double length, const std::shared_ptr<ITexture>& texture);
             Cylinder(Cylinder const &cylinder) = default;
             Cylinder(Cylinder &&cylinder) = default;
 
