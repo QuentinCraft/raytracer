@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20.5)
+cmake_minimum_required(VERSION 3.22.1)
 project(raytracer)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -62,6 +62,8 @@ add_executable(raytracer
         src/objects/Sphere.hpp
         src/objects/Plane.cpp
         src/objects/Plane.hpp
+        src/objects/Cone.cpp
+        src/objects/Cone.hpp
         src/objects/IObject.hpp
         src/objects/AObject.hpp
         src/objects/PipeLine.hpp

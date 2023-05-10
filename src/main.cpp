@@ -16,6 +16,7 @@
 #include "objects/Sphere.hpp"
 #include "objects/Plane.hpp"
 #include "objects/Cylinder.hpp"
+#include "objects/Cone.hpp"
 
 #include "utils/config/ConfigManager.hpp"
 #include "utils/loader/LibraryLoader.hpp"
@@ -24,6 +25,7 @@
 #include "texture/ChessBoard.hpp"
 #include "texture/ATexture.hpp"
 #include "texture/ITexture.hpp"
+
 
 #include "materials/Plastic.hpp"
 #include "materials/Chrome.hpp"
@@ -42,6 +44,7 @@ int main(int argc, char **argv)
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
 
     RayTracer::Utils::Config config = configManager->getConf(argv[1]);
+
 
     scene->_camera = configManager->createCamera(config);
     scene->_objects = configManager->createObjects(config);

@@ -18,6 +18,7 @@ namespace RayTracer {
     struct PipeLine {
         Math::Vector3D _position;
         Math::Vector3D _color;
+
         std::string _info;
         std::shared_ptr<AObject> _object;
         std::shared_ptr<IMaterial> _material;
