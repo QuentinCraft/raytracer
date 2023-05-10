@@ -1,17 +1,17 @@
 /*
 ** EPITECH PROJECT, 2023
-** raytracer
+** CylinderEntryPoint.cpp
 ** File description:
-** SphereEntryPoint.cpp
+** CylinderEntryPoint
 */
 
 #include "utils/builder/IBuilder.hpp"
-#include "SphereBuilder.hpp"
+#include "CylinderBuilder.hpp"
 
 extern "C"
 {
     RayTracer::IBuilder *entryPoint(void)
     {
-        return new RayTracer::SphereBuilder();
+        return new RayTracer::CylinderBuilder();
     }
 }

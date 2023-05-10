@@ -20,11 +20,13 @@ namespace RayTracer::Utils {
                 _manager = std::make_unique<PluginsManager>(path);
                 _builders = _manager->loadPlugins();
             };
-            ~ObjectFactory() override = default;
-            RayTracer::IBuilder *createObjectBuilder(const std::string &type) override;
+            ~ObjectFactory() {
+                std::cout << "ObjectFactory destructor" << std::endl;
+            };
+            std::shared_ptr<RayTracer::IBuilder> createObjectBuilder(const std::string &type) override;
         private:
             std::unique_ptr<IPluginsManager> _manager;
-            std::vector<std::unique_ptr<RayTracer::IBuilder>> _builders;
+            std::vector<std::shared_ptr<RayTracer::IBuilder>> _builders;
     };
 
 }

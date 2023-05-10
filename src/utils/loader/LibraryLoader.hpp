@@ -31,8 +31,8 @@ namespace RayTracer::Utils {
                 if (!_loader->open(lib))
                     throw RayTracer::Utils::Error(std::string("Error Cannot load [" + lib + "]"));
                 T (*c_fct)() = (T (*)())(_loader->getFunction("entryPoint"));
+//                std::cout << "error : " << dlerror() << std::endl;
                 T newFunction = c_fct();
-
                 return newFunction;
             }
         private:
