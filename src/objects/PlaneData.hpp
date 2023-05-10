@@ -11,7 +11,7 @@
 
 namespace RayTracer {
 
-    class PlaneData : public Utils::AData {
+    class  PlaneData : public Utils::AData {
         public:
             PlaneData() : Utils::AData() {_type = "plane";};
             ~PlaneData() {};

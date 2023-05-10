@@ -24,7 +24,7 @@ namespace RayTracer {
         public:
             // Constructors
             Cylinder();
-            Cylinder(const Math::Vector3D& center, double radius, double length, const Math::Vector3D& color);
+            Cylinder(const Math::Vector3D& center, double radius, double length);
             Cylinder(Cylinder const &cylinder) = default;
             Cylinder(Cylinder &&cylinder) = default;
 

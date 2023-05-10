@@ -12,15 +12,15 @@ namespace RayTracer {
     Cylinder::Cylinder() {
         _origin = Math::Vector3D();
         _radius = 0;
-        _id = globalId++;
         _length = 0;
+        _id = globalId++;
     }
 
-    Cylinder::Cylinder(const Math::Vector3D& center, double radius, double length, const Math::Vector3D& color) {
+    Cylinder::Cylinder(const Math::Vector3D& center, double radius, double length) {
         _origin = center;
         _radius = radius;
-        _id = globalId++;
         _length = length;
+        _id = globalId++;
     }
 
     std::optional<PipeLine> Cylinder::hits(Ray const& ray) const {

@@ -26,7 +26,7 @@ namespace RayTracer {
                 _scale = Math::Vector3D();
             }
 
-            AObject(double id, const Math::Vector3D& origin, const Math::Vector3D& color, const Math::Vector3D& rotation, const Math::Vector3D& scale) {
+            AObject(double id, const Math::Vector3D& origin, const Math::Vector3D& rotation, const Math::Vector3D& scale) {
                 _id = globalId++;
                 _origin = origin;
                 _rotation = rotation;

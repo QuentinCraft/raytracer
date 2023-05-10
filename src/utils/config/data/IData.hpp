@@ -23,7 +23,6 @@ namespace RayTracer::Utils {
             virtual void setPoint(Math::Vector3D point) = 0;
             virtual void setNormal(Math::Vector3D normal) = 0;
             virtual void setRadius(double radius) = 0;
-            virtual void setAxis(const std::string &axis) = 0;
             virtual void setIntensity(const Math::Vector3D intensity) = 0;
             virtual void setLength(double length) = 0;
 

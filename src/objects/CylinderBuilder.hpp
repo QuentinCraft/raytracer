@@ -21,7 +21,7 @@ namespace RayTracer {
 
             std::shared_ptr<RayTracer::IObject> build() override
             {
-                _object = std::make_shared<RayTracer::Cylinder>(_center, _radius, _length, _color);
+                _object = std::make_shared<RayTracer::Cylinder>(_center, _radius, _length);
                 return std::move(_object);
             }
 

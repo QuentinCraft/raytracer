@@ -156,7 +156,7 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
          data->setCenter(Math::Vector3D(x, y, z));
          data->setRadius(radius);
          data->setLength(length);
-         data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+         //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
          _primitives.emplace_back(builder, std::move(data));
      } catch (libconfig::SettingNotFoundException &e) {
          throw Error("Error: Invalid settings in [Primitives/Cylinder] part");

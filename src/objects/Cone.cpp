@@ -6,20 +6,19 @@
 */
 
 #include "Cone.hpp"
+#include "objects/PipeLine.hpp"
 
 namespace RayTracer {
     Cone::Cone() {
         _origin = Math::Vector3D();
         _radius = 0;
         _height = 0;
-        _color = Math::Vector3D(255, 255, 255);
     }
 
-    Cone::Cone(const Math::Vector3D& center, double radius, double height, const Math::Vector3D& color) {
+    Cone::Cone(const Math::Vector3D& center, double radius, double height) {
         _origin = center;
         _radius = radius;
         _height = height;
-        _color = color;
     }
 
     std::optional<PipeLine> Cone::hits(Ray const& ray) const {
@@ -71,8 +70,7 @@ namespace RayTracer {
         }
 
         pipe._position = hitPoint;
-        pipe._color = _color;
-        pipe.id = _id;
+        pipe._id = _id;
         return pipe;
     }
 
@@ -85,7 +83,7 @@ namespace RayTracer {
     }
 
     bool Cone::operator==(const Cone &cone) const {
-        return _origin == cone._origin && _radius == cone._radius && _color == cone._color;
+        return _origin == cone._origin && _radius == cone._radius;
     }
 
 } // RayTracer

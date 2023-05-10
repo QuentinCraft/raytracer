@@ -23,7 +23,7 @@ namespace RayTracer {
         public:
             // Constructors
             Cone();
-            Cone(const Math::Vector3D& center, double radius, double height, const Math::Vector3D& color);
+            Cone(const Math::Vector3D& center, double radius, double height);
             Cone(Cone const &cone) = default;
             Cone(Cone &&cone) = default;
 
