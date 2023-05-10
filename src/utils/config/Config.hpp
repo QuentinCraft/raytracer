@@ -32,7 +32,7 @@ namespace RayTracer::Utils {
             std::vector <Math::Vector3D> directional_lights;
         } light;
 
-        std::vector<std::pair<IBuilder *, std::unique_ptr<IData>>> primitives;
+        std::vector<std::pair<std::shared_ptr<IBuilder>, std::unique_ptr<IData>>> primitives;
     };
 
 }

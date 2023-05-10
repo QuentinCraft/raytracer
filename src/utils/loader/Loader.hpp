@@ -29,16 +29,18 @@ namespace RayTracer::Utils {
                 _error = nullptr;
             }
             bool open(const std::string &path) override {
-                if (_handle) close();
-                _handle = dlopen(path.c_str(), RTLD_LAZY);
+//                if (_handle) close();
+                _handle = dlopen(path.c_str(), RTLD_NOW);
 
                 if (_handle)
                     return true;
                 _error = dlerror();
+
                 return false;
             }
             void *getFunction(const std::string function) override {
-                return dlsym(_handle, function.c_str());
+                void *tmp = dlsym(_handle, function.c_str());
+                return tmp;
             }
             std::string getError() { return (!_error) ? std::string(_error) : ""; };
             void close() override {

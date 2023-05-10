@@ -16,6 +16,7 @@
 #include "objects/Sphere.hpp"
 #include "objects/Plane.hpp"
 #include "objects/Cylinder.hpp"
+#include "objects/Cone.hpp"
 
 #include "utils/config/ConfigManager.hpp"
 #include "utils/loader/LibraryLoader.hpp"
@@ -25,6 +26,7 @@
 #include "texture/ATexture.hpp"
 #include "texture/ITexture.hpp"
 
+
 #include "materials/Plastic.hpp"
 #include "materials/Chrome.hpp"
 #include <chrono>
@@ -33,47 +35,24 @@
 
 int globalId = 0;
 
-int main() {
+int main(int argc, char **argv) {
     auto begin = std::chrono::high_resolution_clock::now();
+
+    if (argc == 1) {
+        std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
+        return 84;
+    }
     std::ofstream file("render.ppm");
-
+    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
-    RayTracer::Chrome chrome;
-    RayTracer::Plastic plastic;
-    RayTracer::AMaterial emerald(Math::Vector3D(0.07568, 0.61424, 0.07568), Math::Vector3D(0.633, 0.727811, 0.633), 76.8, 1.57, false, 0.002);
 
-    std::shared_ptr<RayTracer::ChessBoard> chessBoardChrome = std::make_shared<RayTracer::ChessBoard>(chrome, chrome, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
-    std::shared_ptr<RayTracer::ChessBoard> chessBoardPlastic = std::make_shared<RayTracer::ChessBoard>(plastic, plastic, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
-    std::shared_ptr<RayTracer::ChessBoard> chessBoardPlasticChrome = std::make_shared<RayTracer::ChessBoard>(plastic, chrome, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
-    std::shared_ptr<RayTracer::ChessBoard> chessBoardChromePlastic = std::make_shared<RayTracer::ChessBoard>(chrome, plastic, Math::Vector3D(200, 200, 200), Math::Vector3D(25, 25, 25));
+    RayTracer::Utils::Config config = configManager->getConf(argv[1]);
 
 
-    std::shared_ptr<RayTracer::ATexture> basic = std::make_shared<RayTracer::ATexture>();
-    std::shared_ptr<RayTracer::ATexture> redChrome = std::make_shared<RayTracer::ATexture>(chrome, Math::Vector3D(200, 50, 50));
-    chrome.setSpread(0.5);
-    std::shared_ptr<RayTracer::ATexture> basicChrome = std::make_shared<RayTracer::ATexture>(chrome, Math::Vector3D(235, 228, 235));
-    std::shared_ptr<RayTracer::ATexture> basicPlastic = std::make_shared<RayTracer::ATexture>(plastic, Math::Vector3D(150, 80, 150));
-    std::shared_ptr<RayTracer::ATexture> basicEmerald = std::make_shared<RayTracer::ATexture>(emerald, Math::Vector3D(230, 230, 230));
-
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 4, 0), 4, basicPlastic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-6, 4, -11), 4, basicChrome));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(6, 4, -10), 4, redChrome));
-    scene->_objects.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(1, 3, -13), 1, basicEmerald));
-
-
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 0), Math::Vector3D(0, 1, 0), chessBoardPlastic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 20, 0), Math::Vector3D(0, -1, 0), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, -20), Math::Vector3D(0, 0, 1), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(0, 0, 20), Math::Vector3D(0, 0, -1), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(-20, 0, 0), Math::Vector3D(1, 0, 0), basic));
-    scene->_objects.push_back(std::make_shared<RayTracer::Plane>(Math::Vector3D(20, 0, 0), Math::Vector3D(-1, 0, 0), basic));
-
-    scene->_ambientLight = std::make_shared<RayTracer::Ambient>(Math::Vector3D(0.1, 0.1, 0.1));
-//    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(-10, 9, -21), Math::Vector3D(3, 3, 70)));
-//    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(10, 9, -21), Math::Vector3D(70, 3, 3)));
-    scene->_lights.push_back(std::make_shared<RayTracer::Spot>(Math::Vector3D(0, 17, -10), Math::Vector3D(35,35,35)));
-
-    scene->_camera = std::make_unique<RayTracer::Camera>(Math::Vector3D(0, 3, -25), 800, 800, 110);
+    scene->_camera = configManager->createCamera(config);
+    scene->_objects = configManager->createObjects(config);
+    scene->_ambientLight = configManager->createAmbientLight(config);
+    scene->_lights = configManager->createLight(config);
 
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
@@ -92,19 +71,3 @@ int main() {
     std::cout << "Time: " << std::round((elapsed.count() * 1e-9) / 0.01) * 0.01 << " seconds." << std::endl;
     return 0;
 }
-
-//int main(int argc, char **argv)
-//{
-//    if (argc == 1) {
-//        std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
-//        return 84;
-//    }
-//    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
-//    RayTracer::Utils::Config config = configManager->getConf(argv[1]);
-//
-//    auto objects = configManager->createObjects(config);
-//
-//    configManager->createCamera(config);
-//    configManager->createLight(config);
-//    return 0;
-//}

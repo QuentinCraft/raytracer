@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20.5)
+cmake_minimum_required(VERSION 3.22.1)
 project(raytracer)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -9,11 +9,26 @@ set(CMAKE_CXX_FLAGS "-O3")
 
 ###### PLUGINS ######
 
+### CYLINDER #####
+set(OBJ_CYLINDER_SRC
+       src/objects/Cylinder.cpp
+       src/objects/CylinderEntryPoint.cpp
+       src/maths/Vector3D.cpp
+       src/maths/Ray.cpp
+       src/maths/Utils.cpp
+)
+
+add_library(cylinder SHARED ${OBJ_CYLINDER_SRC})
+set_target_properties(cylinder PROPERTIES PREFIX raytracer_)
+set_target_properties(cylinder PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
 ###### SPHERE ######
 set(OBJ_SPHERE_SRC
         src/objects/Sphere.cpp
         src/objects/SphereEntryPoint.cpp
         src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
 )
 
 add_library(sphere SHARED ${OBJ_SPHERE_SRC})
@@ -24,7 +39,10 @@ set_target_properties(sphere PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT
 set(OBJ_PLANE_SRC
         src/objects/Plane.cpp
         src/objects/PlaneEntryPoint.cpp
-        src/maths/Vector3D.cpp)
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+)
 
 add_library(plane SHARED ${OBJ_PLANE_SRC})
 set_target_properties(plane PROPERTIES PREFIX raytracer_)
@@ -44,6 +62,8 @@ add_executable(raytracer
         src/objects/Sphere.hpp
         src/objects/Plane.cpp
         src/objects/Plane.hpp
+        src/objects/Cone.cpp
+        src/objects/Cone.hpp
         src/objects/IObject.hpp
         src/objects/AObject.hpp
         src/objects/PipeLine.hpp
