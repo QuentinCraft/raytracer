@@ -231,10 +231,33 @@ namespace RayTracer {
 
     Math::Vector3D Camera::pointAt(double u, double v, std::vector<std::shared_ptr<IObject>> &objects, std::vector<std::shared_ptr<ILight>> &lights, std::shared_ptr<Ambient> &ambient) const {
         Ray r = ray(u, v);
-        Math::Vector3D hitColor;
+        Ray r1 = r;
+        Ray r2 = r;
+        Ray r3 = r;
+        Ray r4 = r;
 
-        hitColor = compute(r, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-        Math::Vector3D color = Math::Utils::toRGB(hitColor);
+        Math::Vector3D hitColorA;
+        Math::Vector3D hitColorB;
+        Math::Vector3D hitColorC;
+        Math::Vector3D hitColorD;
+
+        r1._origin._x -= 0.01;
+        r1._origin._y -= 0.01;
+
+        r2._origin._x += 0.01;
+        r2._origin._y -= 0.01;
+
+        r3._origin._x -= 0.01;
+        r3._origin._y += 0.01;
+
+        r4._origin._x += 0.01;
+        r4._origin._y += 0.01;
+
+        hitColorA = compute(r1, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+        hitColorB = compute(r2, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+        hitColorC = compute(r3, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+        hitColorD = compute(r4, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+        Math::Vector3D color = Math::Utils::toRGB((hitColorA + hitColorB + hitColorC + hitColorD)/ 4);
         return color;
     }
 
