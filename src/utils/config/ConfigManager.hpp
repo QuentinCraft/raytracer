@@ -37,7 +37,7 @@ namespace RayTracer::Utils {
                 _textures.clear();
                 std::cout << "ConfigManager destructor" << std::endl;
             };
-            Config getConf(const std::string& path);
+            Config getConf(const std::string& path, bool includeConfig = false);
             std::unique_ptr<ICamera> createCamera(Config &conf);
             std::vector<std::shared_ptr<ILight>> createLight(Config &conf);
             std::vector<std::shared_ptr<IObject>> createObjects(Config &conf);
@@ -45,6 +45,7 @@ namespace RayTracer::Utils {
         private:
             Config::Camera _getCamera(const libconfig::Setting& root);
             Config::Light _getLight(const libconfig::Setting& root);
+            std::vector<std::string> _getInclude(const libconfig::Setting &root);
             void _getSphere(const libconfig::Setting& primitive);
             void _getPlane(const libconfig::Setting& primitive);
             void _getCylinder(const libconfig::Setting& primitive);

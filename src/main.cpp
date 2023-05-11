@@ -57,6 +57,17 @@ int main(int argc, char **argv) {
     scene->_objects = configManager->createObjects(config);
     scene->_ambientLight = configManager->createAmbientLight(config);
     scene->_lights = configManager->createLight(config);
+    for (auto x : config.includes) {
+        std::cout << "building... using [" << x << "]" << std::endl;
+        RayTracer::Utils::Config other = configManager->getConf(x, true);
+        auto newObjs = configManager->createObjects(other);
+        for (auto &obj : newObjs)
+            scene->_objects.push_back(obj);
+        auto newLights = configManager->createLight(other);
+        for (auto &light : newLights)
+            scene->_lights.push_back(light);
+        std::cout << "--------------------------------" << std::endl;
+    }
 //
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 

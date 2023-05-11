@@ -35,6 +35,7 @@ namespace RayTracer::Utils {
         } light;
 
         std::vector<std::pair<std::shared_ptr<IBuilder>, std::unique_ptr<IData>>> primitives;
+        std::vector<std::string> includes;
     };
 
 }

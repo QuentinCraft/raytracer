@@ -295,7 +295,23 @@ void RayTracer::Utils::ConfigManager::_getTextures(const libconfig::Setting &roo
     }
 }
 
-RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::string& path) {
+std::vector<std::string> RayTracer::Utils::ConfigManager::_getInclude(const libconfig::Setting &root) {
+    std::vector<std::string> includes;
+    const libconfig::Setting& includePart = root["includes"];
+
+    for (int i = 0; i < includePart.getLength(); i++) {
+        std::cout << "[Include]-----------------------" << std::endl;
+        const libconfig::Setting& include = includePart[i];
+        std::string path = include["path"];
+        std::cout << "path : [" << path << "]" << std::endl;
+        includes.push_back(path);
+    }
+
+
+    return includes;
+}
+
+RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::string& path, bool includeConfig) {
     RayTracer::Utils::Config cnf;
     libconfig::Config config;
 
@@ -310,9 +326,12 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     const libconfig::Setting& root = config.getRoot();
     _textures.push_back({"basic", std::make_shared<RayTracer::ATexture>()});
     _getTextures(root);
-    cnf.camera = _getCamera(root);
+    if (!includeConfig)
+        cnf.camera = _getCamera(root);
     cnf.light = _getLight(root);
     cnf.primitives = _getPrimitives(root);
+    if (!includeConfig)
+        cnf.includes = _getInclude(root);
 
     return cnf;
 }
