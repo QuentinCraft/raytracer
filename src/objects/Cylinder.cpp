@@ -79,6 +79,9 @@ namespace RayTracer {
             pipe._position = hitPoint_top;
             pipe._id = _id;
             pipe._info = "TopCylinder";
+            std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+            pipe._material = mat.first;
+            pipe._color = mat.second;
             return pipe;
         }
 
@@ -88,6 +91,9 @@ namespace RayTracer {
             pipe._position = hitPoint_bot;
             pipe._id = _id;
             pipe._info = "BotCylinder";
+            std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+            pipe._material = mat.first;
+            pipe._color = mat.second;
             return pipe;
         }
 
