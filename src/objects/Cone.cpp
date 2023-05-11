@@ -15,10 +15,11 @@ namespace RayTracer {
         _height = 0;
     }
 
-    Cone::Cone(int *globalId, const Math::Vector3D& center, double radius, double height) : RayTracer::AObject(globalId) {
+    Cone::Cone(int *globalId, const Math::Vector3D& center, double radius, double height, const std::shared_ptr<ITexture>& texture) : RayTracer::AObject(globalId) {
         _origin = center;
         _radius = radius;
         _height = height;
+        _texture = texture;
     }
 
     std::optional<PipeLine> Cone::hits(Ray const& ray) const {
@@ -68,7 +69,9 @@ namespace RayTracer {
             pipe._position = hitPoint_top;
             pipe._info = "TopCone";
         }
-
+        std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+        pipe._material = mat.first;
+        pipe._color = mat.second;
         pipe._position = hitPoint;
         pipe._id = _id;
         return pipe;

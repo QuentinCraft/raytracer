@@ -184,6 +184,36 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
      }
 }
 
+void RayTracer::Utils::ConfigManager::_getCone(const libconfig::Setting &primitive) {
+    try {
+        int x = primitive["x"];
+        int y = primitive["y"];
+        int z = primitive["z"];
+        std::string texture = primitive["texture"];
+        float radius = primitive["r"];
+        float length = primitive["l"];
+        std::cout << "[Cone]-----------------------" << std::endl;
+        auto builder = _builder->createObjectBuilder("cone");
+        std::unique_ptr<IData> data = builder->createData();
+        data->setCenter(Math::Vector3D(x, y, z));
+        data->setRadius(radius);
+        data->setLength(length);
+        bool found = false;
+        for (auto &i : _textures) {
+            if (i.first == texture) {
+                data->setTexture(i.second);
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+            throw Error("Error: Invalid texture in [Primitives/Cone] part");
+        _primitives.emplace_back(builder, std::move(data));
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("Error: Invalid settings in [Primitives/Cone] part");
+    }
+}
+
 std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayTracer::Utils::IData>>> RayTracer::Utils::ConfigManager::_getPrimitives(
         const libconfig::Setting &root) {
     std::vector<std::pair<std::shared_ptr<IBuilder>, std::unique_ptr<IData>>> data;
@@ -199,6 +229,8 @@ std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayT
                     _getPlane(primitive[x]);
                 if (item == "cylinders")
                     _getCylinder(primitive[x]);
+                if (item == "cones")
+                    _getCone(primitive[x]);
             }
         }
     } catch (libconfig::SettingNotFoundException &e) {

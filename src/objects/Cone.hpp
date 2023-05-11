@@ -23,7 +23,7 @@ namespace RayTracer {
         public:
             // Constructors
             Cone(int *globalId);
-            Cone(int *globalId, const Math::Vector3D& center, double radius, double height);
+            Cone(int *globalId, const Math::Vector3D& center, double radius, double height, const std::shared_ptr<ITexture>& texture);
             Cone(Cone const &cone) = default;
             Cone(Cone &&cone) = default;
 

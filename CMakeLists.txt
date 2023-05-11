@@ -54,6 +54,22 @@ add_library(plane SHARED ${OBJ_PLANE_SRC})
 set_target_properties(plane PROPERTIES PREFIX raytracer_)
 set_target_properties(plane PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
 
+###### CONE ######
+set(OBJ_CONE_SRC
+        src/objects/Cone.cpp
+        src/objects/ConeEntryPoint.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        src/texture/ATexture.cpp
+        src/materials/AMaterial.cpp
+        )
+
+add_library(cone SHARED ${OBJ_CONE_SRC})
+set_target_properties(cone PROPERTIES PREFIX raytracer_)
+set_target_properties(cone PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
+
 ###################################################
 
 ###### CHROME ######
