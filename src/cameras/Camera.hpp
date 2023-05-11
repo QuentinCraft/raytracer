@@ -48,11 +48,16 @@ namespace RayTracer {
             [[nodiscard]] const Math::Vector3D &getRotation() const override { return _rotation; };
             void setRotation(const Math::Vector3D &rotation) override { _rotation = rotation; };
 
+            void setRecursionDepth(int depth) override { _recursionDepth = depth; };
+            void setSuperSampling(int sampling) override { _superSampling = sampling; };
+
         protected:
             Math::Vector3D _origin;
             double _fov;
             double _height;
             double _width;
+            int _superSampling;
+            int _recursionDepth;
             Math::Vector3D _rotation;
     };
 

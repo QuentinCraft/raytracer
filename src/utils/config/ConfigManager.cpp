@@ -23,6 +23,8 @@ RayTracer::Utils::Config::Camera RayTracer::Utils::ConfigManager::_getCamera(con
         cam.resolution._x = static_cast<int>(resolution["width"]);
         cam.resolution._z = 0;
         cam.fieldOfView = camera["fieldOfView"];
+        cam.superSampling = camera["superSampling"];
+        cam.recursionDepth = camera["recursionDepth"];
 
         cam.rotation._x = static_cast<int>(rotation["x"]);
         cam.rotation._y = static_cast<int>(rotation["y"]);
@@ -335,6 +337,8 @@ std::unique_ptr<RayTracer::ICamera> RayTracer::Utils::ConfigManager::createCamer
 //    std::cout << "FOV : " << conf.camera.fieldOfView << std::endl;
     std::cout << "building object [camera]";
     auto x = std::make_unique<RayTracer::Camera>(conf.camera.position, conf.camera.resolution._y, conf.camera.resolution._x, conf.camera.fieldOfView);
+    x->setRecursionDepth(conf.camera.recursionDepth);
+    x->setSuperSampling(conf.camera.superSampling);
     std::cout << " [OK]" << std::endl;
     return std::move(x);
 }

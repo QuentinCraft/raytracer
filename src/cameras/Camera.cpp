@@ -233,7 +233,7 @@ namespace RayTracer {
         Ray r = ray(u, v);
         Math::Vector3D hitColor;
 
-        hitColor = compute(r, objects, lights, ambient, 20, 128, 0);
+        hitColor = compute(r, objects, lights, ambient, _recursionDepth, _superSampling, 0);
         Math::Vector3D color = Math::Utils::toRGB(hitColor);
         return color;
     }

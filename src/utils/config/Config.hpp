@@ -22,6 +22,8 @@ namespace RayTracer::Utils {
             Math::Vector3D resolution, position, rotation;
 
             double fieldOfView = 0.0f;
+            int superSampling = 0;
+            int recursionDepth = 0;
         } camera;
 
         // Light Settings

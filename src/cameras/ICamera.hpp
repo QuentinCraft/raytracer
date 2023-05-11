@@ -36,6 +36,8 @@ namespace RayTracer {
                                                  std::vector<std::shared_ptr<IObject>> &objects,
                                                  std::vector<std::shared_ptr<ILight>> &lights,
                                                  std::shared_ptr<Ambient> &ambient) const = 0;
+            virtual void setRecursionDepth(int depth) = 0;
+            virtual void setSuperSampling(int sampling) = 0;
     };
 
 } // RayTracer
