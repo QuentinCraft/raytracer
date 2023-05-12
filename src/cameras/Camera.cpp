@@ -117,12 +117,16 @@ namespace RayTracer {
         int correct = 0;
         int count = 0;
 
+        if (sampling < 1)
+            sampling = 1;
         for (int s = 0; s < sampling; s++) {
             Math::Vector3D sampleVec = light->getOrigin() - savedHitPoint._position;
             double dist = Math::Utils::distance(light->getOrigin(), savedHitPoint._position);
-            sampleVec._x += randomDouble(1);
-            sampleVec._z += randomDouble(1);
-            sampleVec._y += randomDouble(1);
+            if (sampling > 1) {
+                sampleVec._x += randomDouble(1);
+                sampleVec._z += randomDouble(1);
+                sampleVec._y += randomDouble(1);
+            }
             Ray bouncingRay(savedHitPoint._position, (sampleVec).normalized());
             status = true;
             correct = -1;
@@ -164,8 +168,10 @@ namespace RayTracer {
         Math::Vector3D finalColor;
         int div = 0;
 
+        if (sampling < 1)
+            sampling = 1;
         for (int s = 0; s < sampling; s++) {
-            if (!Math::Utils::equal(spread, 0)) {
+            if (!Math::Utils::equal(spread, 0) && sampling > 1) {
                 r._direction._x += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
                 r._direction._y += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
                 r._direction._z += std::clamp(std::rand() % 100 / 100.0, -spread, spread);
@@ -185,8 +191,10 @@ namespace RayTracer {
                 if (savedHitPoint2._object == nullptr) {
                     savedHitPoint._color = {0.3, 0.3, 1};
                 } else {
-                    if (recursive <= 0)
-                        savedHitPoint._color = {0, 0, 0};
+                    if (recursive <= 0) {
+                        if (sampling != 1)
+                            savedHitPoint._color = {0, 0, 0};
+                    }
                     savedHitPoint._color =
                             compute(reflectedRay, objects, lights, ambient, recursive - 1, (sampling /= 2), savedHitPoint._material->getSpread()) * savedHitPoint._color;
                 }
@@ -231,34 +239,42 @@ namespace RayTracer {
 
     Math::Vector3D Camera::pointAt(double u, double v, std::vector<std::shared_ptr<IObject>> &objects, std::vector<std::shared_ptr<ILight>> &lights, std::shared_ptr<Ambient> &ambient) const {
         Ray r = ray(u, v);
-        Ray r1 = r;
-        Ray r2 = r;
-        Ray r3 = r;
-        Ray r4 = r;
 
-        Math::Vector3D hitColorA;
-        Math::Vector3D hitColorB;
-        Math::Vector3D hitColorC;
-        Math::Vector3D hitColorD;
+        if (_superSampling > 1) {
+            Ray r1 = r;
+            Ray r2 = r;
+            Ray r3 = r;
+            Ray r4 = r;
 
-        r1._origin._x -= 0.01;
-        r1._origin._y -= 0.01;
+            Math::Vector3D hitColorA;
+            Math::Vector3D hitColorB;
+            Math::Vector3D hitColorC;
+            Math::Vector3D hitColorD;
 
-        r2._origin._x += 0.01;
-        r2._origin._y -= 0.01;
+            r1._origin._x -= 0.01;
+            r1._origin._y -= 0.01;
 
-        r3._origin._x -= 0.01;
-        r3._origin._y += 0.01;
+            r2._origin._x += 0.01;
+            r2._origin._y -= 0.01;
 
-        r4._origin._x += 0.01;
-        r4._origin._y += 0.01;
+            r3._origin._x -= 0.01;
+            r3._origin._y += 0.01;
 
-        hitColorA = compute(r1, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-        hitColorB = compute(r2, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-        hitColorC = compute(r3, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-        hitColorD = compute(r4, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-        Math::Vector3D color = Math::Utils::toRGB((hitColorA + hitColorB + hitColorC + hitColorD)/ 4);
-        return color;
+            r4._origin._x += 0.01;
+            r4._origin._y += 0.01;
+
+            hitColorA = compute(r1, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+            hitColorB = compute(r2, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+            hitColorC = compute(r3, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+            hitColorD = compute(r4, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+            Math::Vector3D color = Math::Utils::toRGB((hitColorA + hitColorB + hitColorC + hitColorD)/ 4);
+            return color;
+        } else {
+            Math::Vector3D hitColor = compute(r, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+            Math::Vector3D color = Math::Utils::toRGB((hitColor));
+            return color;
+        }
+
     }
 
 } // RayTracer

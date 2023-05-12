@@ -41,15 +41,17 @@ int main(int argc, char **argv) {
     auto begin = std::chrono::high_resolution_clock::now();
 
     std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
-
+    bool fast = false;
 //    obj->load("scenes/cube.obj");
 //
 //    return 0;
     if (argc == 1) {
-        std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
+        std::cerr << "Usage: ./bsraytracer [config] <flag>" << std::endl;
         return 84;
     }
-    std::ofstream file("render.ppm");
+    if (argc == 3 && std::string(argv[2]) == "-f")
+        fast = true;
+    std::cout << "Fast: " << (fast ? "true" : "false") << std::endl;
     std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
 
@@ -77,8 +79,10 @@ int main(int argc, char **argv) {
         std::cout << "--------------------------------" << std::endl;
     }
 //
-    file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
-
+    if (fast) {
+        scene->_camera->setRecursionDepth(1);
+        scene->_camera->setSuperSampling(1);
+    }
     int nbThreads = std::thread::hardware_concurrency();
     std::vector<std::thread> threads;
     std::mutex mutex;
@@ -97,7 +101,7 @@ int main(int argc, char **argv) {
             for (int xt = x; xt < xEnd; xt++) {
                 double u = yt / scene->_camera->getWidth() * 2 -1;
                 double v = xt / scene->_camera->getHeight() * 2 - 1;
-                if (xt % 2 == status) {
+                if ((xt % 2 == status) || !fast) {
                     Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
                     mutex.lock();
                     res[xt][yt] = color;
@@ -117,6 +121,8 @@ int main(int argc, char **argv) {
     for (auto &x: threads)
         x.join();
 
+    std::ofstream file("render.ppm");
+    file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
     for (int i = 0; i < scene->_camera->getHeight(); i++) {
         for (int j = 0; j < scene->_camera->getHeight(); j++) {
             if (!res[i][j].has_value()) {
