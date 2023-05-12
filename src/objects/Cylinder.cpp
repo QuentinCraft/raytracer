@@ -74,15 +74,17 @@ namespace RayTracer {
         double dist_bot = sqrt((hitPoint_bot._x - _origin._x) * (hitPoint_bot._x - _origin._x) + (hitPoint_bot._z - _origin._z) * (hitPoint_bot._z - _origin._z));
 
         if (Math::Utils::inf(dist_top, _radius) || Math::Utils::equal(dist_top, _radius)) {
-            PipeLine pipe;
-            pipe._object = std::make_shared<Cylinder>(*this);
-            pipe._position = hitPoint_top;
-            pipe._id = _id;
-            pipe._info = "TopCylinder";
-            std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
-            pipe._material = mat.first;
-            pipe._color = mat.second;
-            return pipe;
+            if ((Math::Utils::distance(ray._origin, hitPoint_top) < Math::Utils::distance(ray._origin, hitPoint_bot)) || !((Math::Utils::inf(dist_bot, _radius) || Math::Utils::equal(dist_bot, _radius)))) {
+                PipeLine pipe;
+                pipe._object = std::make_shared<Cylinder>(*this);
+                pipe._position = hitPoint_top;
+                pipe._id = _id;
+                pipe._info = "TopCylinder";
+                std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
+                pipe._material = mat.first;
+                pipe._color = mat.second;
+                return pipe;
+            }
         }
 
         if (Math::Utils::inf(dist_bot, _radius) || Math::Utils::equal(dist_bot, _radius)) {
