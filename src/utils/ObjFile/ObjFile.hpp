@@ -133,7 +133,7 @@ namespace RayTracer {
                     Math::Vector3D point = getPosFromVertex(parsed[0]);
                     Math::Vector3D normal = getNormalFromNormalList(parsed[2]);
                     toappend[i].first = point;
-                    toappend[i].second = point;
+                    toappend[i].second = normal;
                 }
                 _faces.push_back(toappend);
             }

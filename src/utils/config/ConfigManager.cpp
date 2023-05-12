@@ -259,6 +259,9 @@ void RayTracer::Utils::ConfigManager::_getObjFile(const libconfig::Setting &prim
     try {
         std::string filepath = primitive["path"];
         std::string texture = primitive["texture"];
+        int _x = primitive["x"];
+        int _y = primitive["y"];
+        int _z = primitive["z"];
         std::cout << "[OBJ File]-----------------------" << std::endl;
         std::cout << "path : " << filepath << std::endl;
         auto result = _objFileParser->load(filepath);
@@ -267,6 +270,7 @@ void RayTracer::Utils::ConfigManager::_getObjFile(const libconfig::Setting &prim
             std::unique_ptr<IData> data = builder->createData();
             data->setV1(x[0].first); data->setV2(x[1].first); data->setV3(x[2].first);
             data->setN1(x[0].second); data->setN2(x[1].second); data->setN3(x[2].second);
+            data->setPoint(Math::Vector3D(_x, _y, _z));
             bool found = false;
             for (auto &i : _textures) {
                 if (i.first == texture) {

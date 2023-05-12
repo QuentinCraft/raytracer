@@ -15,10 +15,11 @@ namespace RayTracer {
 //        _color = Math::Vector3D();
     }
 
-    Triangle::Triangle(int *globalId, const Math::Vector3D& v1, const Math::Vector3D& v2, const Math::Vector3D& v3, const Math::Vector3D &n1, const Math::Vector3D &n2, const Math::Vector3D &n3, const std::shared_ptr<ITexture>& texture) : AObject(globalId) {
-        _vertices = {v1, v2, v3};
+    Triangle::Triangle(int *globalId, const Math::Vector3D& point, const Math::Vector3D& v1, const Math::Vector3D& v2, const Math::Vector3D& v3, const Math::Vector3D &n1, const Math::Vector3D &n2, const Math::Vector3D &n3, const std::shared_ptr<ITexture>& texture) : AObject(globalId) {
+        _vertices = {v1 + point, v2 + point, v3 + point};
         _normals = {n1, n2, n3};
         _texture = texture;
+        _origin = point;
         _id = (*globalId)++;
 //        _color = color;
     }
@@ -63,14 +64,7 @@ namespace RayTracer {
     }
 
     Math::Vector3D Triangle::normal(const PipeLine &pipe) const {
-        Math::Vector3D v0 = _normals[0];
-        Math::Vector3D v1 = _normals[1];
-        Math::Vector3D v2 = _normals[2];
-
-        Math::Vector3D edge1 = v1 - v0;
-        Math::Vector3D edge2 = v2 - v0;
-
-        return edge1.cross(edge2).normalized();
+        return _normals[0] * -1;
     }
 
     bool Triangle::operator==(const Triangle &triangle) const {

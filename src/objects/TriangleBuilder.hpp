@@ -19,7 +19,7 @@ namespace RayTracer {
 
             std::shared_ptr<RayTracer::IObject> build(int *globalId) override
             {
-                _object = std::make_shared<RayTracer::Triangle>(globalId, _v1, _v2, _v3, _n1, _n2, _n3, _texture);
+                _object = std::make_shared<RayTracer::Triangle>(globalId, _point, _v1, _v2, _v3, _n1, _n2, _n3, _texture);
                 return std::move(_object);
             }
 

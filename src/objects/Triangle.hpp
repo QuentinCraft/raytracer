@@ -24,7 +24,7 @@ namespace RayTracer {
     public:
         // Constructors
         Triangle(int *globalId);
-        Triangle(int *globalId, const Math::Vector3D& v1, const Math::Vector3D& v2, const Math::Vector3D& v3, const Math::Vector3D& n1, const Math::Vector3D& n2, const Math::Vector3D& n3, const std::shared_ptr<ITexture>& texture);
+        Triangle(int *globalId, const Math::Vector3D& point, const Math::Vector3D& v1, const Math::Vector3D& v2, const Math::Vector3D& v3, const Math::Vector3D& n1, const Math::Vector3D& n2, const Math::Vector3D& n3, const std::shared_ptr<ITexture>& texture);
         Triangle(Triangle const &Triangle) = default;
         Triangle(Triangle &&Triangle) = default;
 
