@@ -63,9 +63,9 @@ namespace RayTracer {
     }
 
     Math::Vector3D Triangle::normal(const PipeLine &pipe) const {
-        Math::Vector3D v0 = _vertices[0];
-        Math::Vector3D v1 = _vertices[1];
-        Math::Vector3D v2 = _vertices[2];
+        Math::Vector3D v0 = _normals[0];
+        Math::Vector3D v1 = _normals[1];
+        Math::Vector3D v2 = _normals[2];
 
         Math::Vector3D edge1 = v1 - v0;
         Math::Vector3D edge2 = v2 - v0;

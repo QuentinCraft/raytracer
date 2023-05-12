@@ -119,30 +119,23 @@ namespace RayTracer {
                 return result;
             }
             void _parseFace(std::stringstream &parsed) {
-                std::string vertex;
-                std::string texture;
-                std::string normal;
+                std::string p[3];
                 Math::Vector3D newPos[3];
                 Math::Vector3D newNormal[3];
-                int cursor = 0;
+                std::array<std::pair<Math::Vector3D, Math::Vector3D>, 3> toappend;
 
-                parsed >> vertex;
-                parsed >> texture;
-                parsed >> normal;
-                std::cout << "Face: " << vertex << " " << texture << " " << normal << std::endl;
-                auto pos = _parseStringByCharToInt(vertex, '/');
-                auto norm = _parseStringByCharToFloat(normal, '/');
-                std::cout << "(" << pos[0] << ", " << pos[1] << ", " << pos[2] << ")" << std::endl;
-                newPos[0] = getPosFromVertex(pos[0]); newPos[1] = getPosFromVertex(pos[1]); newPos[2] = getPosFromVertex(pos[2]);
-                newNormal[0] = getNormalFromNormalList(norm[0]); newNormal[1] = getNormalFromNormalList(norm[1]); newNormal[2] = getNormalFromNormalList(norm[2]);
-                std::cout << "x : " << newPos[0]._x << ", " << newPos[0]._y << ", " << newPos[0]._z << std::endl;
-                std::cout << "x : " << newNormal[0]._x << ", " << newNormal[0]._y << ", " << newNormal[0]._z << std::endl;
-                std::cout << "y : " << newPos[1]._x << ", " << newPos[1]._y << ", " << newPos[1]._z << std::endl;
-                std::cout << "y : " << newNormal[1]._x << ", " << newNormal[1]._y << ", " << newNormal[1]._z << std::endl;
-                std::cout << "z : " << newPos[2]._x << ", " << newPos[2]._y << ", " << newPos[2]._z << std::endl;
-                std::cout << "z : " << newNormal[2]._x << ", " << newNormal[2]._y << ", " << newNormal[2]._z << std::endl;
-                _faces.push_back({std::make_pair(newPos[0], newNormal[0]), std::make_pair(newPos[1], newNormal[1]), std::make_pair(newPos[2], newNormal[2])});
-                std::cout << "-----------------" << std::endl;
+                parsed >> p[0];
+                parsed >> p[1];
+                parsed >> p[2];
+                std::cout << "Face: " << p[0] << " " << p[1] << " " << p[2] << std::endl;
+                for (int  i = 0; i < 3; i++) {
+                    auto parsed = _parseStringByCharToInt(p[i], '/');
+                    Math::Vector3D point = getPosFromVertex(parsed[0]);
+                    Math::Vector3D normal = getNormalFromNormalList(parsed[2]);
+                    toappend[i].first = point;
+                    toappend[i].second = point;
+                }
+                _faces.push_back(toappend);
             }
             Math::Vector3D getPosFromVertex(const int nb) {
                 int i = 1;
