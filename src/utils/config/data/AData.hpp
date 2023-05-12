@@ -28,6 +28,8 @@ namespace RayTracer::Utils {
             void setN1(Math::Vector3D n1) override { _n1 = n1; };
             void setN2(Math::Vector3D n2) override { _n2 = n2; };
             void setN3(Math::Vector3D n3) override { _n3 = n3; };
+            void setAxe(const Math::Vector3D axe) override { _axe = axe; };
+            void setAngle(double angle) override { _angle = angle; };
 
             std::string &getType() override { return _type; };
             std::shared_ptr<ITexture> &getTexture() override { return _texture; };
@@ -44,6 +46,8 @@ namespace RayTracer::Utils {
             Math::Vector3D &getN1() override { return _n1; };
             Math::Vector3D &getN2() override { return _n2; };
             Math::Vector3D &getN3() override { return _n3; };
+            Math::Vector3D &getAxe() override { return _axe; };
+            double &getAngle() override { return _angle; };
 
         protected:
             std::string _type;
@@ -60,6 +64,8 @@ namespace RayTracer::Utils {
             Math::Vector3D _n1;
             Math::Vector3D _n2;
             Math::Vector3D _n3;
+            Math::Vector3D _axe;
+            double _angle;
     };
 
 }

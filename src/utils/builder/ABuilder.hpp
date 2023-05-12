@@ -73,6 +73,8 @@ namespace RayTracer {
                 _n1 = data->getN1();
                 _n2 = data->getN2();
                 _n3 = data->getN3();
+                _axe = data->getAxe();
+                _angle = data->getAngle();
                 return *this;
             }
         protected:
@@ -91,6 +93,8 @@ namespace RayTracer {
             Math::Vector3D _n1;
             Math::Vector3D _n2;
             Math::Vector3D _n3;
+            Math::Vector3D _axe;
+            double _angle;
     };
 
 }

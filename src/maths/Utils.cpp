@@ -31,4 +31,17 @@ namespace Math {
         return sqrt(pow(aColor._x - bColor._x, 2) + pow(aColor._y - bColor._y, 2) + pow(aColor._z - bColor._z, 2));
     }
 
+    Vector3D Utils::rotateVector(const Math::Vector3D& vector, const Math::Vector3D& axis, double angle) {
+        Math::Vector3D normalizedAxis = axis.normalized();
+        double angle1 = angle * (M_PI / 180.0);
+
+        double cosTheta = std::cos(angle1);
+        double sinTheta = std::sin(angle1);
+
+        Vector3D rotatedVector = vector * cosTheta + normalizedAxis.cross(vector) * sinTheta
+            + normalizedAxis * normalizedAxis.dot(vector) * (1 - cosTheta);
+
+    return rotatedVector;
+    }
+
 } // Math

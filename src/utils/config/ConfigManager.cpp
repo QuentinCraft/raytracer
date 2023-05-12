@@ -186,6 +186,45 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
      }
 }
 
+void RayTracer::Utils::ConfigManager::_getUnlimitedCylinder(const libconfig::Setting &primitive)
+{
+    try {
+            int x = primitive["x"];
+            int y = primitive["y"];
+            int z = primitive["z"];
+            std::string texture = primitive["texture"];
+            float radius = primitive["r"];
+            float length = primitive["l"];
+            float angle = primitive["angle"];
+            const libconfig::Setting& axe = primitive["axe"];
+            float axeX = axe["x"];
+            float axeY = axe["y"];
+            float axeZ = axe["z"];
+            std::cout << "[Unlimited Cylinder]-----------------------" << std::endl;
+            auto builder = _builder->createObjectBuilder("unlimitedCylinder");
+            std::unique_ptr<IData> data = builder->createData();
+            data->setCenter(Math::Vector3D(x, y, z));
+            data->setRadius(radius);
+            data->setLength(length);
+            data->setAngle(angle);
+            data->setAxe(Math::Vector3D(axeX, axeY, axeZ));
+            bool found = false;
+            for (auto &i : _textures) {
+                if (i.first == texture) {
+                    data->setTexture(i.second);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                throw Error("Error: Invalid texture in [Primitives/Cylinder] part");
+            //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+            _primitives.emplace_back(builder, std::move(data));
+        } catch (libconfig::SettingNotFoundException &e) {
+            throw Error("Error: Invalid settings in [Primitives/Cylinder] part");
+        }
+}
+
 void RayTracer::Utils::ConfigManager::_getCone(const libconfig::Setting &primitive) {
     try {
         int x = primitive["x"];
@@ -264,6 +303,8 @@ std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayT
                     _getCone(primitive[x]);
                 if (item == "obj-files")
                     _getObjFile(primitive[x]);
+                if (item == "unlimited-cylinders")
+                    _getUnlimitedCylinder(primitive[x]);
             }
         }
     } catch (libconfig::SettingNotFoundException &e) {

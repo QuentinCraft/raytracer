@@ -31,6 +31,8 @@ namespace RayTracer::Utils {
             virtual void setN1(Math::Vector3D n1) = 0;
             virtual void setN2(Math::Vector3D n2) = 0;
             virtual void setN3(Math::Vector3D n3) = 0;
+            virtual void setAxe(const Math::Vector3D axe) = 0;
+            virtual void setAngle(double angle) = 0;
 
             virtual std::string &getType() = 0;
             virtual std::shared_ptr<ITexture> &getTexture() = 0;
@@ -46,6 +48,8 @@ namespace RayTracer::Utils {
             virtual Math::Vector3D &getN1() = 0;
             virtual Math::Vector3D &getN2() = 0;
             virtual Math::Vector3D &getN3() = 0;
+            virtual Math::Vector3D &getAxe() = 0;
+            virtual double &getAngle() = 0;
     };
 
 }
