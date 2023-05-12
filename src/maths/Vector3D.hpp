@@ -12,52 +12,50 @@
 
 namespace Math {
     class Vector3D {
-        public:
-            // Constructors
-            Vector3D();
-            Vector3D(double x, double y, double z);
-            Vector3D(const Vector3D &vector);
-            Vector3D(Vector3D &&vector) = default;
-            Vector3D(const Vector3D &point1, const Vector3D &point2);
+    public:
+        // Constructors
+        Vector3D();
+        Vector3D(double x, double y, double z);
+        Vector3D(const Vector3D &vector);
+        Vector3D(Vector3D &&vector) = default;
+        Vector3D(const Vector3D &point1, const Vector3D &point2);
 
-            // Destructor
-            ~Vector3D() = default;
+        // Destructor
+        ~Vector3D() = default;
 
-            // Operators
-            Vector3D &operator=(const Vector3D &vector) = default;
-            Vector3D &operator=(Vector3D &&vector) = default;
+        // Operators
+        Vector3D &operator=(const Vector3D &vector) = default;
+        Vector3D &operator=(Vector3D &&vector) = default;
 
-            Vector3D operator+(const Vector3D &vector) const;
-            Vector3D &operator+=(const Vector3D &vector);
-            Vector3D operator-(const Vector3D &vector) const;
-            Vector3D &operator-=(const Vector3D &vector);
-            Vector3D operator*(const Vector3D &vector) const;
-            Vector3D &operator*=(const Vector3D &vector);
-            Vector3D operator/(const Vector3D &vector) const;
-            Vector3D &operator/=(const Vector3D &vector);
+        Vector3D operator+(const Vector3D &vector) const;
+        Vector3D &operator+=(const Vector3D &vector);
+        Vector3D operator-(const Vector3D &vector) const;
+        Vector3D &operator-=(const Vector3D &vector);
+        Vector3D operator*(const Vector3D &vector) const;
+        Vector3D &operator*=(const Vector3D &vector);
+        Vector3D operator/(const Vector3D &vector) const;
+        Vector3D &operator/=(const Vector3D &vector);
 
-            Vector3D operator*(double value) const;
-            Vector3D &operator*=(double value);
-            Vector3D operator+(double value) const;
-            Vector3D &operator+=(double value);
-            Vector3D operator-(double value) const;
-            Vector3D &operator-=(double value);
-            Vector3D operator/(double value) const;
-            Vector3D &operator/=(double value);
+        Vector3D operator*(double value) const;
+        Vector3D operator+(double value) const;
+        Vector3D &operator*=(double value);
+        Vector3D &operator+=(double value);
+        Vector3D operator/(double value) const;
+        Vector3D &operator/=(double value);
 
-            bool operator==(const Vector3D &vector) const;
+        bool operator==(const Vector3D &vector) const;
 
-            [[nodiscard]] Vector3D normalized() const;
+        [[nodiscard]] Vector3D normalized() const;
 
-            // Methods
-            [[nodiscard]] double dot(const Vector3D &vector) const;
-            [[nodiscard]] Vector3D cross(const Vector3D &other) const;
-            [[nodiscard]] double length() const;
+        // Methods
+        [[nodiscard]] double dot(const Vector3D &vector) const;
+        [[nodiscard]] Vector3D cross(const Vector3D &other) const;
+        [[nodiscard]] float length() const;
 
-            // Variables
-            double _x;
-            double _y;
-            double _z;
+        // Variables
+        double _x;
+        double _y;
+        double _z;
     };
 
 } // Math
