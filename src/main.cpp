@@ -30,7 +30,6 @@
 #include "materials/Plastic.hpp"
 #include "materials/Chrome.hpp"
 #include <chrono>
-#include "utils/ObjFile/ObjFile.hpp"
 
 #include <ctime>
 #include <thread>
@@ -42,9 +41,7 @@ int main(int argc, char **argv) {
 
     std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
     bool fast = false;
-//    obj->load("scenes/cube.obj");
-//
-//    return 0;
+
     if (argc == 1) {
         std::cerr << "Usage: ./bsraytracer [config] <flag>" << std::endl;
         return 84;

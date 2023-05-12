@@ -17,7 +17,7 @@ namespace Math {
 
     Vector3D::Vector3D(double x, double y, double z) {
         _x = x;
-        _y = y; 
+        _y = y;
         _z = z;
     }
 
@@ -27,7 +27,7 @@ namespace Math {
         _z = vector._z;
     }
 
-    double Vector3D::length() const {
+    float Vector3D::length() const {
         return std::sqrt((float) (_x * _x) + (float) (_y * _y) + (float) (_z * _z));
     }
 
@@ -131,6 +131,13 @@ namespace Math {
         return (_x * vector._x) + (_y * vector._y) + (_z * vector._z);
     }
 
+    Vector3D Vector3D::cross(const Vector3D &other) const {
+        double x = _y * other._z - _z * other._y;
+        double y = _z * other._x - _x * other._z;
+        double z = _x * other._y - _y * other._x;
+        return Math::Vector3D(x, y, z);
+    }
+
     Vector3D::Vector3D(const Vector3D &point1, const Vector3D &point2) {
         _x = point2._x - point1._x;
         _y = point2._y - point1._y;
@@ -162,27 +169,6 @@ namespace Math {
 
     bool Vector3D::operator==(const Vector3D &vector) const {
         return Math::Utils::equal(_x, vector._x) && Math::Utils::equal(_y, vector._y) && Math::Utils::equal(_z, vector._z);
-    }
-
-    Vector3D Vector3D::operator-(double value) const {
-        Vector3D result;
-
-        result._x = _x - value;
-        result._y = _y - value;
-        result._z = _z - value;
-        return result;
-    }
-
-    Vector3D &Vector3D::operator-=(double value) {
-        _x -= value;
-        _y -= value;
-        _z -= value;
-        return *this;
-    }
-
-    std::ostream &operator<<(std::ostream& os, const Vector3D& v) {
-        os << "(" << v._x << ", " << v._y << ", " << v._z << ")";
-        return os;
     }
 
 } // Math
