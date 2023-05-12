@@ -120,9 +120,9 @@ namespace RayTracer {
         for (int s = 0; s < sampling; s++) {
             Math::Vector3D sampleVec = light->getOrigin() - savedHitPoint._position;
             double dist = Math::Utils::distance(light->getOrigin(), savedHitPoint._position);
-            sampleVec._x += randomDouble(5);
-            sampleVec._z += randomDouble(5);
-            sampleVec._y += randomDouble(5);
+            sampleVec._x += randomDouble(1);
+            sampleVec._z += randomDouble(1);
+            sampleVec._y += randomDouble(1);
             Ray bouncingRay(savedHitPoint._position, (sampleVec).normalized());
             status = true;
             correct = -1;
