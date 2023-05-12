@@ -67,6 +67,12 @@ namespace RayTracer {
                 _radius = data->getRadius();
                 _normal = data->getNormal();
                 _length = data->getLength();
+                _v1 = data->getV1();
+                _v2 = data->getV2();
+                _v3 = data->getV3();
+                _n1 = data->getN1();
+                _n2 = data->getN2();
+                _n3 = data->getN3();
                 return *this;
             }
         protected:
@@ -79,6 +85,12 @@ namespace RayTracer {
             int *_globalId;
             std::string _builderName;
             std::shared_ptr<RayTracer::IObject> _object;
+            Math::Vector3D _v1;
+            Math::Vector3D _v2;
+            Math::Vector3D _v3;
+            Math::Vector3D _n1;
+            Math::Vector3D _n2;
+            Math::Vector3D _n3;
     };
 
 }

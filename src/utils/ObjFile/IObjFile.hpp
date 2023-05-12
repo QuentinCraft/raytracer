@@ -7,6 +7,8 @@
 #ifndef IOBJFILE_HPP_
 #define IOBJFILE_HPP_
 #include <iostream>
+#include <vector>
+#include "maths/Vector3D.hpp"
 
 namespace RayTracer {
 
@@ -14,7 +16,7 @@ namespace RayTracer {
     public:
         virtual ~IObjFile() = default;
 
-        virtual void load(const std::string &path) = 0;
+        virtual std::vector<std::array<std::pair<Math::Vector3D, Math::Vector3D>, 3>> load(const std::string &path) = 0;
     };
 
 }

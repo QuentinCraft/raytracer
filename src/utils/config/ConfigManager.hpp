@@ -24,6 +24,7 @@
 #include "utils/builder/IBuilder.hpp"
 #include "utils/factory/ObjectFactory.hpp"
 #include "cameras/ICamera.hpp"
+#include "utils/ObjFile/ObjFile.hpp"
 
 namespace RayTracer::Utils {
 
@@ -31,6 +32,7 @@ namespace RayTracer::Utils {
         public:
             ConfigManager(const std::string &plugins) {
                 _builder = std::make_unique<ObjectFactory>(plugins);
+                _objFileParser = std::make_unique<RayTracer::ObjFile>();
                 _globalId = 0;
             };
             ~ConfigManager() {
@@ -50,6 +52,7 @@ namespace RayTracer::Utils {
             void _getPlane(const libconfig::Setting& primitive);
             void _getCylinder(const libconfig::Setting& primitive);
             void _getCone(const libconfig::Setting& primitive);
+            void _getObjFile(const libconfig::Setting& primitive);
             void _getTextures(const libconfig::Setting& root);
             std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayTracer::Utils::IData>>> _getPrimitives(const libconfig::Setting &root);
             //
@@ -57,6 +60,7 @@ namespace RayTracer::Utils {
             int _globalId;
             std::vector<std::pair<std::string, std::shared_ptr<ITexture>>> _textures;
             std::unique_ptr<ObjectFactory> _builder;
+            std::unique_ptr<RayTracer::IObjFile> _objFileParser;
     };
 
 } // RayTracer

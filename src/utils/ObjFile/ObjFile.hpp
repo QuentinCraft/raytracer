@@ -19,10 +19,11 @@ namespace RayTracer {
         public:
             ObjFile() = default;
             ~ObjFile() = default;
-            void load(const std::string &path) {
+            std::vector<std::array<std::pair<Math::Vector3D, Math::Vector3D>, 3>> load(const std::string &path) {
                 _vertex.clear();
                 _texture.clear();
                 _normal.clear();
+                _faces.clear();
                 std::string content;
                 std::cout << "ObjFile loading file ... [" << path << "]" << std::endl;
                 std::ifstream file(path);
@@ -30,6 +31,7 @@ namespace RayTracer {
                 while (std::getline(file, content)) {
                     _parseLine(content);
                 }
+                return _faces;
             }
         private:
             void _parseLine(const std::string &line) {
@@ -130,12 +132,17 @@ namespace RayTracer {
                 std::cout << "Face: " << vertex << " " << texture << " " << normal << std::endl;
                 auto pos = _parseStringByCharToInt(vertex, '/');
                 auto norm = _parseStringByCharToFloat(normal, '/');
+                std::cout << "(" << pos[0] << ", " << pos[1] << ", " << pos[2] << ")" << std::endl;
                 newPos[0] = getPosFromVertex(pos[0]); newPos[1] = getPosFromVertex(pos[1]); newPos[2] = getPosFromVertex(pos[2]);
                 newNormal[0] = getNormalFromNormalList(norm[0]); newNormal[1] = getNormalFromNormalList(norm[1]); newNormal[2] = getNormalFromNormalList(norm[2]);
-
-                std::cout << "generating with pos : " << newPos[0] << "," << newPos[1] << ", " << newPos[2] << std::endl;
-                std::cout << "generating with normal : " << newNormal[0] << "," << newNormal[1] << ", " << newNormal[2] << std::endl;
-
+                std::cout << "x : " << newPos[0]._x << ", " << newPos[0]._y << ", " << newPos[0]._z << std::endl;
+                std::cout << "x : " << newNormal[0]._x << ", " << newNormal[0]._y << ", " << newNormal[0]._z << std::endl;
+                std::cout << "y : " << newPos[1]._x << ", " << newPos[1]._y << ", " << newPos[1]._z << std::endl;
+                std::cout << "y : " << newNormal[1]._x << ", " << newNormal[1]._y << ", " << newNormal[1]._z << std::endl;
+                std::cout << "z : " << newPos[2]._x << ", " << newPos[2]._y << ", " << newPos[2]._z << std::endl;
+                std::cout << "z : " << newNormal[2]._x << ", " << newNormal[2]._y << ", " << newNormal[2]._z << std::endl;
+                _faces.push_back({std::make_pair(newPos[0], newNormal[0]), std::make_pair(newPos[1], newNormal[1]), std::make_pair(newPos[2], newNormal[2])});
+                std::cout << "-----------------" << std::endl;
             }
             Math::Vector3D getPosFromVertex(const int nb) {
                 int i = 1;
@@ -158,6 +165,7 @@ namespace RayTracer {
             std::vector<Math::Vector3D> _vertex;
             std::vector<std::pair<double, double>> _texture;
             std::vector<Math::Vector3D> _normal;
+            std::vector<std::array<std::pair<Math::Vector3D, Math::Vector3D>, 3>> _faces;
     };
 
 }
