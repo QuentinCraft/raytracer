@@ -172,9 +172,9 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
          bool found = false;
          for (auto &i : _textures) {
              if (i.first == texture) {
-                 data->setTexture(i.second);
-                 found = true;
-                 break;
+                data->setTexture(i.second);
+                found = true;
+                break;
              }
          }
          if (!found)
@@ -233,12 +233,19 @@ void RayTracer::Utils::ConfigManager::_getCone(const libconfig::Setting &primiti
         std::string texture = primitive["texture"];
         float radius = primitive["r"];
         float length = primitive["l"];
+        float angle = primitive["angle"];
+        const libconfig::Setting& axe = primitive["axe"];
+        float axeX = axe["x"];
+        float axeY = axe["y"];
+        float axeZ = axe["z"];
         std::cout << "[Cone]-----------------------" << std::endl;
         auto builder = _builder->createObjectBuilder("cone");
         std::unique_ptr<IData> data = builder->createData();
         data->setCenter(Math::Vector3D(x, y, z));
         data->setRadius(radius);
         data->setLength(length);
+        data->setAngle(angle);
+        data->setAxe(Math::Vector3D(axeX, axeY, axeZ));
         bool found = false;
         for (auto &i : _textures) {
             if (i.first == texture) {
