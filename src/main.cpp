@@ -83,22 +83,28 @@ int main(int argc, char **argv) {
     std::vector<std::thread> threads;
     std::mutex mutex;
 
-    std::vector<std::vector<std::string>> res(scene->_camera->getHeight(), std::vector<std::string>(scene->_camera->getWidth()));
+    std::vector<std::vector<std::optional<Math::Vector3D>>> res(scene->_camera->getHeight(), std::vector<std::optional<Math::Vector3D>>(scene->_camera->getWidth()));
 
     auto f = [&](auto n) {
         int x = n * (scene->_camera->getHeight() / (nbThreads));
         int xEnd = ((n + 1) * (scene->_camera->getWidth() / (nbThreads)));
+        std::vector<std::optional<Math::Vector3D>> temp(scene->_camera->getWidth());
 
-        std::vector<std::string> temp(scene->_camera->getWidth());
+        bool status = true;
 
         for (int yt = 0; yt < scene->_camera->getHeight(); yt++) {
+            status = !status;
             for (int xt = x; xt < xEnd; xt++) {
                 double u = yt / scene->_camera->getWidth() * 2 -1;
                 double v = xt / scene->_camera->getHeight() * 2 - 1;
-                Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
-                mutex.lock();
-                res[xt][yt] = std::to_string((unsigned int) color._x) + " " + std::to_string((unsigned int) color._y) + " " + std::to_string((unsigned int) color._z);
-                mutex.unlock();
+                if (xt % 2 == status) {
+                    Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
+                    mutex.lock();
+                    res[xt][yt] = color;
+                    mutex.unlock();
+                } else {
+                    res[xt][yt] = std::nullopt;
+                }
             }
         }
     };
@@ -111,9 +117,36 @@ int main(int argc, char **argv) {
     for (auto &x: threads)
         x.join();
 
-    for (auto &x : res) {
-        for (auto &y : x) {
-            file << y << std::endl;
+    for (int i = 0; i < scene->_camera->getHeight(); i++) {
+        for (int j = 0; j < scene->_camera->getHeight(); j++) {
+            if (!res[i][j].has_value()) {
+                Math::Vector3D temp;
+                int div = 0;
+                if (i - 1 >= 0) {
+                    temp += res[i - 1][j].value();
+                    div++;
+                }
+                if (i + 1 < scene->_camera->getHeight()) {
+                    temp += res[i + 1][j].value();
+                    div++;
+                }
+                if (j - 1 >= 0) {
+                    temp += res[i][j - 1].value();
+                    div++;
+                }
+                if (j + 1 < scene->_camera->getHeight()) {
+                    temp += res[i][j + 1].value();
+                    div++;
+                }
+                res[i][j] = Math::Vector3D();
+                res[i][j].value()._x = temp._x / div;
+                res[i][j].value()._y = temp._y / div;
+                res[i][j].value()._z = temp._z / div;
+            }
+            if (std::isnan(res[i][j].value()._x) || std::isnan(res[i][j].value()._y) || std::isnan(res[i][j].value()._z))
+                file << "0 0 0" << std::endl;
+            else
+                file << (unsigned int) std::clamp(std::round(res[i][j].value()._x), 0.0, 255.0) << " " << (unsigned int) std::clamp(std::round(res[i][j].value()._y), 0.0, 255.0) << " " << (unsigned int) std::clamp(std::round(res[i][j].value()._z), 0.0, 255.0) << std::endl;
         }
     }
     file.close();
