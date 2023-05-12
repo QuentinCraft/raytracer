@@ -219,6 +219,7 @@ void RayTracer::Utils::ConfigManager::_getCone(const libconfig::Setting &primiti
 void RayTracer::Utils::ConfigManager::_getObjFile(const libconfig::Setting &primitive) {
     try {
         std::string filepath = primitive["path"];
+        std::string texture = primitive["texture"];
         std::cout << "[OBJ File]-----------------------" << std::endl;
         std::cout << "path : " << filepath << std::endl;
         auto result = _objFileParser->load(filepath);
@@ -227,12 +228,16 @@ void RayTracer::Utils::ConfigManager::_getObjFile(const libconfig::Setting &prim
             std::unique_ptr<IData> data = builder->createData();
             data->setV1(x[0].first); data->setV2(x[1].first); data->setV3(x[2].first);
             data->setN1(x[0].second); data->setN2(x[1].second); data->setN3(x[2].second);
+            bool found = false;
             for (auto &i : _textures) {
-                if (i.first == "red-plastic") {
+                if (i.first == texture) {
                     data->setTexture(i.second);
+                    found = true;
                     break;
                 }
             }
+            if (!found)
+                throw Error("Error: Invalid texture in [Primitives/ObjFile] part");
             _primitives.emplace_back(builder, std::move(data));
         }
     } catch (libconfig::SettingNotFoundException &e) {
