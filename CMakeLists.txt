@@ -196,7 +196,7 @@ add_executable(raytracer
         src/objects/PlaneData.hpp
         src/objects/SphereData.hpp
         src/utils/loader/PluginsManager.hpp
-        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp src/texture/ITextureBuilder.hpp)
+        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp src/texture/ITextureBuilder.hpp src/utils/ObjFile/IObjFile.hpp src/utils/ObjFile/ObjFile.hpp)
 
 
 
