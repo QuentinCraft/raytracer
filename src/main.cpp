@@ -21,6 +21,7 @@
 #include "utils/config/ConfigManager.hpp"
 #include "utils/loader/LibraryLoader.hpp"
 #include "utils/loader/PluginsManager.hpp"
+#include "utils/ObjFile/ObjFile.hpp"
 
 #include "texture/ChessBoard.hpp"
 #include "texture/ATexture.hpp"
@@ -29,10 +30,11 @@
 
 #include "materials/Plastic.hpp"
 #include "materials/Chrome.hpp"
-#include <chrono>
-#include "utils/ObjFile/ObjFile.hpp"
 
+
+#include <chrono>
 #include <ctime>
+#include <vector>
 
 
 int main(int argc, char **argv) {
@@ -77,14 +79,23 @@ int main(int argc, char **argv) {
 //
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
-    for (int y = 0; y < scene->_camera->getWidth(); y++) {
-        for (int x = 0; x < scene->_camera->getHeight(); x++) {
-            double u = x / scene->_camera->getWidth() * 2 -1;
+    std::vector<int> itrH(scene->_camera->getHeight(), 0);
+    std::vector<int> itrW(scene->_camera->getWidth(), 0);
+
+    int x = 0;
+    int y = 0;
+    std::for_each(itrH.begin(), itrH.end(), [&](int &n) {
+        y++;
+        x = 0;
+        std::for_each(itrW.begin(), itrW.end(), [&](int &n) {
+            x++;
+            double u = x / scene->_camera->getWidth() * 2 - 1;
             double v = y / scene->_camera->getHeight() * 2 - 1;
             Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
-            file << ((unsigned int) color._x) << " " << ((unsigned int) color._y) << " " << ((unsigned int) color._z) << std::endl;
-        }
-    }
+            file << ((unsigned int) color._x) << " " << ((unsigned int) color._y) << " " << ((unsigned int) color._z)
+                 << std::endl;
+        });
+    });
     file.close();
 
     auto end = std::chrono::high_resolution_clock::now();
