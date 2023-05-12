@@ -11,6 +11,7 @@
 namespace RayTracer {
     Triangle::Triangle(int *globalId) : AObject(globalId) {
         _vertices = { Math::Vector3D(), Math::Vector3D(), Math::Vector3D() };
+        _id = (*globalId)++;
 //        _color = Math::Vector3D();
     }
 
@@ -18,6 +19,7 @@ namespace RayTracer {
         _vertices = {v1, v2, v3};
         _normals = {n1, n2, n3};
         _texture = texture;
+        _id = (*globalId)++;
 //        _color = color;
     }
 
@@ -56,10 +58,7 @@ namespace RayTracer {
         std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
         pipe._material = mat.first;
         pipe._color = mat.second;
-//        std::cout << "Triangle color: " << pipe._color._x << ", " << pipe._color._y << ", " << pipe._color._z << std::endl;
-
-//        pipe._color = Math::Vector3D(1, 0, 0);
-        //pipe._color = _color;
+        pipe._object = std::make_shared<Triangle>(*this);
         return pipe;
     }
 
