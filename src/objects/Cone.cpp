@@ -45,6 +45,9 @@ namespace RayTracer {
 
         double t = t1;
 
+        if (t < 0)
+            return std::nullopt;
+
         Math::Vector3D hitPoint = ray._origin + ray._direction * t;
 
         double t_top = (_origin._y + _height - ray._origin._y) / ray._direction._y;
@@ -53,6 +56,7 @@ namespace RayTracer {
 
         double dist_top = sqrt((hitPoint_top._x - _origin._x) * (hitPoint_top._x - _origin._x) + (hitPoint_top._z - _origin._z) * (hitPoint_top._z - _origin._z));
 
+        pipe._position = hitPoint;
         if (Math::Utils::inf(dist_top, _radius) || Math::Utils::equal(dist_top, _radius)) {
             if (Math::Utils::inf(Math::Utils::distance(ray._origin, hitPoint_top), Math::Utils::distance(ray._origin, hitPoint))) {
                 pipe._position = hitPoint_top;
@@ -60,11 +64,10 @@ namespace RayTracer {
             }
         } else if (Math::Utils::inf(hitPoint._y, _origin._y) || Math::Utils::sup(hitPoint._y, _origin._y + _height))
             return std::nullopt;
-        std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
         pipe._object = std::make_shared<Cone>(*this);
+        std::pair<std::shared_ptr<IMaterial>, Math::Vector3D> mat = _texture->getTexture(pipe._position);
         pipe._material = mat.first;
         pipe._color = mat.second;
-        pipe._position = hitPoint;
         pipe._id = _id;
         return pipe;
     }

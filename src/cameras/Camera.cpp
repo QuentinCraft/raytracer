@@ -189,14 +189,14 @@ namespace RayTracer {
                 Ray reflectedRay(savedHitPoint._position, reflect);
                 PipeLine savedHitPoint2 = closestPoint(reflectedRay, objects, lights, ambient);
                 if (savedHitPoint2._object == nullptr) {
-                    savedHitPoint._color = {0.3, 0.3, 1};
+                    savedHitPoint._color = Math::Vector3D(0.3, 0.3, 1) * savedHitPoint._color;
                 } else {
                     if (recursive <= 0) {
-                        if (sampling != 1)
-                            savedHitPoint._color = {0, 0, 0};
+                        savedHitPoint._color = Math::Vector3D(0.3, 0.3, 1) * savedHitPoint._color;
+                    } else {
+                        savedHitPoint._color =
+                                compute(reflectedRay, objects, lights, ambient, recursive - 1, (sampling /= 2), savedHitPoint._material->getSpread()) * savedHitPoint._color;
                     }
-                    savedHitPoint._color =
-                            compute(reflectedRay, objects, lights, ambient, recursive - 1, (sampling /= 2), savedHitPoint._material->getSpread()) * savedHitPoint._color;
                 }
             } else if (!Math::Utils::equal(savedHitPoint._material->getRefraction(), 0) && recursive > 0) {
                 double ref = savedHitPoint._material->getRefraction();
@@ -215,8 +215,7 @@ namespace RayTracer {
                 Math::Vector3D r_out_parallel = n * -sqrt(fabs(1.0 - r_out_perp.length()));
                 Ray reflectedRay(savedHitPoint._position, (r_out_perp + r_out_parallel.normalized()).normalized());
 
-                savedHitPoint._color =
-                        compute(reflectedRay, objects, lights, ambient, recursive, (sampling /= 2), savedHitPoint._material->getSpread()) * savedHitPoint._color;
+                savedHitPoint._color = compute(reflectedRay, objects, lights, ambient, recursive - 1, (sampling /= 2), savedHitPoint._material->getSpread()) * savedHitPoint._color;
             }
             std::vector<Math::Vector3D> phongs;
             std::vector<Math::Vector3D> dropShadows;
@@ -234,6 +233,8 @@ namespace RayTracer {
             finalColor += hitColor;
             div++;
         }
+        if (div == 0)
+            div = 1;
         return finalColor / div;
     }
 

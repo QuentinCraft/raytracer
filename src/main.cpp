@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
                 res[i][j].value()._z = temp._z / div;
             }
             if (std::isnan(res[i][j].value()._x) || std::isnan(res[i][j].value()._y) || std::isnan(res[i][j].value()._z))
-                file << "0 0 0" << std::endl;
+                file << "255 255 255" << std::endl;
             else
                 file << (unsigned int) std::clamp(std::round(res[i][j].value()._x), 0.0, 255.0) << " " << (unsigned int) std::clamp(std::round(res[i][j].value()._y), 0.0, 255.0) << " " << (unsigned int) std::clamp(std::round(res[i][j].value()._z), 0.0, 255.0) << std::endl;
         }
