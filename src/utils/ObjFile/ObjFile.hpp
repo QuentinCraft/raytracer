@@ -19,10 +19,11 @@ namespace RayTracer {
         public:
             ObjFile() = default;
             ~ObjFile() = default;
-            void load(const std::string &path) {
+            std::vector<std::array<std::pair<Math::Vector3D, Math::Vector3D>, 3>> load(const std::string &path) {
                 _vertex.clear();
                 _texture.clear();
                 _normal.clear();
+                _faces.clear();
                 std::string content;
                 std::cout << "ObjFile loading file ... [" << path << "]" << std::endl;
                 std::ifstream file(path);
@@ -30,6 +31,7 @@ namespace RayTracer {
                 while (std::getline(file, content)) {
                     _parseLine(content);
                 }
+                return _faces;
             }
         private:
             void _parseLine(const std::string &line) {
@@ -117,25 +119,23 @@ namespace RayTracer {
                 return result;
             }
             void _parseFace(std::stringstream &parsed) {
-                std::string vertex;
-                std::string texture;
-                std::string normal;
+                std::string p[3];
                 Math::Vector3D newPos[3];
                 Math::Vector3D newNormal[3];
-                int cursor = 0;
+                std::array<std::pair<Math::Vector3D, Math::Vector3D>, 3> toappend;
 
-                parsed >> vertex;
-                parsed >> texture;
-                parsed >> normal;
-                std::cout << "Face: " << vertex << " " << texture << " " << normal << std::endl;
-                auto pos = _parseStringByCharToInt(vertex, '/');
-                auto norm = _parseStringByCharToFloat(normal, '/');
-                newPos[0] = getPosFromVertex(pos[0]); newPos[1] = getPosFromVertex(pos[1]); newPos[2] = getPosFromVertex(pos[2]);
-                newNormal[0] = getNormalFromNormalList(norm[0]); newNormal[1] = getNormalFromNormalList(norm[1]); newNormal[2] = getNormalFromNormalList(norm[2]);
-
-                std::cout << "generating with pos : " << newPos[0] << "," << newPos[1] << ", " << newPos[2] << std::endl;
-                std::cout << "generating with normal : " << newNormal[0] << "," << newNormal[1] << ", " << newNormal[2] << std::endl;
-
+                parsed >> p[0];
+                parsed >> p[1];
+                parsed >> p[2];
+                std::cout << "Face: " << p[0] << " " << p[1] << " " << p[2] << std::endl;
+                for (int  i = 0; i < 3; i++) {
+                    auto parsed = _parseStringByCharToInt(p[i], '/');
+                    Math::Vector3D point = getPosFromVertex(parsed[0]);
+                    Math::Vector3D normal = getNormalFromNormalList(parsed[2]);
+                    toappend[i].first = point;
+                    toappend[i].second = point;
+                }
+                _faces.push_back(toappend);
             }
             Math::Vector3D getPosFromVertex(const int nb) {
                 int i = 1;
@@ -158,6 +158,7 @@ namespace RayTracer {
             std::vector<Math::Vector3D> _vertex;
             std::vector<std::pair<double, double>> _texture;
             std::vector<Math::Vector3D> _normal;
+            std::vector<std::array<std::pair<Math::Vector3D, Math::Vector3D>, 3>> _faces;
     };
 
 }

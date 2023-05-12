@@ -30,7 +30,6 @@
 #include "materials/Plastic.hpp"
 #include "materials/Chrome.hpp"
 #include <chrono>
-#include "utils/ObjFile/ObjFile.hpp"
 
 #include <ctime>
 
@@ -38,11 +37,6 @@
 int main(int argc, char **argv) {
     auto begin = std::chrono::high_resolution_clock::now();
 
-    std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
-
-//    obj->load("scenes/cube.obj");
-//
-//    return 0;
     if (argc == 1) {
         std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
         return 84;

@@ -84,6 +84,21 @@ add_library(cone SHARED ${OBJ_CONE_SRC})
 set_target_properties(cone PROPERTIES PREFIX raytracer_)
 set_target_properties(cone PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
 
+###### TRIANGLE ######
+set(OBJ_TRIANGLE_SRC
+        src/objects/Triangle.cpp
+        src/objects/TriangleEntryPoint.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        src/texture/ATexture.cpp
+        src/materials/AMaterial.cpp
+        )
+
+add_library(triangle SHARED ${OBJ_TRIANGLE_SRC})
+set_target_properties(triangle PROPERTIES PREFIX raytracer_)
+set_target_properties(triangle PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
 
 ###################################################
 
@@ -211,7 +226,7 @@ add_executable(raytracer
         src/objects/PlaneData.hpp
         src/objects/SphereData.hpp
         src/utils/loader/PluginsManager.hpp
-        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp src/texture/ITextureBuilder.hpp src/utils/ObjFile/IObjFile.hpp src/utils/ObjFile/ObjFile.hpp)
+        src/utils/loader/IPluginsManager.hpp src/materials/Chrome.hpp src/texture/ITexture.hpp src/texture/ATexture.cpp src/texture/ATexture.hpp src/texture/ChessBoard.cpp src/texture/ChessBoard.hpp src/texture/ITextureBuilder.hpp src/utils/ObjFile/IObjFile.hpp src/utils/ObjFile/ObjFile.hpp src/objects/Triangle.hpp src/objects/Triangle.cpp src/objects/TriangleData.hpp src/objects/TriangleBuilder.hpp)
 
 
 
