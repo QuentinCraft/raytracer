@@ -40,9 +40,9 @@ int main(int argc, char **argv) {
 
     std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
 
-    obj->load("scenes/cube.obj");
-
-    return 0;
+//    obj->load("scenes/cube.obj");
+//
+//    return 0;
     if (argc == 1) {
         std::cerr << "Usage: ./bsraytracer [config]" << std::endl;
         return 84;
