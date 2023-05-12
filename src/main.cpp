@@ -21,7 +21,6 @@
 #include "utils/config/ConfigManager.hpp"
 #include "utils/loader/LibraryLoader.hpp"
 #include "utils/loader/PluginsManager.hpp"
-#include "utils/ObjFile/ObjFile.hpp"
 
 #include "texture/ChessBoard.hpp"
 #include "texture/ATexture.hpp"
@@ -30,11 +29,12 @@
 
 #include "materials/Plastic.hpp"
 #include "materials/Chrome.hpp"
-
-
 #include <chrono>
+#include "utils/ObjFile/ObjFile.hpp"
+
 #include <ctime>
-#include <vector>
+#include <thread>
+#include <list>
 
 
 int main(int argc, char **argv) {
@@ -79,23 +79,43 @@ int main(int argc, char **argv) {
 //
     file << "P3\n" << scene->_camera->getWidth() << " " << scene->_camera->getHeight() << "\n255\n";
 
-    std::vector<int> itrH(scene->_camera->getHeight(), 0);
-    std::vector<int> itrW(scene->_camera->getWidth(), 0);
+    int nbThreads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads;
+    std::mutex mutex;
 
-    int x = 0;
-    int y = 0;
-    std::for_each(itrH.begin(), itrH.end(), [&](int &n) {
-        y++;
-        x = 0;
-        std::for_each(itrW.begin(), itrW.end(), [&](int &n) {
-            x++;
-            double u = x / scene->_camera->getWidth() * 2 - 1;
-            double v = y / scene->_camera->getHeight() * 2 - 1;
-            Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
-            file << ((unsigned int) color._x) << " " << ((unsigned int) color._y) << " " << ((unsigned int) color._z)
-                 << std::endl;
-        });
-    });
+    std::vector<std::vector<std::string>> res(scene->_camera->getHeight(), std::vector<std::string>(scene->_camera->getWidth()));
+
+    auto f = [&](auto n) {
+        int x = n * (scene->_camera->getHeight() / (nbThreads));
+        int xEnd = ((n + 1) * (scene->_camera->getWidth() / (nbThreads)));
+
+        std::vector<std::string> temp(scene->_camera->getWidth());
+
+        for (int yt = 0; yt < scene->_camera->getHeight(); yt++) {
+            for (int xt = x; xt < xEnd; xt++) {
+                double u = yt / scene->_camera->getWidth() * 2 -1;
+                double v = xt / scene->_camera->getHeight() * 2 - 1;
+                Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
+                mutex.lock();
+                res[xt][yt] = std::to_string((unsigned int) color._x) + " " + std::to_string((unsigned int) color._y) + " " + std::to_string((unsigned int) color._z);
+                mutex.unlock();
+            }
+        }
+    };
+
+    threads.reserve(nbThreads);
+    for (int i = 0; i < nbThreads; i++) {
+        threads.emplace_back(f, i);
+    }
+
+    for (auto &x: threads)
+        x.join();
+
+    for (auto &x : res) {
+        for (auto &y : x) {
+            file << y << std::endl;
+        }
+    }
     file.close();
 
     auto end = std::chrono::high_resolution_clock::now();
