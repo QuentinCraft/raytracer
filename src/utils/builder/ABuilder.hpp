@@ -67,6 +67,8 @@ namespace RayTracer {
                 _radius = data->getRadius();
                 _normal = data->getNormal();
                 _length = data->getLength();
+                _axe = data->getAxe();
+                _angle = data->getAngle();
                 return *this;
             }
         protected:
@@ -79,6 +81,8 @@ namespace RayTracer {
             int *_globalId;
             std::string _builderName;
             std::shared_ptr<RayTracer::IObject> _object;
+            Math::Vector3D _axe;
+            double _angle;
     };
 
 }

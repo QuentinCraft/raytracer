@@ -25,6 +25,8 @@ namespace RayTracer::Utils {
             virtual void setRadius(double radius) = 0;
             virtual void setIntensity(const Math::Vector3D intensity) = 0;
             virtual void setLength(double length) = 0;
+            virtual void setAxe(const Math::Vector3D axe) = 0;
+            virtual void setAngle(double angle) = 0;
 
             virtual std::string &getType() = 0;
             virtual std::shared_ptr<ITexture> &getTexture() = 0;
@@ -34,6 +36,8 @@ namespace RayTracer::Utils {
             virtual double &getRadius() = 0;
             virtual Math::Vector3D &getIntensity() = 0;
             virtual double &getLength() = 0;
+            virtual Math::Vector3D &getAxe() = 0;
+            virtual double &getAngle() = 0;
     };
 
 }

@@ -22,6 +22,8 @@ namespace RayTracer::Utils {
             void setNormal(Math::Vector3D normal) override { _normal = normal; };
             void setRadius(double radius) override { _radius = radius; };
             void setLength(double length) override { _length = length; };
+            void setAxe(const Math::Vector3D axe) override { _axe = axe; };
+            void setAngle(double angle) override { _angle = angle; };
 
             std::string &getType() override { return _type; };
             std::shared_ptr<ITexture> &getTexture() override { return _texture; };
@@ -32,6 +34,8 @@ namespace RayTracer::Utils {
             Math::Vector3D &getIntensity() override { return _intensity; };
             void setIntensity(const Math::Vector3D intensity) override { _intensity = intensity; };
             double &getLength() override { return _length; };
+            Math::Vector3D &getAxe() override { return _axe; };
+            double &getAngle() override { return _angle; };
 
         protected:
             std::string _type;
@@ -42,6 +46,8 @@ namespace RayTracer::Utils {
             double _radius;
             double _length;
             Math::Vector3D _intensity;
+            Math::Vector3D _axe;
+            double _angle;
     };
 
 }

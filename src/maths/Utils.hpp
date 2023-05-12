@@ -19,6 +19,8 @@ namespace Math {
             static bool sup(double a, double b);
             static Vector3D toRGB(Vector3D x);
             [[nodiscard]] static double distance(const Math::Vector3D &aColor, const Math::Vector3D &bColor);
+            [[nodiscard]] static Vector3D rotateVector(const Math::Vector3D &vector, const Math::Vector3D &axis, double angle);
+
     };
 
 } // Math

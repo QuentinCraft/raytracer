@@ -24,6 +24,21 @@ add_library(cylinder SHARED ${OBJ_CYLINDER_SRC})
 set_target_properties(cylinder PROPERTIES PREFIX raytracer_)
 set_target_properties(cylinder PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
 
+### UNLIMITED CYLINDER #####
+set(OBJ_UNLIMITED_CYLINDER_SRC
+        src/objects/UnlimitedCylinder.cpp
+        src/objects/UnlimitedCylinderEntryPoint.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        src/texture/ATexture.cpp
+        src/materials/AMaterial.cpp
+)
+
+add_library(unlimitedCylinder SHARED ${OBJ_UNLIMITED_CYLINDER_SRC})
+set_target_properties(unlimitedCylinder PROPERTIES PREFIX raytracer_)
+set_target_properties(unlimitedCylinder PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
 ###### SPHERE ######
 set(OBJ_SPHERE_SRC
         src/objects/Sphere.cpp

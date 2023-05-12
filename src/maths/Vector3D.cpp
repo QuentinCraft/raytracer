@@ -17,7 +17,7 @@ namespace Math {
 
     Vector3D::Vector3D(double x, double y, double z) {
         _x = x;
-        _y = y; 
+        _y = y;
         _z = z;
     }
 
@@ -129,6 +129,13 @@ namespace Math {
 
     double Vector3D::dot(const Vector3D &vector) const {
         return (_x * vector._x) + (_y * vector._y) + (_z * vector._z);
+    }
+
+    Vector3D Vector3D::cross(const Vector3D &other) const {
+        double x = _y * other._z - _z * other._y;
+        double y = _z * other._x - _x * other._z;
+        double z = _x * other._y - _y * other._x;
+        return Math::Vector3D(x, y, z);
     }
 
     Vector3D::Vector3D(const Vector3D &point1, const Vector3D &point2) {
