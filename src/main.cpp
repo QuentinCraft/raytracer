@@ -45,9 +45,15 @@ int main(int argc, char **argv) {
     std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
     bool fast = false;
     bool graph = false;
-
+    for (int i = 1; i < argc; i++)
+        if (std::string(argv[i]) == "--help") {
+            std::cout << "USAGE: ./raytracer <SCENE_FILE>" << std::endl;
+            std::cout << "\tSCENE_FILE: scene configuration" << std::endl;
+            return 0;
+        }
     if (argc == 1) {
-        std::cerr << "Usage: ./bsraytracer [config] <flags>" << std::endl;
+        std::cout << "USAGE: ./raytracer <SCENE_FILE>" << std::endl;
+        std::cout << "\tSCENE_FILE: scene configuration" << std::endl;
         return 84;
     }
     for (int i = 1; i < argc; i++) {
