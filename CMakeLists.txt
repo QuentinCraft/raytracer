@@ -130,6 +130,21 @@ set_target_properties(plastic PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURREN
 
 ###################################################
 
+###### EMERALD ######
+set(OBJ_EMERALD_SRC
+        src/materials/EmeraldEntryPoint.cpp
+        src/materials/AMaterial.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        )
+
+add_library(emerald SHARED ${OBJ_EMERALD_SRC})
+set_target_properties(emerald PROPERTIES PREFIX raytracer_)
+set_target_properties(emerald PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/materials)
+
+###################################################
+
 ###### CHESSBOARD ######
 set(OBJ_CHESSBOARD_SRC
         src/texture/ChessBoardEntryPoint.cpp
