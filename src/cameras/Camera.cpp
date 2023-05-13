@@ -87,14 +87,14 @@ namespace RayTracer {
         double coeff = (lightDir * -1).dot(surfaceNormal);
 
 
-        Math::Vector3D ambient = objectColor * ambientLight.getIntensity();
+        Math::Vector3D ambient = objectColor * (material->getAmbient() + ambientLight.getIntensity());
 
         Math::Vector3D diffuse = objectColor * material->getDiffuse() * std::max(coeff, 0.0) * lightIntensity;
 
         Math::Vector3D halfwayDir = (lightDir + viewDir).normalized();
         Math::Vector3D specular = objectColor * std::pow(std::max((surfaceNormal * -1).dot(halfwayDir), 0.0), (material->getShininess())) * material->getSpecular() * lightIntensity;
 
-        Math::Vector3D color = ambient + (diffuse) + specular;
+        Math::Vector3D color = ambient + diffuse + specular;
 
         return color / 255;
     }

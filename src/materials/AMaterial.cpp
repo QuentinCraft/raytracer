@@ -58,8 +58,9 @@ namespace RayTracer {
         _reflection = reflection;
     }
 
-    AMaterial::AMaterial(std::string name, Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction,
+    AMaterial::AMaterial(std::string name, Math::Vector3D ambient, Math::Vector3D diffuse, Math::Vector3D specular, double shininess, double refraction,
                          bool reflection, double spread) {
+        _ambient = ambient;
         _diffuse = diffuse;
         _specular = specular;
         _shininess = shininess;
@@ -76,5 +77,13 @@ namespace RayTracer {
 
     double AMaterial::getSpread() const {
         return _spread;
+    }
+
+    void AMaterial::setAmbient(Math::Vector3D ambient) {
+        _ambient = ambient;
+    }
+
+    Math::Vector3D AMaterial::getAmbient() const {
+        return _ambient;
     }
 } // RayTracer

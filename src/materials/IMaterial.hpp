@@ -35,6 +35,9 @@ namespace RayTracer {
             [[nodiscard]] virtual double getSpread() const = 0;
             virtual void setSpread(double spread) = 0;
 
+            [[nodiscard]] virtual Math::Vector3D getAmbient() const = 0;
+            virtual void setAmbient(Math::Vector3D ambient) = 0;
+
             [[nodiscard]] virtual std::string getName() const = 0;
     };
 

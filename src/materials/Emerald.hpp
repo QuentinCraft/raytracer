@@ -16,6 +16,7 @@ namespace RayTracer {
     public:
         Emerald() : AMaterial(
                 "emerald",
+                {0.0215, 0.1745, 0.0215},
                 {0.07568, 0.61424, 0.07568},
                 {0.633, 0.727811, 0.633},
                 76.8,

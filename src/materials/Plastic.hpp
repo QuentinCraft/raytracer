@@ -16,6 +16,7 @@ namespace RayTracer {
         public:
             Plastic() : AMaterial(
                 "plastic",
+                {0.0, 0.0, 0.0},
                 {0.5, 0.5, 0.5},
                 {0.7, 0.6, 0.6},
                 0.25 * 128,
