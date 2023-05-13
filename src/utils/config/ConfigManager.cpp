@@ -19,20 +19,20 @@ RayTracer::Utils::Config::Camera RayTracer::Utils::ConfigManager::_getCamera(con
         const libconfig::Setting& position = camera["position"];
         const libconfig::Setting& rotation = camera["rotation"];
 
-        cam.resolution._y = static_cast<int>(resolution["height"]);
-        cam.resolution._x = static_cast<int>(resolution["width"]);
+        cam.resolution._y = resolution["height"];
+        cam.resolution._x = resolution["width"];
         cam.resolution._z = 0;
         cam.fieldOfView = camera["fieldOfView"];
         cam.superSampling = camera["superSampling"];
         cam.recursionDepth = camera["recursionDepth"];
 
-        cam.rotation._x = static_cast<int>(rotation["x"]);
-        cam.rotation._y = static_cast<int>(rotation["y"]);
-        cam.rotation._z = static_cast<int>(rotation["z"]);
+        cam.rotation._x = rotation["x"];
+        cam.rotation._y = rotation["y"];
+        cam.rotation._z = rotation["z"];
 
-        cam.position._y = static_cast<int>(position["y"]);
-        cam.position._x = static_cast<int>(position["x"]);
-        cam.position._z = static_cast<int>(position["z"]);
+        cam.position._y = position["y"];
+        cam.position._x = position["x"];
+        cam.position._z = position["z"];
     } catch (libconfig::SettingNotFoundException &e) {
         throw RayTracer::Utils::Error("Error: Invalid settings in [Camera] part");
     }
@@ -86,10 +86,10 @@ RayTracer::Utils::Config::Light RayTracer::Utils::ConfigManager::_getLight(
 void RayTracer::Utils::ConfigManager::_getSphere(
         const libconfig::Setting &primitive) {
     try {
-        int x = primitive["x"];
-        int y = primitive["y"];
-        int z = primitive["z"];
-        int r = primitive["r"];
+        float x = primitive["x"];
+        float y = primitive["y"];
+        float z = primitive["z"];
+        float r = primitive["r"];
         std::string texture = primitive["texture"];
         std::cout << "[Sphere]----------------------" << std::endl;
         std::cout << "pos : " << x << ", " << y << ", " << z << std::endl;
@@ -125,9 +125,9 @@ void RayTracer::Utils::ConfigManager::_getPlane(
         const libconfig::Setting &primitive) {
     try {
         const libconfig::Setting& normal = primitive["normal"];
-        int x = primitive["x"];
-        int y = primitive["y"];
-        int z = primitive["z"];
+        float x = primitive["x"];
+        float y = primitive["y"];
+        float z = primitive["z"];
         std::string texture = primitive["texture"];
         float normalX = normal["x"];
         float normalY = normal["y"];
@@ -163,9 +163,9 @@ void RayTracer::Utils::ConfigManager::_getPlane(
 
 void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &primitive) {
     try {
-    int x = primitive["x"];
-    int y = primitive["y"];
-    int z = primitive["z"];
+    float x = primitive["x"];
+    float y = primitive["y"];
+    float z = primitive["z"];
     std::string texture = primitive["texture"];
     float radius = primitive["r"];
     float length = primitive["l"];
@@ -198,9 +198,9 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
 void RayTracer::Utils::ConfigManager::_getUnlimitedCylinder(const libconfig::Setting &primitive)
 {
     try {
-            int x = primitive["x"];
-            int y = primitive["y"];
-            int z = primitive["z"];
+            float x = primitive["x"];
+            float y = primitive["y"];
+            float z = primitive["z"];
             std::string texture = primitive["texture"];
             float radius = primitive["r"];
             float length = primitive["l"];
@@ -239,9 +239,9 @@ void RayTracer::Utils::ConfigManager::_getUnlimitedCylinder(const libconfig::Set
 
 void RayTracer::Utils::ConfigManager::_getCone(const libconfig::Setting &primitive) {
     try {
-        int x = primitive["x"];
-        int y = primitive["y"];
-        int z = primitive["z"];
+        float x = primitive["x"];
+        float y = primitive["y"];
+        float z = primitive["z"];
         std::string texture = primitive["texture"];
         float radius = primitive["r"];
         float length = primitive["l"];
@@ -281,9 +281,9 @@ void RayTracer::Utils::ConfigManager::_getObjFile(const libconfig::Setting &prim
     try {
         std::string filepath = primitive["path"];
         std::string texture = primitive["texture"];
-        int _x = primitive["x"];
-        int _y = primitive["y"];
-        int _z = primitive["z"];
+        float _x = primitive["x"];
+        float _y = primitive["y"];
+        float _z = primitive["z"];
         std::cout << "[OBJ File]-----------------------" << std::endl;
         std::cout << "path : " << filepath << std::endl;
         auto result = _objFileParser->load(filepath);
