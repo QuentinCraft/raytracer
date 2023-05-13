@@ -39,6 +39,7 @@
 #include "renderer/PPMRenderer.hpp"
 
 int main(int argc, char **argv) {
+
     auto begin = std::chrono::high_resolution_clock::now();
 
     std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
@@ -56,9 +57,9 @@ int main(int argc, char **argv) {
             graph = true;
     }
     std::cout << "Fast: " << (fast ? "true" : "false") << std::endl;
+
     std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
     std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
-
     RayTracer::Utils::Config config;
     try {
         config = configManager->getConf(argv[1]);
@@ -67,15 +68,15 @@ int main(int argc, char **argv) {
         return 84;
     }
 
-    scene->_camera = configManager->createCamera(config);
     try {
+        scene->_camera = configManager->createCamera(config);
         scene->_objects = configManager->createObjects(config);
+        scene->_ambientLight = configManager->createAmbientLight(config);
+        scene->_lights = configManager->createLight(config);
     } catch (RayTracer::Utils::Error &e) {
         std::cerr << e.what() << std::endl;
         return 84;
     }
-    scene->_ambientLight = configManager->createAmbientLight(config);
-    scene->_lights = configManager->createLight(config);
     try {
         for (auto x: config.includes) {
             std::cout << "building... using [" << x << "]" << std::endl;
@@ -101,9 +102,12 @@ int main(int argc, char **argv) {
     //////
     std::unique_ptr<RayTracer::IRenderer> renderer;
     if (!graph)
-        renderer = std::make_unique<RayTracer::PPMRenderer>(scene->_camera->getWidth(), scene->_camera->getHeight());
+        renderer = std::make_unique<RayTracer::PPMRenderer>(scene->_camera->getWidth(),
+                                                            scene->_camera->getHeight());
     else
-        renderer = std::make_unique<RayTracer::GraphicalRenderer>(scene->_camera->getWidth(), scene->_camera->getHeight());
+        renderer = std::make_unique<RayTracer::GraphicalRenderer>(scene->_camera->getWidth(),
+                                                                  scene->_camera->getHeight(),
+                                                                  configManager->getConfigFile());
     renderer->build(scene, fast);
     ///////
 
