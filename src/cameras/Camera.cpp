@@ -45,14 +45,43 @@ namespace RayTracer {
         _width = width;
         _height = height;
         _fov = fov;
-        _rotation = Math::Vector3D(0, 0, 0);
+        _rotation = Math::Vector3D(50, 0, 0);
     }
+
+    static Math::Vector3D rotateByEulerAngles(const Math::Vector3D& vector, const Math::Vector3D& euler) {
+        double cosX = cos(euler._x);
+        double sinX = sin(euler._x);
+        double cosY = cos(euler._y);
+        double sinY = sin(euler._y);
+        double cosZ = cos(euler._z);
+        double sinZ = sin(euler._z);
+
+        Math::Vector3D rotatedVector;
+
+        // Apply rotation around x-axis
+        rotatedVector._x = vector._x;
+        rotatedVector._y = vector._y * cosX - vector._z * sinX;
+        rotatedVector._z = vector._y * sinX + vector._z * cosX;
+
+        // Apply rotation around y-axis
+        double tempX = rotatedVector._x * cosY + rotatedVector._z * sinY;
+        rotatedVector._z = -rotatedVector._x * sinY + rotatedVector._z * cosY;
+        rotatedVector._x = tempX;
+
+        // Apply rotation around z-axis
+        tempX = rotatedVector._x * cosZ - rotatedVector._y * sinZ;
+        rotatedVector._y = rotatedVector._x * sinZ + rotatedVector._y * cosZ;
+        rotatedVector._x = tempX;
+
+        return rotatedVector;
+    }
+
 
     Ray Camera::ray(double u, double v) const {
         Math::Vector3D direction(u * (_fov / 90),
                                  -v * (_fov / 90),
                                  1);
-        Ray ray(_origin, direction.normalized());
+        Ray ray(_origin, rotateByEulerAngles(direction.normalized(), _rotation * 3.1415 / 180));
         return ray;
     }
 
