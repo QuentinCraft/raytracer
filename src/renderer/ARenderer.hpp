@@ -7,7 +7,9 @@
 
 #ifndef ARENDERER_HPP_
 #define ARENDERER_HPP_
+
 #include "IRenderer.hpp"
+#include "scenes/Scene.hpp"
 
 #include <iostream>
 #include <memory>
@@ -21,7 +23,7 @@ namespace RayTracer {
                 _height = height;
             };
             ~ARenderer() {};
-            void build() {};
+            void build(std::unique_ptr<RayTracer::Scene> &scene, bool fast) {};
         protected:
             int _width;
             int _height;

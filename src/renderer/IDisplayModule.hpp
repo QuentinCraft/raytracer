@@ -11,16 +11,20 @@
 
 namespace RayTracer
 {
+    enum EventType {
+        NONE,
+        CLOSE
+    };
     class IDisplayModule
     {
         public:
             virtual ~IDisplayModule() = default;
-            virtual void draw(Math::Vector3D &pos, Math::Vector3D &color) = 0;
+            virtual void draw(const Math::Vector3D &pos, const Math::Vector3D &color) = 0;
             virtual void display() = 0;
             virtual void clear() = 0;
             virtual bool isOpen() = 0;
             virtual void close() = 0;
-            virtual void eventHandler() = 0;
+            virtual enum EventType eventHandler() = 0;
     };
 }
 

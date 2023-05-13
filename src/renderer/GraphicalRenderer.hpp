@@ -15,11 +15,12 @@ namespace RayTracer {
     class GraphicalRenderer : public ARenderer {
         public:
             GraphicalRenderer(int width, int height);
-            ~GraphicalRenderer();
-            void build() override;
+            ~GraphicalRenderer() override;
+            void build(std::unique_ptr<RayTracer::Scene> &scene, bool fast) override;
         private:
             void eventHandler();
             std::unique_ptr<IDisplayModule> _displayModule;
+            bool _isRunning;
     };
 
 }
