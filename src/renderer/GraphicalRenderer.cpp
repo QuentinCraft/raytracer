@@ -28,16 +28,33 @@ void RayTracer::GraphicalRenderer::eventHandler()
 
 void RayTracer::GraphicalRenderer::build(std::unique_ptr<RayTracer::Scene> &scene, bool fast)
 {
-    int nbThreads = std::thread::hardware_concurrency();
+    int nbThreads = std::thread::hardware_concurrency() - 1;
     std::vector<std::thread> threads;
     std::mutex mutex;
 
     _displayModule->clear();
     _displayModule->display();
+
+    std::thread displayThread([&]() {
+        auto oldT = std::chrono::steady_clock::now();
+        auto newT = std::chrono::steady_clock::now();
+
+        while (_isRunning && _displayModule->isOpen()) {
+            eventHandler();
+            if (!_isRunning)
+                return;
+
+            newT = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsedTime = newT - oldT;
+            if (static_cast<int>(elapsedTime.count() * 10) % 2 == 0)
+                continue;
+            mutex.lock();
+            _displayModule->display();
+            mutex.unlock();
+        }
+    });
+
     while (_isRunning && _displayModule->isOpen()) {
-
-        eventHandler();
-
         auto f = [&](auto n) {
             int x = n * (scene->_camera->getHeight() / (nbThreads));
             int xEnd = ((n + 1) * (scene->_camera->getWidth() / (nbThreads)));
@@ -49,16 +66,10 @@ void RayTracer::GraphicalRenderer::build(std::unique_ptr<RayTracer::Scene> &scen
                     Math::Vector3D color = scene->_camera->pointAt(u, v, scene->_objects, scene->_lights, scene->_ambientLight);
                     mutex.lock();
                     _displayModule->draw(Math::Vector3D(static_cast<double>(yt), static_cast<double>(xt), 0.0), color);
-                    eventHandler();
                     if (!_isRunning) {
                         mutex.unlock();
                         return;
                     }
-                    mutex.unlock();
-                }
-                if (!fast) {
-                    mutex.lock();
-                    _displayModule->display();
                     mutex.unlock();
                 }
             }
@@ -71,11 +82,8 @@ void RayTracer::GraphicalRenderer::build(std::unique_ptr<RayTracer::Scene> &scen
         for (auto &x: threads)
             x.join();
 
-        _displayModule->display();
         bool waiting = true;
-        while (_isRunning && _displayModule->isOpen() && waiting) {
-            eventHandler();
-        }
+        displayThread.join();
     }
     _displayModule->close();
 }
