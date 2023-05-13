@@ -465,7 +465,7 @@ std::unique_ptr<RayTracer::ICamera> RayTracer::Utils::ConfigManager::createCamer
 //    std::cout << "Rotation : " << conf.camera.rotation._x << "," << conf.camera.rotation._y << std::endl;
 //    std::cout << "FOV : " << conf.camera.fieldOfView << std::endl;
     std::cout << "building object [camera]";
-    auto x = std::make_unique<RayTracer::Camera>(conf.camera.position, conf.camera.resolution._y, conf.camera.resolution._x, conf.camera.fieldOfView);
+    auto x = std::make_unique<RayTracer::Camera>(conf.camera.position, conf.camera.resolution._y, conf.camera.resolution._x, conf.camera.fieldOfView, conf.camera.rotation);
     x->setRecursionDepth(conf.camera.recursionDepth);
     x->setSuperSampling(conf.camera.superSampling);
     std::cout << " [OK]" << std::endl;

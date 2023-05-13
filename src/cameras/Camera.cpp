@@ -10,7 +10,6 @@
 
 namespace RayTracer {
 
-
     static double randomDouble(double n) {
         static std::uniform_real_distribution<double> distribution(-n, n);
         static std::mt19937 generator;
@@ -40,12 +39,12 @@ namespace RayTracer {
         _rotation = Math::Vector3D(0, 0, 0);
     }
 
-    Camera::Camera(const Math::Vector3D &origin, double width, double height, double fov) {
+    Camera::Camera(const Math::Vector3D &origin, double width, double height, double fov, const Math::Vector3D& rotation) {
         _origin = origin;
         _width = width;
         _height = height;
         _fov = fov;
-        _rotation = Math::Vector3D(50, 0, 0);
+        _rotation = rotation;
     }
 
     static Math::Vector3D rotateByEulerAngles(const Math::Vector3D& vector, const Math::Vector3D& euler) {

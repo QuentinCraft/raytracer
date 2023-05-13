@@ -24,7 +24,7 @@ namespace RayTracer {
         public:
             // Constructors
             Camera();
-            Camera(const Math::Vector3D& origin, double height, double width, double fov);
+            Camera(const Math::Vector3D& origin, double height, double width, double fov, const Math::Vector3D& rotation);
 
             // Methods
             [[nodiscard]] Ray ray(double u, double v) const override;
