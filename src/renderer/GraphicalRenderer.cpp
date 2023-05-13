@@ -49,6 +49,7 @@ void RayTracer::GraphicalRenderer::build(std::unique_ptr<RayTracer::Scene> &scen
             if (static_cast<int>(elapsedTime.count() * 10) % 2 == 0)
                 continue;
             mutex.lock();
+            _displayModule->clear();
             _displayModule->display();
             mutex.unlock();
         }
