@@ -242,34 +242,40 @@ namespace RayTracer {
         Ray r = ray(u, v);
 
         if (_superSampling > 1) {
-            Ray r1 = r;
-            Ray r2 = r;
-            Ray r3 = r;
-            Ray r4 = r;
+            int div = 0;
+            Math::Vector3D finalColor;
 
             Math::Vector3D hitColorA;
             Math::Vector3D hitColorB;
             Math::Vector3D hitColorC;
             Math::Vector3D hitColorD;
 
-            r1._origin._x -= 0.01;
-            r1._origin._y -= 0.01;
+            do {
+                div++;
+                Ray r1 = r;
+                Ray r2 = r;
+                Ray r3 = r;
+                Ray r4 = r;
 
-            r2._origin._x += 0.01;
-            r2._origin._y -= 0.01;
+                r1._origin._x -= (0.01 / div);
+                r1._origin._y -= (0.01 / div);
 
-            r3._origin._x -= 0.01;
-            r3._origin._y += 0.01;
+                r2._origin._x += (0.01 / div);
+                r2._origin._y -= (0.01 / div);
 
-            r4._origin._x += 0.01;
-            r4._origin._y += 0.01;
+                r3._origin._x -= (0.01 / div);
+                r3._origin._y += (0.01 / div);
 
-            hitColorA = compute(r1, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-            hitColorB = compute(r2, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-            hitColorC = compute(r3, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-            hitColorD = compute(r4, objects, lights, ambient, _recursionDepth, _superSampling, 0);
-            Math::Vector3D color = Math::Utils::toRGB((hitColorA + hitColorB + hitColorC + hitColorD)/ 4);
-            return color;
+                r4._origin._x += (0.01 / div);
+                r4._origin._y += (0.01 / div);
+
+                hitColorA = compute(r1, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+                hitColorB = compute(r2, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+                hitColorC = compute(r3, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+                hitColorD = compute(r4, objects, lights, ambient, _recursionDepth, _superSampling, 0);
+                finalColor += Math::Utils::toRGB((hitColorA + hitColorB + hitColorC + hitColorD) / 4);
+            } while (hitColorA == hitColorB && hitColorB == hitColorC && hitColorC == hitColorD && div < _recursionDepth);
+            return finalColor / div;
         } else {
             Math::Vector3D hitColor = compute(r, objects, lights, ambient, _recursionDepth, _superSampling, 0);
             Math::Vector3D color = Math::Utils::toRGB((hitColor));
