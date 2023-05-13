@@ -39,12 +39,6 @@
 #include "renderer/PPMRenderer.hpp"
 
 int main(int argc, char **argv) {
-
-    auto begin = std::chrono::high_resolution_clock::now();
-
-    std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
-    bool fast = false;
-    bool graph = false;
     for (int i = 1; i < argc; i++)
         if (std::string(argv[i]) == "--help") {
             std::cout << "USAGE: ./raytracer <SCENE_FILE>" << std::endl;
@@ -56,6 +50,11 @@ int main(int argc, char **argv) {
         std::cout << "\tSCENE_FILE: scene configuration" << std::endl;
         return 84;
     }
+    auto begin = std::chrono::high_resolution_clock::now();
+
+    std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
+    bool fast = false;
+    bool graph = false;
     for (int i = 1; i < argc; i++) {
         if (std::string(argv[i]) == "-f")
             fast = true;
