@@ -35,8 +35,12 @@
 #include <thread>
 #include <list>
 
+#include "renderer/GraphicalRenderer.hpp"
 
 int main(int argc, char **argv) {
+//    std::unique_ptr<RayTracer::IRenderer> renderer = std::make_unique<RayTracer::GraphicalRenderer>(800, 800);
+//    renderer->build();
+//    return 0;
     auto begin = std::chrono::high_resolution_clock::now();
 
     std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();

@@ -13,6 +13,7 @@ namespace RayTracer {
     class IRenderer {
         public:
             virtual ~IRenderer() = default;
+            virtual void build() = 0;
     };
 
 } // RayTracer
