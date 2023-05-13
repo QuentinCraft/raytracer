@@ -8,10 +8,14 @@
 #include <thread>
 #include "GraphicalRenderer.hpp"
 
-RayTracer::GraphicalRenderer::GraphicalRenderer(int width, int height) : ARenderer(width, height)
+RayTracer::GraphicalRenderer::GraphicalRenderer(int width, int height, std::pair<std::string, std::string> currentConfig, bool *stop) : ARenderer(width, height)
 {
     _displayModule = std::make_unique<SFMLDisplayModule>(width, height);
     _isRunning = true;
+    _currentConfig = currentConfig.second;
+    _currentConfigPath = currentConfig.first;
+    _reload = false;
+    _stopProgram = stop;
 }
 
 RayTracer::GraphicalRenderer::~GraphicalRenderer()
@@ -22,8 +26,10 @@ void RayTracer::GraphicalRenderer::eventHandler()
 {
     EventType type = _displayModule->eventHandler();
 
-    if (type == EventType::CLOSE)
+    if (type == EventType::CLOSE) {
         _isRunning = false;
+        *_stopProgram = true;
+    }
 }
 
 void RayTracer::GraphicalRenderer::build(std::unique_ptr<RayTracer::Scene> &scene, bool fast)
@@ -39,15 +45,25 @@ void RayTracer::GraphicalRenderer::build(std::unique_ptr<RayTracer::Scene> &scen
         auto oldT = std::chrono::steady_clock::now();
         auto newT = std::chrono::steady_clock::now();
 
-        while (_isRunning && _displayModule->isOpen()) {
+        while (_isRunning && !_reload && _displayModule->isOpen()) {
             eventHandler();
             if (!_isRunning)
                 return;
 
             newT = std::chrono::steady_clock::now();
             std::chrono::duration<double> elapsedTime = newT - oldT;
-            if (static_cast<int>(elapsedTime.count() * 10) % 2 == 0)
+            if (static_cast<int>(elapsedTime.count() * 10) % 2 == 0) {
+                std::ifstream file(_currentConfigPath);
+                std::stringstream buffer;
+                buffer << file.rdbuf();
+                if (buffer.str() != _currentConfig) {
+                    std::cout << "Reloading..." << std::endl;
+                    _reload = true;
+                    return;
+                }
+                file.close();
                 continue;
+            }
             mutex.lock();
             _displayModule->clear();
             _displayModule->display();
@@ -55,7 +71,7 @@ void RayTracer::GraphicalRenderer::build(std::unique_ptr<RayTracer::Scene> &scen
         }
     });
 
-    while (_isRunning && _displayModule->isOpen()) {
+    while (_isRunning && !_reload && _displayModule->isOpen()) {
         auto f = [&](auto n) {
             int x = n * (scene->_camera->getHeight() / (nbThreads));
             int xEnd = ((n + 1) * (scene->_camera->getWidth() / (nbThreads)));

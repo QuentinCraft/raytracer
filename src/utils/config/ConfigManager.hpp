@@ -34,12 +34,14 @@ namespace RayTracer::Utils {
                 _builder = std::make_unique<ObjectFactory>(plugins);
                 _objFileParser = std::make_unique<RayTracer::ObjFile>();
                 _globalId = 0;
+                _lastConfig = "";
             };
             ~ConfigManager() {
                 _textures.clear();
                 std::cout << "ConfigManager destructor" << std::endl;
             };
             Config getConf(const std::string& path, bool includeConfig = false);
+            std::pair<std::string, std::string> getConfigFile();
             std::unique_ptr<ICamera> createCamera(Config &conf);
             std::vector<std::shared_ptr<ILight>> createLight(Config &conf);
             std::vector<std::shared_ptr<IObject>> createObjects(Config &conf);
@@ -62,6 +64,8 @@ namespace RayTracer::Utils {
             std::vector<std::pair<std::string, std::shared_ptr<ITexture>>> _textures;
             std::unique_ptr<ObjectFactory> _builder;
             std::unique_ptr<RayTracer::IObjFile> _objFileParser;
+            std::string _lastConfig;
+            std::string _lastConfigPath;
     };
 
 } // RayTracer

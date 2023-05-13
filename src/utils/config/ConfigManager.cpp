@@ -434,6 +434,15 @@ RayTracer::Utils::Config RayTracer::Utils::ConfigManager::getConf(const std::str
     if (!includeConfig)
         cnf.includes = _getInclude(root);
 
+    std::ifstream file(path);
+    _lastConfigPath = path;
+    if (file.is_open()) {
+        std::stringstream mystr;
+        mystr << file.rdbuf();
+        _lastConfig = mystr.str();
+        file.close();
+    }
+
     return cnf;
 }
 
@@ -477,4 +486,8 @@ std::vector<std::shared_ptr<RayTracer::ILight>> RayTracer::Utils::ConfigManager:
         std::cout << " [OK]" << std::endl;
     }
     return points;
+}
+
+std::pair<std::string, std::string> RayTracer::Utils::ConfigManager::getConfigFile() {
+    return {_lastConfigPath, _lastConfig};
 }
