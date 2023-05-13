@@ -27,8 +27,8 @@ namespace Math {
         _z = vector._z;
     }
 
-    float Vector3D::length() const {
-        return std::sqrt((float) (_x * _x) + (float) (_y * _y) + (float) (_z * _z));
+    double Vector3D::length() const {
+        return std::sqrt(static_cast<double>(_x * _x) + static_cast<double>(_y * _y) + static_cast<double>(_z * _z));
     }
 
     Vector3D Vector3D::operator+(const Vector3D &vector) const {

@@ -18,17 +18,17 @@ namespace RayTracer
                 _window.create(sf::VideoMode(width, height), "RayTracer");
                 _window.setFramerateLimit(60);
                 _window.setActive(true);
+                _image.create(width, height, sf::Color::Black);
             };
-            ~SFMLDisplayModule() = default;
+            ~SFMLDisplayModule() override = default;
             void draw(const Math::Vector3D &pos, const Math::Vector3D &color) override {
-                sf::RectangleShape pixel(sf::Vector2f(1, 1));
-
-
-                pixel.setPosition(static_cast<float>(pos._x), static_cast<float>(pos._y));
-                pixel.setFillColor(sf::Color(static_cast<float>(color._x), static_cast<float>(color._y), static_cast<float>(color._z)));
-                _window.draw(pixel);
+                _image.setPixel(pos._x, pos._y, sf::Color(color._x, color._y, color._z));
             };
             void display() override {
+                sf::Texture texture;
+                texture.loadFromImage(_image);
+                sf::Sprite sprite(texture);
+                _window.draw(sprite);
                 _window.display();
             };
             void clear() override {
@@ -51,6 +51,7 @@ namespace RayTracer
         private:
             sf::RenderWindow _window;
             sf::Event _event;
+            sf::Image _image;
     };
 }
 
