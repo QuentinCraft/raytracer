@@ -65,19 +65,29 @@ int main(int argc, char **argv) {
     }
 
     scene->_camera = configManager->createCamera(config);
-    scene->_objects = configManager->createObjects(config);
+    try {
+        scene->_objects = configManager->createObjects(config);
+    } catch (RayTracer::Utils::Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
     scene->_ambientLight = configManager->createAmbientLight(config);
     scene->_lights = configManager->createLight(config);
-    for (auto x : config.includes) {
-        std::cout << "building... using [" << x << "]" << std::endl;
-        RayTracer::Utils::Config other = configManager->getConf(x, true);
-        auto newObjs = configManager->createObjects(other);
-        for (auto &obj : newObjs)
-            scene->_objects.push_back(obj);
-        auto newLights = configManager->createLight(other);
-        for (auto &light : newLights)
-            scene->_lights.push_back(light);
-        std::cout << "--------------------------------" << std::endl;
+    try {
+        for (auto x: config.includes) {
+            std::cout << "building... using [" << x << "]" << std::endl;
+            RayTracer::Utils::Config other = configManager->getConf(x, true);
+            auto newObjs = configManager->createObjects(other);
+            for (auto &obj: newObjs)
+                scene->_objects.push_back(obj);
+            auto newLights = configManager->createLight(other);
+            for (auto &light: newLights)
+                scene->_lights.push_back(light);
+            std::cout << "--------------------------------" << std::endl;
+        }
+    } catch (RayTracer::Utils::Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
     }
 //
     if (fast) {
