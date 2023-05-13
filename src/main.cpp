@@ -39,7 +39,7 @@
 #include "renderer/PPMRenderer.hpp"
 
 int main(int argc, char **argv) {
-    bool reload = false;
+
     auto begin = std::chrono::high_resolution_clock::now();
 
     std::unique_ptr<RayTracer::IObjFile> obj = std::make_unique<RayTracer::ObjFile>();
@@ -57,74 +57,59 @@ int main(int argc, char **argv) {
             graph = true;
     }
     std::cout << "Fast: " << (fast ? "true" : "false") << std::endl;
-    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager;
-    std::unique_ptr<RayTracer::Scene> scene;
+
+    std::unique_ptr<RayTracer::Utils::ConfigManager> configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
+    std::unique_ptr<RayTracer::Scene> scene = std::make_unique<RayTracer::Scene>();
     RayTracer::Utils::Config config;
-    bool stopProgram = false;
+    try {
+        config = configManager->getConf(argv[1]);
+    } catch (RayTracer::Utils::Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
 
-    while (!stopProgram) {
-        while (1) {
-            configManager = std::make_unique<RayTracer::Utils::ConfigManager>("plugins");
-            scene = std::make_unique<RayTracer::Scene>();
-            try {
-                config = configManager->getConf(argv[1]);
-            } catch (RayTracer::Utils::Error &e) {
-                if (!reload) {
-                    std::cerr << e.what() << std::endl;
-                    return 84;
-                } else {
-                    reload = true;
-                    continue;
-                }
-            }
-            reload = true;
-            break;
-        }
-
+    try {
         scene->_camera = configManager->createCamera(config);
-        try {
-            scene->_objects = configManager->createObjects(config);
-        } catch (RayTracer::Utils::Error &e) {
-            std::cerr << e.what() << std::endl;
-            return 84;
-        }
+        scene->_objects = configManager->createObjects(config);
         scene->_ambientLight = configManager->createAmbientLight(config);
         scene->_lights = configManager->createLight(config);
-        try {
-            for (auto x: config.includes) {
-                std::cout << "building... using [" << x << "]" << std::endl;
-                RayTracer::Utils::Config other = configManager->getConf(x, true);
-                auto newObjs = configManager->createObjects(other);
-                for (auto &obj: newObjs)
-                    scene->_objects.push_back(obj);
-                auto newLights = configManager->createLight(other);
-                for (auto &light: newLights)
-                    scene->_lights.push_back(light);
-                std::cout << "--------------------------------" << std::endl;
-            }
-        } catch (RayTracer::Utils::Error &e) {
-            std::cerr << e.what() << std::endl;
-            return 84;
+    } catch (RayTracer::Utils::Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
+    try {
+        for (auto x: config.includes) {
+            std::cout << "building... using [" << x << "]" << std::endl;
+            RayTracer::Utils::Config other = configManager->getConf(x, true);
+            auto newObjs = configManager->createObjects(other);
+            for (auto &obj: newObjs)
+                scene->_objects.push_back(obj);
+            auto newLights = configManager->createLight(other);
+            for (auto &light: newLights)
+                scene->_lights.push_back(light);
+            std::cout << "--------------------------------" << std::endl;
         }
+    } catch (RayTracer::Utils::Error &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
 
 //
-        if (fast) {
-            scene->_camera->setRecursionDepth(1);
-            scene->_camera->setSuperSampling(1);
-        }
-        std::unique_ptr<RayTracer::IRenderer> renderer;
-        if (!graph)
-            renderer = std::make_unique<RayTracer::PPMRenderer>(scene->_camera->getWidth(),
-                                                                scene->_camera->getHeight());
-        else
-            renderer = std::make_unique<RayTracer::GraphicalRenderer>(scene->_camera->getWidth(),
-                                                                      scene->_camera->getHeight(),
-                                                                      configManager->getConfigFile(),
-                                                                      &stopProgram);
-        renderer->build(scene, fast);
-        if (!graph)
-            break;
+    if (fast) {
+        scene->_camera->setRecursionDepth(1);
+        scene->_camera->setSuperSampling(1);
     }
+    //////
+    std::unique_ptr<RayTracer::IRenderer> renderer;
+    if (!graph)
+        renderer = std::make_unique<RayTracer::PPMRenderer>(scene->_camera->getWidth(),
+                                                            scene->_camera->getHeight());
+    else
+        renderer = std::make_unique<RayTracer::GraphicalRenderer>(scene->_camera->getWidth(),
+                                                                  scene->_camera->getHeight(),
+                                                                  configManager->getConfigFile());
+    renderer->build(scene, fast);
+    ///////
 
 
 

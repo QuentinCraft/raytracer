@@ -16,7 +16,7 @@ namespace RayTracer {
 
     class GraphicalRenderer : public ARenderer {
         public:
-            GraphicalRenderer(int width, int height, std::pair<std::string, std::string> currentConfig, bool *stop);
+            GraphicalRenderer(int width, int height, std::pair<std::string, std::string> currentConfig);
             ~GraphicalRenderer() override;
             void build(std::unique_ptr<RayTracer::Scene> &scene, bool fast) override;
         private:
@@ -26,7 +26,7 @@ namespace RayTracer {
             std::string _currentConfig;
             std::string _currentConfigPath;
             bool _reload = false;
-            bool *_stopProgram;
+            std::unique_ptr<RayTracer::Utils::ConfigManager> configManager;
     };
 
 }
