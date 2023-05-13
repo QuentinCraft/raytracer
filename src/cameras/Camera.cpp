@@ -139,7 +139,10 @@ namespace RayTracer {
                         if (pipe.has_value()) {
                             if (Math::Utils::inf(Math::Utils::distance(pipe.value()._position, bouncingRay._origin), dist)) {
                                 div++;
-                                finalColor += ambient->getIntensity();
+                                if (pipe->_material->getRefraction() <= 0)
+                                    finalColor += ambient->getIntensity();
+                                else
+                                    finalColor += ambient->getIntensity() * 2;
                                 correct = count;
                                 status = false;
                             }
