@@ -231,7 +231,7 @@ add_executable(raytracer
         src/renderer/GraphicalRenderer.hpp
         src/renderer/PPMRenderer.hpp
         src/renderer/GraphicalRenderer.cpp
-        src/renderer/PPMRenderer.cpp)
+        src/renderer/PPMRenderer.cpp src/renderer/IDisplayModule.hpp src/renderer/SFMLDisplayModule.hpp)
 
 
 

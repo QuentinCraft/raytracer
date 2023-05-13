@@ -8,8 +8,7 @@
 #ifndef GRAPHICALRENDERER_HPP_
 #define GRAPHICALRENDERER_HPP_
 #include "ARenderer.hpp"
-
-#include <SFML/Graphics.hpp>
+#include "SFMLDisplayModule.hpp"
 
 namespace RayTracer {
 
@@ -20,8 +19,7 @@ namespace RayTracer {
             void build() override;
         private:
             void eventHandler();
-            sf::RenderWindow _window;
-            sf::Event _event{};
+            std::unique_ptr<IDisplayModule> _displayModule;
     };
 
 }
