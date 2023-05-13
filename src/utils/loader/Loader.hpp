@@ -11,6 +11,7 @@
 #include <dlfcn.h>
 #include <stddef.h>
 #include "ILoader.hpp"
+#include <vector>
 
 namespace RayTracer::Utils {
 
@@ -21,16 +22,18 @@ namespace RayTracer::Utils {
                 _error = nullptr;
             }
             ~Loader() override {
-                if (_handle)
-                    dlclose(_handle);
+                for (auto &x : _tofree) {
+                    if (x != nullptr)
+                        dlclose(x);
+                }
                 if (_error)
                     free(_error);
                 _handle = nullptr;
                 _error = nullptr;
             }
             bool open(const std::string &path) override {
-//                if (_handle) close();
                 _handle = dlopen(path.c_str(), RTLD_NOW);
+                _tofree.push_back(_handle);
 
                 if (_handle)
                     return true;
@@ -45,14 +48,15 @@ namespace RayTracer::Utils {
             }
             std::string getError() { return (!_error) ? std::string(_error) : ""; };
             void close() override {
-                if (!_handle)
-                    return;
-                dlclose(_handle);
-                _handle = nullptr;
+                if (_handle != nullptr) {
+                    dlclose(_handle);
+                    _handle = nullptr;
+                }
             }
         private:
             void *_handle;
             char *_error;
+            std::vector<void *> _tofree;
     };
 }
 
