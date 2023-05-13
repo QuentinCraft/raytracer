@@ -54,6 +54,7 @@ namespace RayTracer::Utils {
             void _getPlane(const libconfig::Setting& primitive);
             void _getCylinder(const libconfig::Setting& primitive);
             void _getUnlimitedCylinder(const libconfig::Setting& primitive);
+            void _getUnlimitedCone(const libconfig::Setting& primitive);
             void _getCone(const libconfig::Setting& primitive);
             void _getObjFile(const libconfig::Setting& primitive);
             void _getTextures(const libconfig::Setting& root);

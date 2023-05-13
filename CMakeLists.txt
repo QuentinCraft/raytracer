@@ -39,6 +39,21 @@ add_library(unlimitedCylinder SHARED ${OBJ_UNLIMITED_CYLINDER_SRC})
 set_target_properties(unlimitedCylinder PROPERTIES PREFIX raytracer_)
 set_target_properties(unlimitedCylinder PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
 
+### UNLIMITED CONE #####
+set(OBJ_UNLIMITED_CONE_SRC
+        src/objects/UnlimitedCone.cpp
+        src/objects/UnlimitedConeEntryPoint.cpp
+        src/maths/Vector3D.cpp
+        src/maths/Ray.cpp
+        src/maths/Utils.cpp
+        src/texture/ATexture.cpp
+        src/materials/AMaterial.cpp
+        )
+
+add_library(unlimitedCone SHARED ${OBJ_UNLIMITED_CONE_SRC})
+set_target_properties(unlimitedCone PROPERTIES PREFIX raytracer_)
+set_target_properties(unlimitedCone PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/plugins/)
+
 ###### SPHERE ######
 set(OBJ_SPHERE_SRC
         src/objects/Sphere.cpp

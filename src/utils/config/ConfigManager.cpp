@@ -237,6 +237,48 @@ void RayTracer::Utils::ConfigManager::_getUnlimitedCylinder(const libconfig::Set
         }
 }
 
+void RayTracer::Utils::ConfigManager::_getUnlimitedCone(const libconfig::Setting &primitive)
+{
+    try {
+            float x = primitive["x"];
+            float y = primitive["y"];
+            float z = primitive["z"];
+            std::string texture = primitive["texture"];
+            float radius = primitive["r"];
+            float length = primitive["l"];
+            float angle = primitive["angle"];
+            const libconfig::Setting& axe = primitive["axe"];
+            float axeX = axe["x"];
+            float axeY = axe["y"];
+            float axeZ = axe["z"];
+            std::cout << "[Unlimited Cone]-----------------------" << std::endl;
+            auto builder = _builder->createObjectBuilder("unlimitedCone");
+            std::unique_ptr<IData> data = builder->createData();
+            data->setCenter(Math::Vector3D(x, y, z));
+            data->setRadius(radius);
+            data->setLength(length);
+            data->setAngle(angle);
+            data->setAxe(Math::Vector3D(axeX, axeY, axeZ));
+            bool found = false;
+            for (auto &i : _textures) {
+                if (i.first == texture) {
+                    data->setTexture(i.second);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                _primitives.clear();
+                _textures.clear();
+                throw Error("Error: Invalid texture in [Primitives/Unlimited-Cone] part");
+            }
+            //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
+            _primitives.emplace_back(builder, std::move(data));
+        } catch (libconfig::SettingNotFoundException &e) {
+            throw Error("Error: Invalid settings in [Primitives/Unlimited-Cone] part");
+        }
+}
+
 void RayTracer::Utils::ConfigManager::_getCone(const libconfig::Setting &primitive) {
     try {
         float x = primitive["x"];
@@ -334,6 +376,8 @@ std::vector<std::pair<std::shared_ptr<RayTracer::IBuilder>, std::unique_ptr<RayT
                     _getObjFile(primitive[x]);
                 if (item == "unlimited-cylinders")
                     _getUnlimitedCylinder(primitive[x]);
+                if (item == "unlimited-cones")
+                    _getUnlimitedCone(primitive[x]);
             }
         }
     } catch (libconfig::SettingNotFoundException &e) {
