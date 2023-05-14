@@ -34,6 +34,8 @@ RayTracer::Utils::Config::Camera RayTracer::Utils::ConfigManager::_getCamera(con
         cam.position._x = position["x"];
         cam.position._z = position["z"];
     } catch (libconfig::SettingNotFoundException &e) {
+        _primitives.clear();
+        _textures.clear();
         throw RayTracer::Utils::Error("Error: Invalid settings in [Camera] part");
     }
 
@@ -78,6 +80,8 @@ RayTracer::Utils::Config::Light RayTracer::Utils::ConfigManager::_getLight(
         }
 
     } catch (libconfig::SettingNotFoundException &e) {
+        _primitives.clear();
+        _textures.clear();
         throw RayTracer::Utils::Error("Error: Invalid settings in [Light] part");
     }
     return light;
@@ -116,6 +120,8 @@ void RayTracer::Utils::ConfigManager::_getSphere(
         data->setRadius(r);
         _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
+        _primitives.clear();
+        _textures.clear();
         throw Error("Error: Invalid settings in [Primitives/Sphere] part");
     }
 }
@@ -157,6 +163,8 @@ void RayTracer::Utils::ConfigManager::_getPlane(
         data->setNormal(Math::Vector3D(normalX, normalY, normalZ));
         _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
+        _primitives.clear();
+        _textures.clear();
         throw Error("Error: Invalid settings in [Primitives/Plane] part");
     }
 }
@@ -191,6 +199,8 @@ void RayTracer::Utils::ConfigManager::_getCylinder(const libconfig::Setting &pri
     //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
     _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
+        _primitives.clear();
+        _textures.clear();
         throw Error("Error: Invalid settings in [Primitives/Cylinder] part");
     }
 }
@@ -203,7 +213,7 @@ void RayTracer::Utils::ConfigManager::_getUnlimitedCylinder(const libconfig::Set
             float z = primitive["z"];
             std::string texture = primitive["texture"];
             float radius = primitive["r"];
-            float length = primitive["l"];
+            float length = 0.0;
             float angle = primitive["angle"];
             const libconfig::Setting& axe = primitive["axe"];
             float axeX = axe["x"];
@@ -233,6 +243,8 @@ void RayTracer::Utils::ConfigManager::_getUnlimitedCylinder(const libconfig::Set
             //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
             _primitives.emplace_back(builder, std::move(data));
         } catch (libconfig::SettingNotFoundException &e) {
+            _primitives.clear();
+            _textures.clear();
             throw Error("Error: Invalid settings in [Primitives/Cylinder] part");
         }
 }
@@ -245,7 +257,7 @@ void RayTracer::Utils::ConfigManager::_getUnlimitedCone(const libconfig::Setting
             float z = primitive["z"];
             std::string texture = primitive["texture"];
             float radius = primitive["r"];
-            float length = primitive["l"];
+            float length = 0.0;
             float angle = primitive["angle"];
             const libconfig::Setting& axe = primitive["axe"];
             float axeX = axe["x"];
@@ -275,6 +287,8 @@ void RayTracer::Utils::ConfigManager::_getUnlimitedCone(const libconfig::Setting
             //data->setColor(Math::Vector3D(colorX, colorY, colorZ));
             _primitives.emplace_back(builder, std::move(data));
         } catch (libconfig::SettingNotFoundException &e) {
+            _primitives.clear();
+            _textures.clear();
             throw Error("Error: Invalid settings in [Primitives/Unlimited-Cone] part");
         }
 }
@@ -315,6 +329,8 @@ void RayTracer::Utils::ConfigManager::_getCone(const libconfig::Setting &primiti
         }
         _primitives.emplace_back(builder, std::move(data));
     } catch (libconfig::SettingNotFoundException &e) {
+        _primitives.clear();
+        _textures.clear();
         throw Error("Error: Invalid settings in [Primitives/Cone] part");
     }
 }
@@ -351,6 +367,8 @@ void RayTracer::Utils::ConfigManager::_getObjFile(const libconfig::Setting &prim
             _primitives.emplace_back(builder, std::move(data));
         }
     } catch (libconfig::SettingNotFoundException &e) {
+        _primitives.clear();
+        _textures.clear();
         throw Error("Error: Invalid settings in [Primitives/ObjFile] part");
     }
 }
